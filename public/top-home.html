@@ -203,11 +203,14 @@ body{
         <span class="pill pill-new">✏️ タブレット対応</span>
       </div>
     </a>
-    <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+    <a href="#fraction-decimal" class="card">
       <div class="card-icon" style="background:#f0fdf4;">🍕</div>
       <div class="card-title">分数・小数</div>
       <div class="card-desc">分数の足し算・引き算・通分、小数の計算など。</div>
-      <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
     </a>
     <a href="#" class="card" style="opacity:.6;pointer-events:none;">
       <div class="card-icon" style="background:#eff6ff;">📈</div>
@@ -250,6 +253,36 @@ body{
     <div class="entry-bottom">
       <a id="go-btn" class="go-btn" href="addition-hissan.html">🖊 ドリルを開く</a>
       <div class="entry-preview" id="entry-preview">足し算 × ひっ算</div>
+    </div>
+  </div>
+
+  <!-- 分数・小数 ドリル -->
+  <div class="entry-panel" id="fraction-decimal">
+    <h2>🍕 分数・小数を選んで始める</h2>
+
+    <div class="op-grid" id="fd-op-grid">
+      <button class="op-btn active" data-op="add">
+        <span class="op-emoji">➕</span>足し算
+      </button>
+      <button class="op-btn" data-op="sub">
+        <span class="op-emoji">➖</span>引き算
+      </button>
+      <button class="op-btn" data-op="mul">
+        <span class="op-emoji">✖️</span>かけ算
+      </button>
+      <button class="op-btn" data-op="div">
+        <span class="op-emoji">➗</span>割り算
+      </button>
+    </div>
+
+    <div class="format-row">
+      <button class="fmt-btn active" data-type="fraction" id="fd-fraction">🍕 分数</button>
+      <button class="fmt-btn" data-type="decimal" id="fd-decimal">🔢 小数</button>
+    </div>
+
+    <div class="entry-bottom">
+      <a id="fd-go-btn" class="go-btn" href="fraction.html?op=add">🖊 ドリルを開く</a>
+      <div class="entry-preview" id="fd-preview">分数 × 足し算</div>
     </div>
   </div>
 
@@ -299,6 +332,35 @@ document.querySelectorAll('.fmt-btn').forEach(btn => {
     btn.classList.add('active');
     selFmt = btn.dataset.fmt;
     update();
+  });
+});
+
+// --- 分数・小数セクション ---
+const fdUrlMap   = { fraction: 'fraction.html', decimal: 'decimal.html' };
+const fdLabelType = { fraction: '分数', decimal: '小数' };
+const fdLabelOp   = { add: '足し算', sub: '引き算', mul: 'かけ算', div: '割り算' };
+let fdType = 'fraction';
+let fdOp   = 'add';
+function updateFd(){
+  const goBtn   = document.getElementById('fd-go-btn');
+  const preview = document.getElementById('fd-preview');
+  if(goBtn)   goBtn.href          = fdUrlMap[fdType];
+  if(preview) preview.textContent = fdLabelType[fdType] + ' × ' + fdLabelOp[fdOp];
+}
+document.querySelectorAll('#fd-op-grid .op-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#fd-op-grid .op-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    fdOp = btn.dataset.op;
+    updateFd();
+  });
+});
+document.querySelectorAll('#fraction-decimal .fmt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#fraction-decimal .fmt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    fdType = btn.dataset.type;
+    updateFd();
   });
 });
 </script>

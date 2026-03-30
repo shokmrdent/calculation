@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小数の計算 | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body data-page-type="decimal">
+  <div class="container">
+    <div class="header-row no-print">
+      <div>
+        <div class="section-label">うちトレ</div>
+        <h1>小数の計算</h1>
+      </div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="op">演算</label>
+        <select id="op">
+          <option value="add">足し算（＋）</option>
+          <option value="sub">引き算（－）</option>
+          <option value="mul">かけ算（×）</option>
+          <option value="div">割り算（÷）</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="dec-places">小数桁数</label>
+        <select id="dec-places">
+          <option value="1" selected>小数第1位</option>
+          <option value="2">小数第2位</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+  <script src="assets/fraction-generator.js"></script>
+  <script src="assets/tablet.js"></script>
+</body>
+</html>

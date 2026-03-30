@@ -387,3 +387,142 @@ select{
   .tb-tool{ font-size:12px; padding:5px 8px; }
   #tb-size{ width:60px; }
 }
+
+/* ===================== 分数表示 ===================== */
+.frac{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  vertical-align:middle;
+  margin:0 2px;
+  line-height:1;
+}
+.frac-num{
+  border-bottom:1.5px solid #000;
+  padding:0 4px 2px;
+  font-size:17px;
+  font-weight:700;
+  text-align:center;
+  min-width:16px;
+}
+.frac-den{
+  padding:2px 4px 0;
+  font-size:17px;
+  font-weight:700;
+  text-align:center;
+  min-width:16px;
+}
+
+/* ===================== 分数・小数 問題グリッド ===================== */
+.problem-frac-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(10,1fr);
+  height:calc(297mm - 10mm - 22mm);
+}
+.problem-frac-item{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:0 8px;
+  border-bottom:1px solid #e5e7eb;
+  min-height:0;
+  overflow:hidden;
+}
+.prob-num-label{
+  font-size:12px;
+  color:#475569;
+  min-width:24px;
+  flex-shrink:0;
+}
+.prob-frac-expr{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+.prob-op{
+  font-size:18px;
+  font-weight:700;
+  flex-shrink:0;
+}
+.prob-eq{
+  font-size:18px;
+  flex-shrink:0;
+}
+.prob-blank-line{
+  display:inline-block;
+  width:56px;
+  border-bottom:2px solid #000;
+  flex-shrink:0;
+  vertical-align:middle;
+}
+.prob-dec-num{
+  font-size:19px;
+  font-weight:700;
+}
+
+/* ===================== タブレット設定パネル ===================== */
+.tb-settings-btn{
+  font:inherit;font-size:13px;font-weight:700;
+  padding:6px 12px;border-radius:10px;
+  border:1px solid var(--line);background:#f8fafc;
+  color:#475569;cursor:pointer;transition:.13s;
+}
+.tb-settings-btn.active{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;}
+
+.tb-settings-panel{
+  display:none;
+  background:#f8fafc;border:1px solid var(--line);
+  border-radius:14px;padding:0;
+  margin-top:8px;overflow:hidden;
+  transition:.2s ease;
+}
+.tb-settings-panel.tb-settings-panel-open{
+  display:block;
+}
+.tb-settings-inner{
+  padding:14px 18px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.tb-setting-row{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.tb-setting-label{
+  font-size:13px;font-weight:700;color:#475569;
+  min-width:120px;flex-shrink:0;
+}
+.tb-setting-val{
+  font-size:13px;font-weight:800;color:#1d4ed8;
+  min-width:28px;text-align:right;
+}
+.tb-setting-note{
+  font-size:12px;color:#94a3b8;
+}
+.tb-settings-inner input[type="range"]{
+  width:160px;accent-color:#3b82f6;cursor:pointer;
+}
+
+/* ---- トグルスイッチ ---- */
+.tb-toggle-switch{
+  position:relative;display:inline-block;
+  width:42px;height:24px;flex-shrink:0;cursor:pointer;
+}
+.tb-toggle-switch input{opacity:0;width:0;height:0;}
+.tb-toggle-slider{
+  position:absolute;inset:0;
+  background:#d1d5db;border-radius:999px;transition:.2s;
+}
+.tb-toggle-slider::before{
+  content:'';position:absolute;
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;left:3px;top:3px;transition:.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.tb-toggle-switch input:checked + .tb-toggle-slider{background:#3b82f6;}
+.tb-toggle-switch input:checked + .tb-toggle-slider::before{transform:translateX(18px);}
+
+@media(max-width:640px){
+  .tb-settings-inner input[type="range"]{width:110px;}
+  .tb-setting-label{min-width:90px;font-size:12px;}
+}

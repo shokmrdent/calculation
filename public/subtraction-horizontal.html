@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>引き算（横式） | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body data-page-type="subtraction-horizontal">
+  <div class="container">
+    <div class="header-row no-print">
+      <div>
+        <div class="section-label">うちトレ</div>
+        <h1 id="pageTitle">引き算（横式）</h1>
+        <div class="small-note" id="pageNote"></div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="digit1">上の数の桁</label>
+        <select id="digit1">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="digit2">下の数の桁</label>
+        <select id="digit2">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+  <script src="assets/generator.js"></script>
+  <script src="assets/tablet.js"></script>
+</body>
+</html>

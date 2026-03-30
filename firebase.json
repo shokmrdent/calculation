@@ -1,0 +1,28 @@
+{
+  "hosting": [
+    {
+      "target": "uchitore-home",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "**", "destination": "/top-home.html" }
+      ]
+    },
+    {
+      "target": "uchitore-juken",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "**", "destination": "/top-juken.html" }
+      ]
+    },
+    {
+      "target": "calculations-11955",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "**", "destination": "/top-home.html" }
+      ]
+    }
+  ]
+}

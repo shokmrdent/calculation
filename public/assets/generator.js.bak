@@ -1,0 +1,223 @@
+
+function rand(min, max){
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makeNumber(d){
+  let min = Math.pow(10, d - 1);
+  let max = Math.pow(10, d) - 1;
+  if(d === 1){
+    min = 1;
+    max = 9;
+  }
+  return rand(min, max);
+}
+
+function hasCarry(a, b){
+  const sa = a.toString().split('').reverse();
+  const sb = b.toString().split('').reverse();
+  const len = Math.max(sa.length, sb.length);
+  for(let i = 0; i < len; i++){
+    const da = parseInt(sa[i] || 0, 10);
+    const db = parseInt(sb[i] || 0, 10);
+    if(da + db >= 10) return true;
+  }
+  return false;
+}
+
+function hasBorrow(a, b){
+  const sa = a.toString().split('').reverse();
+  const sb = b.toString().split('').reverse();
+  let borrow = 0;
+  const len = Math.max(sa.length, sb.length);
+  for(let i = 0; i < len; i++){
+    let da = parseInt(sa[i] || 0, 10) - borrow;
+    const db = parseInt(sb[i] || 0, 10);
+    if(da < db){
+      return true;
+    }
+    borrow = 0;
+  }
+  return false;
+}
+
+function makeAdditionProblem(d1, d2){
+  while(true){
+    const a = makeNumber(d1);
+    const b = makeNumber(d2);
+    if(hasCarry(a, b)) return [a, b];
+  }
+}
+
+function makeSubtractionProblem(d1, d2){
+  while(true){
+    let a = makeNumber(d1);
+    let b = makeNumber(d2);
+    if(a < b){
+      const t = a; a = b; b = t;
+    }
+    if(a !== b && hasBorrow(a, b)) return [a, b];
+  }
+}
+
+function makeMultiplicationProblem(d1, d2){
+  return [makeNumber(d1), makeNumber(d2)];
+}
+
+function getPageConfig(){
+  const pageType = document.body.dataset.pageType || 'addition-hissan';
+  const map = {
+    'addition-hissan': {
+      title: '足し算（ひっ算）',
+      operator: '＋',
+      pdfName: 'tashizan_hissan.pdf',
+      generator: makeAdditionProblem,
+      note: '繰り上がりのある足し算を生成します。'
+    },
+    'subtraction-hissan': {
+      title: '引き算（ひっ算）',
+      operator: '－',
+      pdfName: 'hikizan_hissan.pdf',
+      generator: makeSubtractionProblem,
+      note: '繰り下がりのある引き算を生成します。'
+    },
+    'multiplication-hissan': {
+      title: '掛け算（ひっ算）',
+      operator: '×',
+      pdfName: 'kakezan_hissan.pdf',
+      generator: makeMultiplicationProblem,
+      note: 'ひっ算用の掛け算問題を生成します。'
+    }
+  };
+  return map[pageType] || map['addition-hissan'];
+}
+
+
+function wrapPageForPreview(page){
+  const wrapper = document.createElement('div');
+  wrapper.className = 'page-preview';
+  const scaleBox = document.createElement('div');
+  scaleBox.className = 'page-scale-box';
+  scaleBox.appendChild(page);
+  wrapper.appendChild(scaleBox);
+  return wrapper;
+}
+
+function applyMobilePageScaling(){
+  const wrappers = document.querySelectorAll('.page-preview');
+  wrappers.forEach((wrapper) => {
+    const scaleBox = wrapper.querySelector('.page-scale-box');
+    const page = wrapper.querySelector('.page');
+    if(!scaleBox || !page) return;
+
+    wrapper.classList.remove('is-scaled');
+    scaleBox.style.width = '';
+    scaleBox.style.height = '';
+    page.style.transform = '';
+
+    const pageWidth = page.offsetWidth;
+    const pageHeight = page.offsetHeight;
+    if(!pageWidth || !pageHeight) return;
+
+    if(window.innerWidth > 640 || window.matchMedia('print').matches){
+      scaleBox.style.width = pageWidth + 'px';
+      scaleBox.style.height = pageHeight + 'px';
+      return;
+    }
+
+    const availableWidth = Math.max(wrapper.clientWidth - 8, 0);
+    if(!availableWidth) return;
+
+    const scale = Math.min(1, availableWidth / pageWidth);
+    wrapper.classList.add('is-scaled');
+    scaleBox.style.width = (pageWidth * scale) + 'px';
+    scaleBox.style.height = (pageHeight * scale) + 'px';
+    page.style.transform = `scale(${scale})`;
+  });
+}
+
+function problemHTML(num, a, b, operator){
+  return `
+    <div class="problem">
+      <div class="problem-number">(${num})</div>
+      <div class="number-top">${a}</div>
+      <div class="operator">${operator}</div>
+      <div class="number-bottom">${b}</div>
+      <div class="line"></div>
+    </div>
+  `;
+}
+
+function pageHeaderHTML(config, pageNo, total){
+  return `
+    <div class="sheet-header">
+      <div>昌太郎式計算問題作成サイト</div>
+      <div>${config.title}　${pageNo}/${total}</div>
+    </div>
+  `;
+}
+
+function generate(){
+  const config = getPageConfig();
+  const d1 = parseInt(document.getElementById('digit1').value, 10);
+  const d2 = parseInt(document.getElementById('digit2').value, 10);
+  const pageCount = parseInt(document.getElementById('count').value, 10);
+  const container = document.getElementById('pages');
+  container.innerHTML = '';
+
+  for(let p = 0; p < pageCount; p++){
+    const page = document.createElement('div');
+    page.className = 'page';
+    page.innerHTML = pageHeaderHTML(config, p + 1, pageCount);
+
+    const grid = document.createElement('div');
+    grid.className = 'problem-grid';
+    for(let i = 1; i <= 18; i++){
+      const [a, b] = config.generator(d1, d2);
+      grid.innerHTML += problemHTML(i, a, b, config.operator);
+    }
+    page.appendChild(grid);
+    container.appendChild(wrapPageForPreview(page));
+  }
+  applyMobilePageScaling();
+}
+
+async function downloadPDF(){
+  const pageNodes = document.querySelectorAll('.page');
+  if(!pageNodes.length){
+    alert('先に「生成」を押して問題を作成してください。');
+    return;
+  }
+  if(!window.html2canvas || !window.jspdf){
+    alert('PDF保存ライブラリの読み込みに失敗しました。ネット接続を確認して再度お試しください。');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const config = getPageConfig();
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  for(let i = 0; i < pageNodes.length; i++){
+    const canvas = await html2canvas(pageNodes[i], { scale: 2, useCORS: true });
+    const img = canvas.toDataURL('image/png');
+    if(i > 0) pdf.addPage();
+    pdf.addImage(img, 'PNG', 0, 0, 210, 297);
+  }
+  pdf.save(config.pdfName);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const config = getPageConfig();
+  const titleNode = document.getElementById('pageTitle');
+  const noteNode = document.getElementById('pageNote');
+  if(titleNode) titleNode.textContent = config.title;
+  if(noteNode) noteNode.textContent = config.note;
+  generate();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(applyMobilePageScaling, 80);
+  });
+  window.addEventListener('beforeprint', applyMobilePageScaling);
+  window.addEventListener('afterprint', applyMobilePageScaling);
+});

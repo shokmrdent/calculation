@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うちトレ 受験算数 ｜ 中学受験モード</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:     #0f1623;
+  --surface:#18202f;
+  --card:   #1e2840;
+  --border: #2a3650;
+  --gold:   #f5a623;
+  --gold-s: #fcd34d;
+  --blue:   #60a5fa;
+  --text:   #f1f5f9;
+  --muted:  #94a3b8;
+  --radius: 20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* grid bg */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,165,250,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,165,250,.04) 1px, transparent 1px);
+  background-size:48px 48px;
+  z-index:0;
+}
+
+/* glow */
+.glow{
+  position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;
+}
+.glow-1{width:600px;height:600px;background:rgba(245,166,35,.08);top:-200px;right:-100px;}
+.glow-2{width:500px;height:500px;background:rgba(96,165,250,.07);bottom:-100px;left:-100px;}
+
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 24px 80px;}
+
+/* ---- nav ---- */
+.nav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 0 0;
+}
+.nav-logo{
+  font-family:'Shippori Mincho',serif;
+  font-size:20px;font-weight:800;
+  color:var(--text);letter-spacing:1px;
+}
+.nav-logo span{color:var(--gold);}
+.nav-link{
+  color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;
+  border:1px solid var(--border);border-radius:999px;padding:6px 16px;
+  transition:.15s ease;
+}
+.nav-link:hover{color:var(--text);border-color:var(--muted);}
+
+/* ---- hero ---- */
+.hero{
+  padding:64px 0 56px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35);
+  border-radius:999px;padding:6px 18px;
+  font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.5px;
+}
+.hero h1{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(36px,6vw,64px);
+  font-weight:800;line-height:1.2;
+  letter-spacing:-1px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--gold),var(--gold-s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:16px;color:var(--muted);line-height:1.9;
+  border-left:3px solid var(--gold);padding-left:16px;
+}
+.hero-stats{
+  display:flex;gap:32px;flex-wrap:wrap;margin-top:8px;
+}
+.stat{
+  display:flex;flex-direction:column;gap:2px;
+}
+.stat-num{
+  font-family:'Shippori Mincho',serif;
+  font-size:32px;font-weight:800;color:var(--text);
+  line-height:1;
+}
+.stat-num span{font-size:16px;color:var(--gold);}
+.stat-label{font-size:12px;color:var(--muted);font-weight:700;}
+
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold),#f97316);
+  color:#fff;font:inherit;font-size:15px;font-weight:800;
+  padding:14px 32px;border-radius:14px;border:none;cursor:pointer;
+  text-decoration:none;transition:.18s ease;
+  box-shadow:0 4px 24px rgba(245,166,35,.3);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,166,35,.4);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--muted);font:inherit;font-size:15px;font-weight:700;
+  padding:14px 24px;border-radius:14px;border:1px solid var(--border);cursor:pointer;
+  text-decoration:none;transition:.15s ease;
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted);}
+
+/* ---- divider ---- */
+.divider{
+  display:flex;align-items:center;gap:12px;margin:48px 0 28px;
+}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-label{
+  font-family:'Shippori Mincho',serif;
+  font-size:13px;font-weight:800;color:var(--gold);
+  letter-spacing:2px;white-space:nowrap;
+}
+
+/* ---- drill selector ---- */
+.drill-panel{
+  background:var(--card);border-radius:var(--radius);padding:28px;
+  border:1px solid var(--border);margin-bottom:40px;
+}
+.drill-panel h2{font-size:17px;font-weight:800;margin-bottom:20px;color:var(--text);}
+.op-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;
+}
+.op-btn{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:12px;padding:14px 8px;text-align:center;
+  cursor:pointer;transition:.15s ease;font:inherit;font-size:13px;font-weight:800;
+  color:var(--muted);
+}
+.op-btn.active,.op-btn:hover{
+  background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.5);color:var(--gold);
+}
+.op-emoji{display:block;font-size:22px;margin-bottom:4px;}
+.format-row{display:flex;gap:10px;margin-bottom:20px;}
+.fmt-btn{
+  flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);
+  background:transparent;font:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;transition:.15s ease;color:var(--muted);
+}
+.fmt-btn.active,.fmt-btn:hover{
+  background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.5);color:var(--blue);
+}
+.drill-bottom{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.go-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold),#f97316);
+  color:#fff;font:inherit;font-size:15px;font-weight:800;
+  padding:13px 28px;border-radius:12px;border:none;cursor:pointer;
+  text-decoration:none;transition:.18s ease;
+}
+.go-btn:hover{transform:translateY(-1px);}
+.drill-preview{
+  font-size:14px;color:var(--muted);
+  background:rgba(255,255,255,.04);padding:10px 16px;
+  border-radius:10px;border:1px solid var(--border);font-weight:700;
+}
+
+/* ---- special算グリッド ---- */
+.tokushu-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;
+  margin-bottom:48px;
+}
+.tokushu-card{
+  background:var(--card);border-radius:16px;padding:16px 18px;
+  border:1px solid var(--border);transition:.15s ease;cursor:default;
+}
+.tokushu-card.ready{
+  border-color:rgba(245,166,35,.25);cursor:pointer;
+}
+.tokushu-card.ready:hover{
+  background:rgba(245,166,35,.06);transform:translateY(-2px);
+}
+.tk-name{font-size:14px;font-weight:800;margin-bottom:4px;}
+.tk-count{font-size:12px;color:var(--muted);}
+.tk-badge{
+  display:inline-block;margin-top:8px;font-size:10px;font-weight:800;
+  padding:2px 8px;border-radius:999px;
+}
+.tk-ready{background:rgba(34,197,94,.15);color:#4ade80;}
+.tk-soon {background:rgba(245,166,35,.12);color:var(--gold);}
+
+/* ---- footer ---- */
+.footer{
+  text-align:center;padding-top:24px;border-top:1px solid var(--border);
+  font-size:13px;color:var(--muted);
+}
+.footer a{color:var(--gold);text-decoration:none;font-weight:700;}
+
+@media(max-width:600px){
+  .hero{padding:40px 0 36px;}
+  .op-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-stats{gap:20px;}
+}
+</style>
+</head>
+<body>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="wrap">
+
+  <!-- nav -->
+  <nav class="nav">
+    <div class="nav-logo">受験<span>算数</span>ドリル</div>
+  </nav>
+
+  <!-- hero -->
+  <div class="hero">
+    <div class="hero-badge">🎯 中学受験モード</div>
+    <h1>算数で、<br><em>合格をつかむ。</em></h1>
+    <p class="hero-sub">
+      特殊算26ジャンル・各100問の演習環境。<br>
+      四則演算の完全習得から特殊算の体系的攻略まで。
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">8<span>種</span></div>
+        <div class="stat-label">四則演算ドリル（実装済み）</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">26<span>系</span></div>
+        <div class="stat-label">特殊算ジャンル（実装予定）</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2600<span>問</span></div>
+        <div class="stat-label">特殊算 目標問題数</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#drill" class="btn-gold">📐 計算ドリルをはじめる</a>
+      <a href="#tokushu" class="btn-ghost">特殊算一覧を見る →</a>
+    </div>
+  </div>
+
+  <!-- 計算ドリル -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">計算ドリル</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="drill-panel" id="drill">
+    <h2>演算ドリルを選択</h2>
+    <div class="op-grid">
+      <button class="op-btn active" data-op="addition">
+        <span class="op-emoji">➕</span>足し算
+      </button>
+      <button class="op-btn" data-op="subtraction">
+        <span class="op-emoji">➖</span>引き算
+      </button>
+      <button class="op-btn" data-op="multiplication">
+        <span class="op-emoji">✖️</span>かけ算
+      </button>
+      <button class="op-btn" data-op="division">
+        <span class="op-emoji">➗</span>割り算
+      </button>
+    </div>
+    <div class="format-row">
+      <button class="fmt-btn active" data-fmt="hissan">🧮 ひっ算</button>
+      <button class="fmt-btn" data-fmt="horizontal">📝 横式</button>
+    </div>
+    <div class="drill-bottom">
+      <a id="go-btn" class="go-btn" href="addition-hissan.html">▶ 問題を開く</a>
+      <div class="drill-preview" id="drill-preview">足し算 × ひっ算</div>
+    </div>
+  </div>
+
+  <!-- 特殊算 -->
+  <div class="divider" id="tokushu">
+    <div class="divider-line"></div>
+    <div class="divider-label">特殊算 26ジャンル</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="tokushu-grid">
+    <!-- 実装予定一覧 -->
+    <script>
+    const tokushuList = [
+      {name:'旅人算',   note:'速さ・追いかけ算'},
+      {name:'植木算',   note:'間隔・本数'},
+      {name:'和差算',   note:'和と差から求める'},
+      {name:'つるかめ算',note:'連立方程式の基礎'},
+      {name:'分配算',   note:'比で分ける'},
+      {name:'年齢算',   note:'年齢と比の関係'},
+      {name:'仕事算',   note:'仕事量・時間'},
+      {name:'流水算',   note:'流れのある川'},
+      {name:'時計算',   note:'長針・短針の角度'},
+      {name:'通過算',   note:'電車・トンネル'},
+      {name:'濃度算',   note:'食塩水の濃度'},
+      {name:'売買算',   note:'利益・原価・定価'},
+      {name:'還元算',   note:'逆算で元を求める'},
+      {name:'相当算',   note:'割合の逆算'},
+      {name:'差集め算', note:'過不足算の応用'},
+      {name:'ニュートン算',note:'増減する仕事算'},
+      {name:'周期算',   note:'繰り返しのパターン'},
+      {name:'数列・等差',note:'等差・等比数列'},
+      {name:'場合の数', note:'順列・組み合わせ'},
+      {name:'規則性',   note:'図形の並び方'},
+      {name:'図形・面積',note:'面積・周長計算'},
+      {name:'図形・角度',note:'多角形の角度'},
+      {name:'立体図形', note:'体積・表面積'},
+      {name:'比・割合', note:'比の応用'},
+      {name:'速さ総合', note:'速さ・時間・距離'},
+      {name:'整数の性質',note:'約数・倍数・素数'},
+    ];
+    document.write(tokushuList.map((t,i) =>
+      `<div class="tokushu-card">
+        <div class="tk-name">${t.name}</div>
+        <div class="tk-count">${t.note}</div>
+        <span class="tk-badge tk-soon">準備中 · 100問予定</span>
+      </div>`
+    ).join(''));
+    </script>
+  </div>
+
+  <!-- footer -->
+  <div class="footer">
+    うちトレ 受験算数
+  </div>
+
+</div>
+
+<script>
+const urlMap = {
+  'addition-hissan':       'addition-hissan.html',
+  'subtraction-hissan':    'subtraction-hissan.html',
+  'multiplication-hissan': 'multiplication-hissan.html',
+  'division-hissan':       'division-hissan.html',
+  'addition-horizontal':       'addition-horizontal.html',
+  'subtraction-horizontal':    'subtraction-horizontal.html',
+  'multiplication-horizontal': 'multiplication-horizontal.html',
+  'division-horizontal':       'division-horizontal.html',
+};
+const labelOp  = {addition:'足し算',subtraction:'引き算',multiplication:'かけ算',division:'割り算'};
+const labelFmt = {hissan:'ひっ算',horizontal:'横式'};
+
+let selOp  = 'addition';
+let selFmt = 'hissan';
+
+function update(){
+  const key     = `${selOp}-${selFmt}`;
+  const goBtn   = document.getElementById('go-btn');
+  const preview = document.getElementById('drill-preview');
+  goBtn.href    = urlMap[key] || '#';
+  preview.textContent = `${labelOp[selOp]} × ${labelFmt[selFmt]}`;
+}
+
+document.querySelectorAll('.op-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selOp = btn.dataset.op;
+    update();
+  });
+});
+document.querySelectorAll('.fmt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selFmt = btn.dataset.fmt;
+    update();
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "calculations-11955"
+  },
+  "targets": {
+    "calculations-11955": {
+      "hosting": {
+        "uchitore-home":     ["uchitore-home"],
+        "uchitore-juken":    ["uchitore-juken"],
+        "calculations-11955": ["calculations-11955"]
+      }
+    }
+  }
+}

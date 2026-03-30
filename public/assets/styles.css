@@ -1,0 +1,389 @@
+
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --line:#d9dfeb;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --accent:#2563eb;
+  --accent-soft:#dbeafe;
+  --shadow:0 10px 30px rgba(15, 23, 42, .08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,#f9fbff 0%, var(--bg) 100%);
+}
+a{color:inherit;text-decoration:none}
+.container{max-width:1120px;margin:0 auto;padding:32px 20px 56px}
+.hero{margin-bottom:28px}
+.hero h1{margin:0 0 10px;font-size:34px;line-height:1.2}
+.hero p{margin:0;color:var(--muted);font-size:15px}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+.home-card{padding:26px}
+.section-label{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:12px}
+.tab-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.tab-input{display:none}
+.tab-label{
+  padding:12px 20px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;
+  font-weight:700;transition:.18s ease;user-select:none;
+}
+.tab-input:checked + .tab-label{
+  background:var(--accent-soft);border-color:#93c5fd;color:#1d4ed8;
+}
+.grid-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.link-card{
+  padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.18s ease;
+}
+.link-card:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.link-title{font-weight:800;margin-bottom:6px}
+.link-meta{font-size:13px;color:var(--muted)}
+.status-ready{display:inline-block;margin-top:10px;padding:4px 8px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:700}
+.status-wip{display:inline-block;margin-top:10px;padding:4px 8px;border-radius:999px;background:#fff7ed;color:#c2410c;font-size:12px;font-weight:700}
+.primary-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:24px}
+.primary-button, button, select{
+  font:inherit;
+}
+.primary-button, .secondary-button, button{
+  border:none;border-radius:14px;padding:12px 18px;cursor:pointer;font-weight:800;
+}
+.primary-button, button.primary{background:var(--accent);color:#fff}
+.secondary-button, button.secondary{background:#eef2ff;color:#3730a3}
+.info-box{padding:16px 18px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);font-size:14px;color:var(--muted)}
+.header-row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.header-actions{display:flex;gap:10px;flex-wrap:wrap}
+.controls{
+  padding:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:24px;
+}
+.control-group{display:flex;flex-direction:column;gap:8px;min-width:120px}
+.control-group label{font-size:13px;color:var(--muted);font-weight:700}
+select{
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;min-width:120px;
+}
+.notice{margin-bottom:18px;padding:14px 16px;border-radius:14px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:14px}
+.page{
+  width:210mm;
+  height:297mm;
+  background:#fff;
+  margin:0 auto 20px;
+  padding:10mm 10mm 22mm;
+  box-sizing:border-box;
+  display:block;
+  page-break-after:always;
+  border:1px solid #e5e7eb;
+  overflow:hidden;
+}
+.sheet-header{
+  grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #cbd5e1;padding-bottom:4mm;margin-bottom:1mm;font-size:14px;font-weight:700;color:#334155;
+}
+.problem{position:relative;width:100%;height:100%;padding-top:8px}
+.number-top,.number-bottom{text-align:right;font-size:28px;letter-spacing:1px}
+.operator{position:absolute;left:calc(100% - 92px);top:36px;font-size:28px;font-weight:700}
+.line{border-bottom:2px solid #000;width:92px;margin-left:auto;margin-top:4px}
+.problem-number{position:absolute;top:-4px;left:0;font-size:15px;color:#475569}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px}
+.ready-panel, .placeholder-panel{padding:24px}
+.placeholder-panel h2{margin-top:0;margin-bottom:10px}
+.placeholder-panel p{color:var(--muted);line-height:1.8}
+.coming-list{margin:14px 0 0;padding-left:1.2em;color:var(--muted)}
+.footer-nav{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+.small-note{font-size:13px;color:var(--muted)}
+@media print{
+  body{background:#fff}
+  .no-print{display:none !important}
+  .container{max-width:none;padding:0}
+  .page{margin:0;border:none;box-shadow:none}
+}
+.page-preview{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin:0 auto 20px;
+}
+.page-preview.is-scaled{
+  overflow:visible;
+}
+.page-scale-box{
+  position:relative;
+  width:210mm;
+  min-height:297mm;
+}
+.page-scale-box .page{
+  position:absolute;
+  left:0;
+  top:0;
+  margin:0;
+  transform-origin:top left;
+}
+.problem-grid{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  grid-template-rows:repeat(6, 1fr);
+  grid-auto-flow:column;
+  gap:8mm 15mm;
+  height:calc(297mm - 10mm - 22mm);
+}
+@media (max-width:900px){
+  .hero h1{font-size:28px}
+}
+@media (max-width:640px){
+  .container{padding:18px 8px 28px}
+  .header-row{gap:10px;margin-bottom:10px}
+  .header-row h1{font-size:24px;margin:0}
+  .section-label{font-size:12px;margin-bottom:6px}
+  .small-note{font-size:12px}
+  .notice{font-size:12px;padding:10px 12px;margin-bottom:12px}
+  .controls{padding:10px 8px;gap:6px;align-items:center;justify-content:flex-start}
+  .control-group{min-width:auto;gap:4px}
+  .control-group label{font-size:11px}
+  select{min-width:56px;padding:6px 8px;border-radius:8px;font-size:12px}
+  .page-actions{gap:6px}
+  button.primary, button.secondary, .secondary-button{padding:8px 10px;border-radius:8px;font-size:12px}
+}
+@media print{
+  .page-preview{display:block;margin:0}
+  .page-scale-box{width:auto !important;height:auto !important}
+  .page-scale-box .page{position:static;transform:none !important}
+}
+
+/* ===================== 横式ページ ===================== */
+.page-horizontal{
+  display:block;
+  padding:10mm 12mm 8mm;
+}
+.page-horizontal .sheet-header{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #cbd5e1;padding-bottom:3mm;margin-bottom:5mm;
+  font-size:13px;font-weight:700;color:#334155;
+}
+.problem-horizontal-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows: repeat(10, 1fr);
+  gap:0 8mm;
+  height:calc(297mm - 10mm - 8mm - 3mm - 5mm - 10mm); /* A4高さからpadding・header引いた分 */
+}
+.problem-horizontal{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:20px;
+  white-space:nowrap;
+  border-bottom:1px solid #e5e7eb;
+  padding:0 4px;
+}
+.prob-num{
+  font-size:13px;color:#475569;min-width:26px;flex-shrink:0;
+}
+.prob-expr{
+  font-size:20px;letter-spacing:1px;
+}
+.prob-answer-box{
+  display:inline-block;
+  width:48px;
+  border-bottom:2px solid #000;
+  height:1.1em;
+  vertical-align:middle;
+  flex-shrink:0;
+}
+.prob-rem-label{
+  font-size:13px;color:#475569;margin-left:2px;flex-shrink:0;
+}
+
+/* ===================== 割り算ひっ算 ===================== */
+.problem-div-hissan{
+  position:relative;
+  width:100%;
+  height:100%;
+  padding-top:8px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+.div-hissan-wrap{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+}
+.div-divisor{
+  font-size:28px;
+  line-height:1;
+  margin-bottom:2px;
+}
+.div-right{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+}
+.div-answer-line{
+  display:block;
+  border-top:2px solid #000;
+  width:100%;
+  margin-bottom:2px;
+}
+.div-bracket-dividend{
+  display:flex;
+  align-items:flex-end;
+}
+.div-bracket{
+  font-size:34px;
+  line-height:1;
+  display:block;
+  margin-bottom:-3px;
+}
+.div-dividend{
+  font-size:28px;
+  line-height:1;
+  padding-left:3px;
+  letter-spacing:3px;
+  margin-bottom:1px;
+}
+
+/* ===================== 割り算ひっ算専用グリッド ===================== */
+.problem-grid-division{
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  height: calc(297mm - 10mm - 22mm);
+}
+.problem-grid-division .problem-div-hissan{
+  padding-top: 6mm;
+  justify-content: flex-start;
+}
+.problem-grid-division .div-hissan-wrap{
+  margin-top: 10mm;
+}
+
+/* ===================== タブレットモード UI ===================== */
+#tablet-bar{
+  margin-bottom: 16px;
+}
+.tb-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.tb-toggle{
+  font: inherit;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 2px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  transition: .15s ease;
+  white-space: nowrap;
+}
+.tb-toggle.active{
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+.tb-tools{
+  display: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.tb-tools.tb-tools-visible{
+  display: flex;
+}
+.tb-group{
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px 8px;
+}
+.tb-tool{
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: .12s ease;
+}
+.tb-tool.active{
+  background: #fff;
+  color: #1d4ed8;
+  box-shadow: 0 1px 4px rgba(0,0,0,.12);
+}
+.tb-colors{
+  gap: 6px;
+}
+.tb-color{
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: .12s ease;
+  padding: 0;
+}
+.tb-color.active{
+  border-color: #fff;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+.tb-size-group{
+  gap: 8px;
+}
+.tb-size-label{
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+  white-space: nowrap;
+}
+#tb-size{
+  width: 80px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+.tb-clear{
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  cursor: pointer;
+  transition: .12s ease;
+}
+.tb-clear:hover{
+  background: #fecaca;
+}
+
+/* タブレットモード中はテキスト選択を無効にして誤反応防止 */
+.tablet-mode-active .page,
+.tablet-mode-active .page *{
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Canvas が乗るので .page-scale-box を relative に */
+.page-scale-box{
+  position: relative;
+}
+
+@media (max-width:640px){
+  .tb-toggle{ font-size:12px; padding:8px 12px; }
+  .tb-tool{ font-size:12px; padding:5px 8px; }
+  #tb-size{ width:60px; }
+}

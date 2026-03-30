@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うちトレ ｜ 家庭学習モード</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:     #fffdf7;
+  --yellow: #fbbf24;
+  --orange: #f97316;
+  --green:  #22c55e;
+  --blue:   #3b82f6;
+  --text:   #1c1917;
+  --muted:  #78716c;
+  --card:   #ffffff;
+  --radius: 24px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ---- blobs ---- */
+.blob{
+  position:fixed;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0;
+}
+.blob-1{width:500px;height:500px;background:#fde68a;top:-120px;left:-100px;}
+.blob-2{width:400px;height:400px;background:#bbf7d0;bottom:-80px;right:-60px;}
+.blob-3{width:300px;height:300px;background:#bfdbfe;top:40%;right:10%;}
+
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 24px 80px;}
+
+/* ---- hero ---- */
+.hero{
+  padding:60px 0 48px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:14px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fef3c7;border:2px solid #fcd34d;border-radius:999px;
+  padding:6px 16px;font-size:13px;font-weight:700;color:#92400e;
+}
+.hero h1{
+  font-family:'Nunito','Noto Sans JP',sans-serif;
+  font-size:clamp(32px,6vw,56px);
+  font-weight:900;line-height:1.15;
+  letter-spacing:-1px;
+}
+.hero h1 span{color:var(--orange);}
+.hero p{
+  font-size:16px;color:var(--muted);line-height:1.8;max-width:520px;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);color:#fff;font:inherit;font-size:15px;font-weight:800;
+  padding:14px 28px;border-radius:16px;border:none;cursor:pointer;
+  text-decoration:none;transition:.18s ease;
+  box-shadow:0 4px 20px rgba(249,115,22,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(249,115,22,.4);}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;color:var(--text);font:inherit;font-size:15px;font-weight:700;
+  padding:14px 28px;border-radius:16px;border:2px solid #e7e5e4;cursor:pointer;
+  text-decoration:none;transition:.18s ease;
+}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+
+/* ---- mode tabs ---- */
+.mode-tabs{
+  display:flex;gap:10px;justify-content:center;margin-bottom:32px;
+}
+.mode-tab{
+  padding:10px 22px;border-radius:999px;border:2px solid #e7e5e4;
+  background:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  transition:.15s ease;color:var(--muted);
+}
+.mode-tab.active{
+  background:var(--yellow);border-color:var(--yellow);color:#78350f;
+}
+
+/* ---- subject cards ---- */
+.section-title{
+  font-size:20px;font-weight:900;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::after{
+  content:'';flex:1;height:2px;background:linear-gradient(90deg,#fed7aa,transparent);border-radius:2px;
+}
+.cards{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;
+  margin-bottom:48px;
+}
+.card{
+  background:var(--card);border-radius:var(--radius);padding:22px;
+  border:2px solid #f5f5f4;transition:.18s ease;cursor:pointer;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:10px;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--yellow);box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.card-icon{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+}
+.card-title{font-size:17px;font-weight:800;}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.card-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.pill{
+  font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;
+}
+.pill-ok   {background:#dcfce7;color:#166534;}
+.pill-soon {background:#fef9c3;color:#854d0e;}
+.pill-new  {background:#dbeafe;color:#1e40af;}
+
+/* ---- entry panel ---- */
+.entry-panel{
+  background:var(--card);border-radius:var(--radius);padding:28px;
+  border:2px solid #f5f5f4;margin-bottom:48px;
+}
+.entry-panel h2{font-size:18px;font-weight:900;margin-bottom:20px;}
+
+.op-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;
+}
+.op-btn{
+  background:#fff7ed;border:2px solid #fed7aa;border-radius:14px;
+  padding:14px 8px;text-align:center;cursor:pointer;transition:.15s ease;
+  font:inherit;font-size:13px;font-weight:800;color:#9a3412;
+}
+.op-btn.active,.op-btn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.op-emoji{display:block;font-size:22px;margin-bottom:4px;}
+
+.format-row{display:flex;gap:10px;margin-bottom:20px;}
+.fmt-btn{
+  flex:1;padding:12px;border-radius:12px;border:2px solid #e7e5e4;
+  background:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  transition:.15s ease;color:var(--muted);
+}
+.fmt-btn.active,.fmt-btn:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;}
+
+.entry-bottom{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.go-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);color:#fff;font:inherit;font-size:15px;font-weight:800;
+  padding:14px 32px;border-radius:16px;border:none;cursor:pointer;
+  text-decoration:none;transition:.18s ease;
+  box-shadow:0 4px 16px rgba(249,115,22,.3);
+}
+.go-btn:hover{transform:translateY(-2px);}
+.entry-preview{
+  font-size:14px;color:var(--muted);
+  background:#f5f5f4;padding:10px 16px;border-radius:12px;font-weight:600;
+}
+
+/* ---- footer ---- */
+.footer{
+  text-align:center;padding-top:24px;border-top:1px solid #f5f5f4;
+  font-size:13px;color:var(--muted);
+}
+.footer a{color:var(--orange);text-decoration:none;font-weight:700;}
+
+@media(max-width:600px){
+  .hero{padding:40px 0 32px;}
+  .op-grid{grid-template-columns:repeat(2,1fr);}
+  .mode-tabs{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="wrap">
+
+  <!-- hero -->
+  <div class="hero">
+    <div class="hero-badge">🏠 家庭学習モード</div>
+    <h1>楽しく続ける<br><span>計算ドリル</span></h1>
+    <p>印刷して使う・タブレットで書き込む、2つの使い方で<br>毎日の計算練習をサポートします。</p>
+    <div class="hero-btns">
+      <a href="#drill" class="btn-primary">✏️ ドリルをはじめる</a>
+    </div>
+  </div>
+
+  <!-- コンテンツ一覧 -->
+  <div class="section-title">📚 学習コンテンツ</div>
+  <div class="cards">
+    <a href="#drill" class="card">
+      <div class="card-icon" style="background:#fff7ed;">🔢</div>
+      <div class="card-title">四則演算</div>
+      <div class="card-desc">足し算・引き算・かけ算・割り算。ひっ算と横式の両方に対応。</div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
+    </a>
+    <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <div class="card-icon" style="background:#f0fdf4;">🍕</div>
+      <div class="card-title">分数・小数</div>
+      <div class="card-desc">分数の足し算・引き算・通分、小数の計算など。</div>
+      <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+    </a>
+    <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <div class="card-icon" style="background:#eff6ff;">📈</div>
+      <div class="card-title">一次・二次関数</div>
+      <div class="card-desc">グラフの読み取りや式の計算などの基本単元。</div>
+      <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+    </a>
+    <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <div class="card-icon" style="background:#fdf4ff;">🔤</div>
+      <div class="card-title">英語</div>
+      <div class="card-desc">単語・文法・リスニングなど家庭学習に必要な英語基礎。</div>
+      <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+    </a>
+  </div>
+
+  <!-- ドリル選択 -->
+  <div class="entry-panel" id="drill">
+    <h2>⚡️ ドリルを選んで始める</h2>
+
+    <div class="op-grid">
+      <button class="op-btn active" data-op="addition">
+        <span class="op-emoji">➕</span>足し算
+      </button>
+      <button class="op-btn" data-op="subtraction">
+        <span class="op-emoji">➖</span>引き算
+      </button>
+      <button class="op-btn" data-op="multiplication">
+        <span class="op-emoji">✖️</span>かけ算
+      </button>
+      <button class="op-btn" data-op="division">
+        <span class="op-emoji">➗</span>割り算
+      </button>
+    </div>
+
+    <div class="format-row">
+      <button class="fmt-btn active" data-fmt="hissan">🧮 ひっ算</button>
+      <button class="fmt-btn" data-fmt="horizontal">📝 横式</button>
+    </div>
+
+    <div class="entry-bottom">
+      <a id="go-btn" class="go-btn" href="addition-hissan.html">🖊 ドリルを開く</a>
+      <div class="entry-preview" id="entry-preview">足し算 × ひっ算</div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="footer">
+    うちトレ
+  </div>
+
+</div>
+
+<script>
+const urlMap = {
+  'addition-hissan':       'addition-hissan.html',
+  'subtraction-hissan':    'subtraction-hissan.html',
+  'multiplication-hissan': 'multiplication-hissan.html',
+  'division-hissan':       'division-hissan.html',
+  'addition-horizontal':       'addition-horizontal.html',
+  'subtraction-horizontal':    'subtraction-horizontal.html',
+  'multiplication-horizontal': 'multiplication-horizontal.html',
+  'division-horizontal':       'division-horizontal.html',
+};
+const labelOp  = {addition:'足し算',subtraction:'引き算',multiplication:'かけ算',division:'割り算'};
+const labelFmt = {hissan:'ひっ算',horizontal:'横式'};
+
+let selOp  = 'addition';
+let selFmt = 'hissan';
+
+function update(){
+  const key     = `${selOp}-${selFmt}`;
+  const goBtn   = document.getElementById('go-btn');
+  const preview = document.getElementById('entry-preview');
+  goBtn.href    = urlMap[key] || '#';
+  preview.textContent = `${labelOp[selOp]} × ${labelFmt[selFmt]}`;
+}
+
+document.querySelectorAll('.op-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selOp = btn.dataset.op;
+    update();
+  });
+});
+document.querySelectorAll('.fmt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selFmt = btn.dataset.fmt;
+    update();
+  });
+});
+</script>
+</body>
+</html>

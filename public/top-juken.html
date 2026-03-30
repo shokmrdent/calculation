@@ -186,6 +186,7 @@ body::before{
   background:var(--card);border-radius:16px;padding:16px 18px;
   border:1px solid var(--border);transition:.15s ease;cursor:default;
 }
+a.tokushu-card{text-decoration:none;color:inherit;display:block;}
 .tokushu-card.ready{
   border-color:rgba(245,166,35,.25);cursor:pointer;
 }
@@ -301,7 +302,7 @@ body::before{
       {name:'旅人算',   note:'速さ・追いかけ算'},
       {name:'植木算',   note:'間隔・本数'},
       {name:'和差算',   note:'和と差から求める'},
-      {name:'つるかめ算',note:'連立方程式の基礎'},
+      {name:'つるかめ算',note:'連立方程式の基礎',url:'tsurukame.html'},
       {name:'分配算',   note:'比で分ける'},
       {name:'年齢算',   note:'年齢と比の関係'},
       {name:'仕事算',   note:'仕事量・時間'},
@@ -325,13 +326,20 @@ body::before{
       {name:'速さ総合', note:'速さ・時間・距離'},
       {name:'整数の性質',note:'約数・倍数・素数'},
     ];
-    document.write(tokushuList.map((t,i) =>
-      `<div class="tokushu-card">
+    document.write(tokushuList.map((t,i) => {
+      if(t.url){
+        return `<a class="tokushu-card ready" href="${t.url}">
+          <div class="tk-name">${t.name}</div>
+          <div class="tk-count">${t.note}</div>
+          <span class="tk-badge tk-ready">✅ 使用可能</span>
+        </a>`;
+      }
+      return `<div class="tokushu-card">
         <div class="tk-name">${t.name}</div>
         <div class="tk-count">${t.note}</div>
         <span class="tk-badge tk-soon">準備中 · 100問予定</span>
-      </div>`
-    ).join(''));
+      </div>`;
+    }).join(''));
     </script>
   </div>
 

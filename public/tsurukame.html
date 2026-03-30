@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>つるかめ算 | うちトレ 受験算数</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:     #0f1623;
+  --surface:#18202f;
+  --card:   #1e2840;
+  --border: #2a3650;
+  --gold:   #f5a623;
+  --gold-s: #fcd34d;
+  --blue:   #60a5fa;
+  --green:  #4ade80;
+  --red:    #f87171;
+  --text:   #f1f5f9;
+  --muted:  #94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,165,250,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,165,250,.04) 1px,transparent 1px);
+  background-size:48px 48px;z-index:0;
+}
+.glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.glow-1{width:500px;height:500px;background:rgba(245,166,35,.07);top:-150px;right:-100px;}
+.glow-2{width:400px;height:400px;background:rgba(96,165,250,.06);bottom:-80px;left:-80px;}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 24px 80px;}
+
+/* nav */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0 0;}
+.nav-logo{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:800;color:var(--text);}
+.nav-logo span{color:var(--gold);}
+.nav-back{
+  color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;
+  border:1px solid var(--border);border-radius:999px;padding:6px 16px;transition:.15s;
+}
+.nav-back:hover{color:var(--text);border-color:var(--muted);}
+
+/* hero */
+.hero{padding:48px 0 36px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35);
+  border-radius:999px;padding:6px 18px;
+  font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.5px;margin-bottom:14px;
+}
+.hero h1{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.2;margin-bottom:10px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--gold),var(--gold-s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{font-size:15px;color:var(--muted);line-height:1.8;border-left:3px solid var(--gold);padding-left:14px;}
+
+/* controls */
+.controls{
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:16px 20px;margin-bottom:32px;
+}
+.ctrl-label{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap;}
+.ctrl-btn{
+  font:inherit;font-size:13px;font-weight:700;
+  padding:7px 16px;border-radius:10px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;transition:.13s;
+}
+.ctrl-btn.active{background:rgba(245,166,35,.12);border-color:rgba(245,166,35,.5);color:var(--gold);}
+.ctrl-btn:hover:not(.active){color:var(--text);border-color:var(--muted);}
+.ctrl-sep{width:1px;height:24px;background:var(--border);}
+.show-all-btn{
+  margin-left:auto;font:inherit;font-size:13px;font-weight:700;
+  padding:7px 16px;border-radius:10px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;transition:.13s;
+}
+.show-all-btn:hover{color:var(--text);}
+
+/* problem card */
+.problem-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:24px 28px;margin-bottom:14px;transition:.15s;
+}
+.problem-card:hover{border-color:rgba(245,166,35,.3);}
+.prob-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;}
+.prob-num{
+  font-family:'Shippori Mincho',serif;
+  min-width:40px;height:40px;border-radius:10px;
+  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:var(--gold);flex-shrink:0;
+}
+.prob-text{font-size:16px;line-height:1.9;font-weight:700;flex:1;}
+
+/* answer area */
+.answer-area{margin-top:14px;}
+.answer-toggle{
+  font:inherit;font-size:13px;font-weight:700;
+  padding:8px 18px;border-radius:10px;
+  border:1px solid rgba(96,165,250,.35);
+  background:rgba(96,165,250,.08);color:var(--blue);
+  cursor:pointer;transition:.13s;display:flex;align-items:center;gap:6px;
+}
+.answer-toggle:hover{background:rgba(96,165,250,.15);}
+.answer-toggle.open{
+  border-color:rgba(74,222,128,.35);
+  background:rgba(74,222,128,.08);color:var(--green);
+}
+.answer-box{
+  display:none;margin-top:12px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:12px;padding:16px 20px;
+}
+.answer-box.visible{display:block;}
+.answer-line{
+  font-size:15px;font-weight:800;color:var(--green);
+  margin-bottom:10px;
+}
+.explain-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px;letter-spacing:.5px;}
+.explain-text{font-size:14px;color:var(--muted);line-height:1.9;}
+
+/* progress */
+.progress-bar-wrap{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:16px 20px;margin-bottom:28px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.progress-label{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap;}
+.progress-bar{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:999px;min-width:120px;}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold-s));transition:.3s;}
+.progress-count{font-size:13px;font-weight:800;color:var(--gold);white-space:nowrap;}
+
+@media(max-width:600px){
+  .prob-text{font-size:15px;}
+  .problem-card{padding:18px 16px;}
+  .controls{padding:12px 14px;}
+}
+</style>
+</head>
+<body>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="wrap">
+
+  <nav class="nav">
+    <div class="nav-logo">うちトレ <span>受験算数</span></div>
+    <a href="top-juken.html" class="nav-back">← 一覧へ戻る</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-badge">特殊算 · つるかめ算</div>
+    <h1>つるかめ算<br><em>基本問題 10問</em></h1>
+    <p class="hero-desc">
+      「全部〇〇だったら」と仮定して差を求める考え方を身につけよう。<br>
+      金額・長さ・点数など、様々な場面で使える汎用テクニック。
+    </p>
+  </div>
+
+  <!-- 進捗 -->
+  <div class="progress-bar-wrap">
+    <span class="progress-label">解答確認済み</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <span class="progress-count" id="progress-count">0 / 10</span>
+  </div>
+
+  <!-- コントロール -->
+  <div class="controls">
+    <span class="ctrl-label">フィルター</span>
+    <button class="ctrl-btn active" data-filter="all" onclick="setFilter(this,'all')">すべて</button>
+    <button class="ctrl-btn" data-filter="tsuru" onclick="setFilter(this,'tsuru')">鶴亀</button>
+    <button class="ctrl-btn" data-filter="apply" onclick="setFilter(this,'apply')">応用</button>
+    <div class="ctrl-sep"></div>
+    <button class="show-all-btn" id="show-all-btn" onclick="toggleAll()">▼ 全問の答えを表示</button>
+  </div>
+
+  <!-- 問題一覧 -->
+  <div id="problem-list"></div>
+
+</div>
+
+<script>
+const problems = [
+  {
+    id:1, category:'tsuru',
+    text:'つるとかめがあわせて10匹います。足の数の合計は28本です。つるとかめはそれぞれ何匹ですか。',
+    answer:'つる 6匹、かめ 4匹',
+    explain:'もし全部つるなら足は20本です。実際は28本なので8本多いです。かめ1匹に変えるごとに足が2本増えるので、かめは 8÷2＝4匹、つるは 10－4＝6匹です。'
+  },
+  {
+    id:2, category:'tsuru',
+    text:'つるとかめがあわせて14匹います。足の数の合計は44本です。つるとかめはそれぞれ何匹ですか。',
+    answer:'つる 6匹、かめ 8匹',
+    explain:'全部つるなら足は28本です。実際は44本で16本多いです。かめ1匹に変えると2本増えるので、かめは 16÷2＝8匹、つるは 14－8＝6匹です。'
+  },
+  {
+    id:3, category:'tsuru',
+    text:'つるとかめがあわせて18匹います。足の数の合計は56本です。つるとかめはそれぞれ何匹ですか。',
+    answer:'つる 8匹、かめ 10匹',
+    explain:'全部つるなら足は36本です。実際は56本で20本多いです。2本ずつ増えるので、かめは 20÷2＝10匹、つるは 18－10＝8匹です。'
+  },
+  {
+    id:4, category:'tsuru',
+    text:'つるとかめがあわせて25匹います。足の数の合計は70本です。つるとかめはそれぞれ何匹ですか。',
+    answer:'つる 15匹、かめ 10匹',
+    explain:'全部つるなら足は50本です。実際は70本で20本多いです。2本ずつ増えるので、かめは 20÷2＝10匹、つるは 25－10＝15匹です。'
+  },
+  {
+    id:5, category:'tsuru',
+    text:'つるとかめがあわせて32匹います。足の数の合計は92本です。つるとかめはそれぞれ何匹ですか。',
+    answer:'つる 18匹、かめ 14匹',
+    explain:'全部つるなら足は64本です。実際は92本で28本多いです。2本ずつ増えるので、かめは 28÷2＝14匹、つるは 32－14＝18匹です。'
+  },
+  {
+    id:6, category:'apply',
+    text:'100円玉と10円玉があわせて12枚あり、金額の合計は480円です。100円玉と10円玉はそれぞれ何枚ですか。',
+    answer:'100円玉 4枚、10円玉 8枚',
+    explain:'全部10円玉なら120円です。実際は480円で360円多いです。100円玉に1枚変えると90円増えるので、100円玉は 360÷90＝4枚、10円玉は 12－4＝8枚です。'
+  },
+  {
+    id:7, category:'apply',
+    text:'大人と子どもがあわせて20人で動物園に入りました。入園料の合計は2600円です。大人は1人160円、子どもは1人100円です。大人と子どもはそれぞれ何人ですか。',
+    answer:'大人 10人、子ども 10人',
+    explain:'全部子どもなら2000円です。実際は2600円で600円多いです。大人1人に変えると60円増えるので、大人は 600÷60＝10人、子どもは 20－10＝10人です。'
+  },
+  {
+    id:8, category:'apply',
+    text:'赤いリボンと青いリボンがあわせて15本あります。赤いリボンは1本80cm、青いリボンは1本120cmで、長さの合計は1560cmです。赤いリボンと青いリボンはそれぞれ何本ですか。',
+    answer:'赤いリボン 6本、青いリボン 9本',
+    explain:'全部赤いリボンなら1200cmです。実際は1560cmで360cm多いです。青いリボン1本に変えると40cm増えるので、青いリボンは 360÷40＝9本、赤いリボンは 15－9＝6本です。'
+  },
+  {
+    id:9, category:'apply',
+    text:'2点問題と5点問題があわせて18問あり、合計点は60点でした。2点問題と5点問題はそれぞれ何問ですか。',
+    answer:'2点問題 10問、5点問題 8問',
+    explain:'全部2点問題なら36点です。実際は60点で24点多いです。5点問題1問に変えると3点増えるので、5点問題は 24÷3＝8問、2点問題は 18－8＝10問です。'
+  },
+  {
+    id:10, category:'apply',
+    text:'えんぴつとボールペンがあわせて22本あります。えんぴつは1本60円、ボールペンは1本120円で、代金の合計は1800円でした。えんぴつとボールペンはそれぞれ何本ですか。',
+    answer:'えんぴつ 14本、ボールペン 8本',
+    explain:'全部えんぴつなら1320円です。実際は1800円で480円多いです。ボールペン1本に変えると60円増えるので、ボールペンは 480÷60＝8本、えんぴつは 22－8＝14本です。'
+  },
+];
+
+let openCount = 0;
+let allOpen   = false;
+let currentFilter = 'all';
+
+function setFilter(btn, filter) {
+  document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = filter;
+  renderProblems();
+}
+
+function renderProblems() {
+  const list = document.getElementById('problem-list');
+  const filtered = currentFilter === 'all' ? problems : problems.filter(p => p.category === currentFilter);
+  list.innerHTML = filtered.map(p => `
+    <div class="problem-card" id="card-${p.id}">
+      <div class="prob-header">
+        <div class="prob-num">${p.id}</div>
+        <div class="prob-text">${p.text}</div>
+      </div>
+      <div class="answer-area">
+        <button class="answer-toggle" id="toggle-${p.id}" onclick="toggleAnswer(${p.id})">
+          <span id="toggle-icon-${p.id}">▶</span> 答えと解説を見る
+        </button>
+        <div class="answer-box" id="answer-${p.id}">
+          <div class="answer-line">✅ ${p.answer}</div>
+          <div class="explain-label">POINT</div>
+          <div class="explain-text">${p.explain}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleAnswer(id) {
+  const box    = document.getElementById(`answer-${id}`);
+  const toggle = document.getElementById(`toggle-${id}`);
+  const icon   = document.getElementById(`toggle-icon-${id}`);
+  const wasOpen = box.classList.contains('visible');
+  box.classList.toggle('visible');
+  toggle.classList.toggle('open', !wasOpen);
+  icon.textContent = wasOpen ? '▶' : '▼';
+  if (!wasOpen) openCount++;
+  else openCount = Math.max(0, openCount - 1);
+  updateProgress();
+}
+
+function toggleAll() {
+  allOpen = !allOpen;
+  const btn = document.getElementById('show-all-btn');
+  btn.textContent = allOpen ? '▲ 全問の答えを隠す' : '▼ 全問の答えを表示';
+  problems.forEach(p => {
+    const box    = document.getElementById(`answer-${p.id}`);
+    const toggle = document.getElementById(`toggle-${p.id}`);
+    const icon   = document.getElementById(`toggle-icon-${p.id}`);
+    if (!box) return;
+    box.classList.toggle('visible', allOpen);
+    toggle.classList.toggle('open', allOpen);
+    icon.textContent = allOpen ? '▼' : '▶';
+  });
+  openCount = allOpen ? problems.length : 0;
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct  = Math.round((openCount / problems.length) * 100);
+  document.getElementById('progress-fill').style.width  = pct + '%';
+  document.getElementById('progress-count').textContent = `${openCount} / ${problems.length}`;
+}
+
+renderProblems();
+</script>
+</body>
+</html>

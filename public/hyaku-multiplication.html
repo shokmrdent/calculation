@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100マス計算（かけ算） | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .hyaku-wrap{
+      width:210mm;
+      min-height:297mm;
+      background:#fff;
+      margin:0 auto 20px;
+      padding:10mm 10mm 10mm;
+      box-sizing:border-box;
+      border:1px solid #e5e7eb;
+    }
+    .hyaku-title{
+      text-align:center;
+      font-size:14px;
+      font-weight:700;
+      color:#334155;
+      margin-bottom:6mm;
+      letter-spacing:1px;
+    }
+    .hyaku-table{
+      border-collapse:collapse;
+      width:100%;
+      table-layout:fixed;
+    }
+    .hyaku-table th,
+    .hyaku-table td{
+      border:1px solid #b0b8c8;
+      text-align:center;
+      vertical-align:middle;
+      font-size:14px;
+      font-weight:700;
+      padding:0;
+      height:18.5mm;
+      width:18.5mm;
+    }
+    /* 左上の演算子セル */
+    .cell-op{
+      background:#f5e6d8;
+      font-size:18px;
+      color:#9a3412;
+    }
+    /* 横ヘッダー（たされる数）行 */
+    .cell-col-header{
+      background:#f5e6d8;
+      color:#1c1917;
+    }
+    /* 縦ヘッダー（たす数）列 */
+    .cell-row-header{
+      background:#f5e6d8;
+      color:#1c1917;
+    }
+    /* 答えセル */
+    .cell-answer{
+      background:#fff;
+      color:#1c1917;
+    }
+    /* たされる数 / たす数 ラベル行 */
+    .cell-label{
+      background:#fff;
+      font-size:10px;
+      font-weight:400;
+      color:#64748b;
+      border:none;
+      height:6mm;
+      writing-mode:vertical-rl;
+      text-orientation:mixed;
+    }
+    .header-label-row th{
+      height:6mm;
+      font-size:10px;
+      font-weight:400;
+      color:#64748b;
+      border:none;
+      background:#fff;
+    }
+    .page-preview-hyaku{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      margin:0 auto 20px;
+    }
+    @media print{
+      .no-print{display:none !important}
+      body{background:#fff}
+      .container{max-width:none;padding:0}
+      .hyaku-wrap{margin:0;border:none;box-shadow:none}
+    }
+    @media(max-width:640px){
+      .page-preview-hyaku{overflow-x:auto;}
+      .hyaku-wrap{width:180mm;padding:6mm;}
+    }
+  </style>
+</head>
+<body data-page-type="hyaku-multiplication">
+  <div class="container">
+    <div class="header-row no-print">
+      <div>
+        <div class="section-label">うちトレ</div>
+        <h1>100マス計算（かけ算）</h1>
+        <div class="small-note">1桁×1桁。九九の練習に。</div>
+      </div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1" selected>1</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+
+  <script src="assets/tablet.js"></script>
+  <script>
+    function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j=rand(0,i);
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function makeNumbers(){
+      // 1〜9 をシャッフルして10個（1個重複）
+      const base=[1,2,3,4,5,6,7,8,9];
+      const extra=rand(1,9);
+      return shuffle([...base, extra]);
+    }
+
+    function generate(){
+      const count = parseInt(document.getElementById('count').value);
+      const container = document.getElementById('pages');
+      container.innerHTML = '';
+
+      for(let p=0; p<count; p++){
+        const colNums = makeNumbers(); // 横ヘッダー 10個
+        const rowNums = makeNumbers(); // 縦ヘッダー 10個
+
+        const wrap = document.createElement('div');
+        wrap.className = 'page-preview-hyaku';
+
+        const sheet = document.createElement('div');
+        sheet.className = 'hyaku-wrap';
+
+        sheet.innerHTML = `<div class="hyaku-title">100マス計算　かけ算　${p+1}/${count}</div>`;
+
+        const table = document.createElement('table');
+        table.className = 'hyaku-table';
+
+        // ラベル行（たされる数）
+        const labelRow = document.createElement('tr');
+        labelRow.className = 'header-label-row';
+        const labelTh0 = document.createElement('th');
+        labelTh0.colSpan = 2;
+        labelRow.appendChild(labelTh0);
+        const labelTh1 = document.createElement('th');
+        labelTh1.colSpan = 10;
+        labelTh1.textContent = 'かけられる数';
+        labelRow.appendChild(labelTh1);
+        table.appendChild(labelRow);
+
+        // ヘッダー行（演算子 ＋ 横数字10個）
+        const headRow = document.createElement('tr');
+        const opTh = document.createElement('th');
+        opTh.className = 'cell-op';
+        opTh.textContent = '×';
+        headRow.appendChild(opTh);
+        // 縦ラベルスペース
+        const spaceTh = document.createElement('th');
+        spaceTh.style.border = 'none';
+        spaceTh.style.background = '#fff';
+        headRow.appendChild(spaceTh);
+        colNums.forEach(n => {
+          const th = document.createElement('th');
+          th.className = 'cell-col-header';
+          th.textContent = n;
+          headRow.appendChild(th);
+        });
+        table.appendChild(headRow);
+
+        // データ行
+        rowNums.forEach((rowNum, ri) => {
+          const tr = document.createElement('tr');
+
+          // 縦ラベル（かける数）- 最初の行のみ表示
+          if(ri === 0){
+            const labelTd = document.createElement('td');
+            labelTd.className = 'cell-label';
+            labelTd.rowSpan = 10;
+            labelTd.textContent = 'かける数';
+            tr.appendChild(labelTd);
+          }
+
+          // 行ヘッダー
+          const rowTh = document.createElement('th');
+          rowTh.className = 'cell-row-header';
+          rowTh.textContent = rowNum;
+          tr.appendChild(rowTh);
+
+          // 答えセル
+          colNums.forEach(() => {
+            const td = document.createElement('td');
+            td.className = 'cell-answer';
+            tr.appendChild(td);
+          });
+
+          table.appendChild(tr);
+        });
+
+        sheet.appendChild(table);
+        wrap.appendChild(sheet);
+        container.appendChild(wrap);
+      }
+    }
+
+    async function downloadPDF(){
+      const sheets = document.querySelectorAll('.hyaku-wrap');
+      if(!sheets.length){ alert('先に「生成」を押してください。'); return; }
+      if(!window.html2canvas || !window.jspdf){ alert('PDFライブラリの読み込みに失敗しました。'); return; }
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+      for(let i=0; i<sheets.length; i++){
+        const canvas = await html2canvas(sheets[i], { scale:2, useCORS:true });
+        const img = canvas.toDataURL('image/png');
+        if(i>0) pdf.addPage();
+        pdf.addImage(img,'PNG',0,0,210,297);
+      }
+      pdf.save('hyaku_kakezan.pdf');
+    }
+
+    window.addEventListener('DOMContentLoaded', generate);
+  </script>
+</body>
+</html>

@@ -16,6 +16,7 @@ function applyMobilePageScaling(){
     const scaleBox = wrapper.querySelector('.page-scale-box');
     const page     = wrapper.querySelector('.page');
     if(!scaleBox || !page) return;
+    if(page.classList.contains('answer-page')) return;
     wrapper.classList.remove('is-scaled');
     scaleBox.style.width = '';
     scaleBox.style.height = '';
@@ -233,6 +234,9 @@ function generate(){
   const container = document.getElementById('pages');
   container.innerHTML = '';
 
+  // 答えページ用
+  const allAnswers = []; // {pageNo, num, label}
+
   for(let p = 0; p < count; p++){
     const usedKeys = new Set();
     const page = document.createElement('div');
@@ -246,16 +250,25 @@ function generate(){
         const sameDenom = document.getElementById('same-denom').value === 'same';
         const prob = uniqueProblem(usedKeys, makeFractionProblem, [op, maxDen, sameDenom]);
         grid.innerHTML += fracProblemHTML(i, prob, op);
+        // 答え計算
+        const ans = calcFracAnswer(prob, op);
+        allAnswers.push({ pageNo: p+1, num: i, label: ans });
       } else {
         const decPlaces = parseInt(document.getElementById('dec-places').value);
         const prob = uniqueProblem(usedKeys, makeDecimalProblem, [op, decPlaces]);
         grid.innerHTML += decProblemHTML(i, prob, op);
+        // 答え計算
+        const ans = calcDecAnswer(prob, op, decPlaces);
+        allAnswers.push({ pageNo: p+1, num: i, label: ans });
       }
     }
 
     page.appendChild(grid);
     container.appendChild(wrapPageForPreview(page));
   }
+
+  // 答えページ追加
+  appendFracAnswerPage(container, allAnswers, pageType, op, count);
 
   // 足し算・引き算のみ同分母オプションを表示
   const sameDomWrap = document.getElementById('same-denom-wrap');
@@ -264,6 +277,91 @@ function generate(){
   }
 
   applyMobilePageScaling();
+}
+
+// ===== 答え計算 =====
+function calcFracAnswer(prob, op){
+  const { n1, d1, n2, d2 } = prob;
+  let rn, rd;
+  if(op === 'add'){
+    const d = lcm(d1, d2);
+    rn = n1*(d/d1) + n2*(d/d2);
+    rd = d;
+  } else if(op === 'sub'){
+    const d = lcm(d1, d2);
+    rn = n1*(d/d1) - n2*(d/d2);
+    rd = d;
+  } else if(op === 'mul'){
+    rn = n1 * n2;
+    rd = d1 * d2;
+  } else { // div
+    rn = n1 * d2;
+    rd = d1 * n2;
+  }
+  const [sn, sd] = simplify(rn, rd);
+  if(sd === 1) return String(sn);
+  // 帯分数に変換
+  if(sn > sd){
+    const whole = Math.floor(sn / sd);
+    const rem   = sn % sd;
+    return rem === 0 ? String(whole) : `${whole} ${rem}/${sd}`;
+  }
+  return `${sn}/${sd}`;
+}
+
+function calcDecAnswer(prob, op, decPlaces){
+  const factor = Math.pow(10, decPlaces);
+  let ans;
+  if(op === 'add')      ans = prob.a + prob.b;
+  else if(op === 'sub') ans = prob.a - prob.b;
+  else if(op === 'mul') ans = prob.a * prob.b;
+  else                  ans = prob.a / prob.b;
+  return parseFloat(ans.toFixed(decPlaces * 2)).toString();
+}
+
+function appendFracAnswerPage(container, allAnswers, pageType, op, count){
+  const opLabel = { add:'足し算', sub:'引き算', mul:'かけ算', div:'割り算' }[op] || op;
+  const typeLabel = pageType === 'fraction' ? '分数' : '小数';
+  const title = `${typeLabel}の${opLabel}　答え`;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'page-preview';
+  const scaleBox = document.createElement('div');
+  scaleBox.className = 'page-scale-box';
+  const page = document.createElement('div');
+  page.className = 'page answer-page';
+
+  const header = document.createElement('div');
+  header.className = 'answer-page-header';
+  header.textContent = title;
+  page.appendChild(header);
+
+  for(let p = 1; p <= count; p++){
+    const probs = allAnswers.filter(x => x.pageNo === p);
+    if(!probs.length) continue;
+    const section = document.createElement('div');
+    section.className = 'answer-section';
+    if(count > 1){
+      const label = document.createElement('div');
+      label.className = 'answer-section-label';
+      label.textContent = `${p}枚目`;
+      section.appendChild(label);
+    }
+    const grid = document.createElement('div');
+    grid.className = 'answer-grid';
+    probs.forEach(({ num, label }) => {
+      const item = document.createElement('div');
+      item.className = 'answer-item';
+      item.innerHTML = `<span class="answer-num">(${num})</span><span class="answer-val">${label}</span>`;
+      grid.appendChild(item);
+    });
+    section.appendChild(grid);
+    page.appendChild(section);
+  }
+
+  scaleBox.appendChild(page);
+  wrap.appendChild(scaleBox);
+  container.appendChild(wrap);
 }
 
 // ===== 初期化 =====
@@ -288,6 +386,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const sameDomWrap = document.getElementById('same-denom-wrap');
   if(sameDomWrap){
     sameDomWrap.style.display = (op === 'add' || op === 'sub') ? '' : 'none';
+  }
+
+  // URLパラメータで演算を初期選択
+  const urlParams = new URLSearchParams(window.location.search);
+  const opParam = urlParams.get('op');
+  if(opParam){
+    const opSel = document.getElementById('op');
+    if(opSel) opSel.value = opParam;
+    // 同分母オプションの表示更新
+    const sameDomWrap = document.getElementById('same-denom-wrap');
+    if(sameDomWrap){
+      sameDomWrap.style.display = (opParam === 'add' || opParam === 'sub') ? '' : 'none';
+    }
   }
 
   generate();

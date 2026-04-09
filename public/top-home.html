@@ -193,9 +193,6 @@ body{
     <div class="hero-badge">🏠 家庭学習モード</div>
     <h1>楽しく続ける<br><span>計算ドリル</span></h1>
     <p>印刷して使う・タブレットで書き込む、2つの使い方で<br>毎日の計算練習をサポートします。</p>
-    <div class="hero-btns">
-      <a href="#drill" class="btn-primary">✏️ ドリルをはじめる</a>
-    </div>
   </div>
 
   <!-- コンテンツ一覧 -->
@@ -204,28 +201,34 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小1〜小2　たし算・ひき算</div>
     <div class="cards">
-      <a href="#drill" class="card" onclick="setDrillOp('addition')">
+      <a href="addition-horizontal.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">➕</div>
         <div class="card-title">足し算（横式）</div>
         <div class="card-desc">繰り上がりあり。1〜3桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('subtraction')">
+      <a href="subtraction-horizontal.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">➖</div>
         <div class="card-title">引き算（横式）</div>
         <div class="card-desc">繰り下がりあり。1〜3桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('addition'); setDrillFmt('hissan')">
+      <a href="addition-hissan.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">📝</div>
         <div class="card-title">足し算（ひっ算）</div>
         <div class="card-desc">繰り上がりあり。桁数選択。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('subtraction'); setDrillFmt('hissan')">
+      <a href="subtraction-hissan.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">📝</div>
         <div class="card-title">引き算（ひっ算）</div>
         <div class="card-desc">繰り下がりあり。桁数選択。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="story-problems.html" class="card">
+        <div class="card-icon" style="background:#fef9c3;">📖</div>
+        <div class="card-title">文章題（足し算・引き算）</div>
+        <div class="card-desc">ランダム生成。式と答えを書く。10問。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
     </div>
@@ -243,25 +246,25 @@ body{
           <span class="pill pill-new">✏️ タブレット</span>
         </div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('multiplication'); setDrillFmt('hissan')">
+      <a href="multiplication-hissan.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">✖️</div>
         <div class="card-title">かけ算（ひっ算）</div>
         <div class="card-desc">2〜3桁×1〜2桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('division'); setDrillFmt('hissan')">
+      <a href="division-hissan.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">➗</div>
         <div class="card-title">わり算（ひっ算）</div>
         <div class="card-desc">1〜3桁÷1〜2桁。あまりあり・なし。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('multiplication'); setDrillFmt('horizontal')">
+      <a href="multiplication-horizontal.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">✖️</div>
         <div class="card-title">かけ算（横式）</div>
         <div class="card-desc">横式で桁数選択。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#drill" class="card" onclick="setDrillOp('division'); setDrillFmt('horizontal')">
+      <a href="division-horizontal.html" class="card">
         <div class="card-icon" style="background:#fff7ed;">➗</div>
         <div class="card-title">わり算（横式）</div>
         <div class="card-desc">あまりあり・なし・混在。</div>
@@ -273,13 +276,13 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小4〜小5　分数・小数</div>
     <div class="cards">
-      <a href="#fraction-decimal" class="card" onclick="setFdType('fraction'); setFdOp('add')">
+      <a href="fraction.html?op=add" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の足し算</div>
         <div class="card-desc">同分母・異分母（通分）。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#fraction-decimal" class="card" onclick="setFdType('fraction'); setFdOp('sub')">
+      <a href="fraction.html?op=sub" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の引き算</div>
         <div class="card-desc">同分母・異分母（通分）。</div>
@@ -291,13 +294,13 @@ body{
         <div class="card-desc">最大公約数・最小公倍数。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
       </a>
-      <a href="#fraction-decimal" class="card" onclick="setFdType('decimal'); setFdOp('add')">
+      <a href="decimal.html?op=add" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数の足し算・引き算</div>
         <div class="card-desc">小数第1・2位。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#fraction-decimal" class="card" onclick="setFdType('decimal'); setFdOp('mul')">
+      <a href="decimal.html?op=mul" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数のかけ算・わり算</div>
         <div class="card-desc">小数×整数、小数÷整数。</div>
@@ -309,13 +312,13 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小6　分数の乗除・混合計算</div>
     <div class="cards">
-      <a href="#fraction-decimal" class="card" onclick="setFdType('fraction'); setFdOp('mul')">
+      <a href="fraction.html?op=mul" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数のかけ算</div>
         <div class="card-desc">分数×分数。約分あり。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#fraction-decimal" class="card" onclick="setFdType('fraction'); setFdOp('div')">
+      <a href="fraction.html?op=div" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の割り算</div>
         <div class="card-desc">分数÷分数。逆数を使う。</div>
@@ -420,66 +423,6 @@ body{
     </div>
   </div>
 
-  </div>
-
-  <!-- ドリル選択 -->
-  <div class="entry-panel" id="drill">
-    <h2>⚡️ ドリルを選んで始める</h2>
-
-    <div class="op-grid">
-      <button class="op-btn active" data-op="addition">
-        <span class="op-emoji">➕</span>足し算
-      </button>
-      <button class="op-btn" data-op="subtraction">
-        <span class="op-emoji">➖</span>引き算
-      </button>
-      <button class="op-btn" data-op="multiplication">
-        <span class="op-emoji">✖️</span>かけ算
-      </button>
-      <button class="op-btn" data-op="division">
-        <span class="op-emoji">➗</span>割り算
-      </button>
-    </div>
-
-    <div class="format-row">
-      <button class="fmt-btn active" data-fmt="hissan">🧮 ひっ算</button>
-      <button class="fmt-btn" data-fmt="horizontal">📝 横式</button>
-    </div>
-
-    <div class="entry-bottom">
-      <a id="go-btn" class="go-btn" href="addition-hissan.html">🖊 ドリルを開く</a>
-      <div class="entry-preview" id="entry-preview">足し算 × ひっ算</div>
-    </div>
-  </div>
-
-  <!-- 分数・小数 ドリル -->
-  <div class="entry-panel" id="fraction-decimal">
-    <h2>🍕 分数・小数を選んで始める</h2>
-
-    <div class="op-grid" id="fd-op-grid">
-      <button class="op-btn active" data-op="add">
-        <span class="op-emoji">➕</span>足し算
-      </button>
-      <button class="op-btn" data-op="sub">
-        <span class="op-emoji">➖</span>引き算
-      </button>
-      <button class="op-btn" data-op="mul">
-        <span class="op-emoji">✖️</span>かけ算
-      </button>
-      <button class="op-btn" data-op="div">
-        <span class="op-emoji">➗</span>割り算
-      </button>
-    </div>
-
-    <div class="format-row">
-      <button class="fmt-btn active" data-type="fraction" id="fd-fraction">🍕 分数</button>
-      <button class="fmt-btn" data-type="decimal" id="fd-decimal">🔢 小数</button>
-    </div>
-
-    <div class="entry-bottom">
-      <a id="fd-go-btn" class="go-btn" href="fraction.html?op=add">🖊 ドリルを開く</a>
-      <div class="entry-preview" id="fd-preview">分数 × 足し算</div>
-    </div>
   </div>
 
   <!-- footer -->

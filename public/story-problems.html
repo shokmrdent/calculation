@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>足し算・引き算　文章題 | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* 文章題レイアウト */
+    .story-page{
+      width: 210mm;
+      height: 297mm;
+      background: #fff;
+      margin: 0 auto 20px;
+      padding: 12mm 14mm 14mm;
+      box-sizing: border-box;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+    }
+    .story-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(5, 1fr);
+      gap: 4mm 8mm;
+      flex: 1;
+      min-height: 0;
+    }
+    .story-item{
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4mm 5mm 3mm;
+      display: flex;
+      flex-direction: column;
+      gap: 3mm;
+    }
+    .story-num{
+      font-size: 11px;
+      color: #475569;
+      font-weight: 700;
+    }
+    .story-text{
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: #1e293b;
+      flex: 1;
+    }
+    .story-write-area{
+      display: flex;
+      flex-direction: column;
+      gap: 2mm;
+    }
+    .story-write-row{
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+    }
+    .story-write-label{
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      min-width: 14mm;
+    }
+    .story-write-line{
+      flex: 1;
+      border-bottom: 1.5px solid #94a3b8;
+      height: 5mm;
+    }
+    /* 答えページ */
+    .story-answer-page{
+      width: 210mm;
+      min-height: 80mm;
+      background: #fff;
+      margin: 0 auto 20px;
+      padding: 10mm 14mm;
+      box-sizing: border-box;
+      border: 1px solid #e5e7eb;
+    }
+
+    @media print{
+      body{ background: #fff; }
+      .no-print{ display: none !important; }
+      .container{ max-width: none; padding: 0; }
+      .story-page,
+      .story-answer-page{ margin: 0; border: none; }
+    }
+    @media(max-width:640px){
+      .page-preview{ overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-row no-print">
+      <div>
+        <div class="section-label">うちトレ</div>
+        <h1>足し算・引き算　文章題</h1>
+        <div class="small-note">ランダム生成。10問／ページ。式と答えを書く。</div>
+      </div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="level">レベル</label>
+        <select id="level">
+          <option value="1">1桁（小1〜小2）</option>
+          <option value="2" selected>2桁（小2〜小3）</option>
+          <option value="3">3桁（小3〜）</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="op-type">演算</label>
+        <select id="op-type">
+          <option value="both" selected>足し算・引き算 混在</option>
+          <option value="add">足し算のみ</option>
+          <option value="sub">引き算のみ</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1" selected>1</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+
+  <script src="assets/tablet.js"></script>
+  <script>
+  function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  // 足し算テンプレート
+  const addTemplates = [
+    (a,b) => `はこの中に りんごが ${a}こ あります。\nそこへ ${b}こ いれました。\nりんごは ぜんぶで なんこですか。`,
+    (a,b) => `あかい はなが ${a}ほん さいています。\nしろい はなも ${b}ほん さいています。\nあわせて なんぼんですか。`,
+    (a,b) => `バスに おきゃくさんが ${a}にん のっています。\nつぎの ていりゅうじょで ${b}にん のってきました。\nぜんぶで なんにんですか。`,
+    (a,b) => `本だなに ほんが ${a}さつ あります。\nきょう ${b}さつ かいました。\nぜんぶで なんさつですか。`,
+    (a,b) => `こうえんで こどもが ${a}にん あそんでいます。\nあとから ${b}にん やってきました。\nぜんぶで なんにんですか。`,
+    (a,b) => `えんぴつが ${a}ほん あります。\nともだちに ${b}ほん もらいました。\nえんぴつは ぜんぶで なんぼんですか。`,
+    (a,b) => `おかしが ${a}こ ありました。\nおかあさんが ${b}こ かってきました。\nおかしは あわせて なんこですか。`,
+    (a,b) => `きいろい ふうせんが ${a}こ、\nあおい ふうせんが ${b}こ あります。\nあわせて なんこですか。`,
+  ];
+
+  // 引き算テンプレート
+  const subTemplates = [
+    (a,b) => `はこの中に りんごが ${a}こ あります。\n${b}こ たべました。\nのこりは なんこですか。`,
+    (a,b) => `クラスに ${a}にん います。\nきょう ${b}にん やすみました。\nがっこうに きているのは なんにんですか。`,
+    (a,b) => `おかしが ${a}こ ありました。\nともだちに ${b}こ あげました。\nのこりは なんこですか。`,
+    (a,b) => `本が ${a}さつ あります。\n${b}さつ よみました。\nまだ よんでいない本は なんさつですか。`,
+    (a,b) => `どうぶつえんに ${a}ひき どうぶつがいます。\nきょう ${b}ひき べつのいけに うつりました。\nのこりは なんびきですか。`,
+    (a,b) => `えんぴつが ${a}ほん ありました。\n${b}ほん つかいました。\nのこりは なんぼんですか。`,
+    (a,b) => `シールが ${a}まい あります。\n${b}まい つかいました。\nのこりは なんまいですか。`,
+    (a,b) => `かごに たまごが ${a}こ ありました。\nりょうりに ${b}こ つかいました。\nのこりは なんこですか。`,
+  ];
+
+  function makeNumbers(level){
+    const max = level === 1 ? 9 : level === 2 ? 99 : 999;
+    const min = level === 1 ? 1 : level === 2 ? 10 : 100;
+    return [rand(min, max), rand(1, Math.floor(max/2))];
+  }
+
+  function makeAddProblem(level){
+    const [a, b] = makeNumbers(level);
+    const tmpl = addTemplates[rand(0, addTemplates.length-1)];
+    return { text: tmpl(a, b), answer: a + b, expr: `${a} ＋ ${b} ＝ ${a+b}` };
+  }
+
+  function makeSubProblem(level){
+    let a, b;
+    do {
+      [a, b] = makeNumbers(level);
+    } while(a <= b);
+    const tmpl = subTemplates[rand(0, subTemplates.length-1)];
+    return { text: tmpl(a, b), answer: a - b, expr: `${a} － ${b} ＝ ${a-b}` };
+  }
+
+  function makeProblem(level, opType){
+    const useAdd = opType === 'add' ? true : opType === 'sub' ? false : rand(0,1) === 0;
+    return useAdd ? makeAddProblem(level) : makeSubProblem(level);
+  }
+
+  function generate(){
+    const level  = parseInt(document.getElementById('level').value);
+    const opType = document.getElementById('op-type').value;
+    const count  = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('pages');
+    container.innerHTML = '';
+
+    const allProblems = [];
+
+    for(let p = 0; p < count; p++){
+      const problems = Array.from({length:10}, () => makeProblem(level, opType));
+
+      // 問題ページ
+      const wrap = document.createElement('div');
+      wrap.className = 'page-preview';
+      const scaleBox = document.createElement('div');
+      scaleBox.className = 'page-scale-box';
+
+      const page = document.createElement('div');
+      page.className = 'story-page';
+
+      const grid = document.createElement('div');
+      grid.className = 'story-grid';
+
+      problems.forEach((prob, idx) => {
+        const item = document.createElement('div');
+        item.className = 'story-item';
+        item.innerHTML = `
+          <div class="story-num">(${idx+1})</div>
+          <div class="story-text">${prob.text.replace(/\n/g,'<br>')}</div>
+          <div class="story-write-area">
+            <div class="story-write-row">
+              <span class="story-write-label">式</span>
+              <span class="story-write-line"></span>
+            </div>
+            <div class="story-write-row">
+              <span class="story-write-label">答え</span>
+              <span class="story-write-line"></span>
+            </div>
+          </div>`;
+        grid.appendChild(item);
+      });
+
+      page.appendChild(grid);
+      scaleBox.appendChild(page);
+      wrap.appendChild(scaleBox);
+      container.appendChild(wrap);
+
+      allProblems.push({ pageNo: p+1, problems });
+    }
+
+    // 答えページ
+    const ansWrap = document.createElement('div');
+    ansWrap.className = 'page-preview';
+    const ansScaleBox = document.createElement('div');
+    ansScaleBox.className = 'page-scale-box';
+
+    const ansPage = document.createElement('div');
+    ansPage.className = 'story-answer-page';
+
+    const header = document.createElement('div');
+    header.className = 'answer-page-header';
+    header.textContent = '足し算・引き算　文章題　答え';
+    ansPage.appendChild(header);
+
+    allProblems.forEach(({ pageNo, problems }) => {
+      const section = document.createElement('div');
+      section.className = 'answer-section';
+      if(count > 1){
+        const label = document.createElement('div');
+        label.className = 'answer-section-label';
+        label.textContent = `${pageNo}枚目`;
+        section.appendChild(label);
+      }
+      const agrid = document.createElement('div');
+      agrid.className = 'answer-grid';
+      problems.forEach((prob, idx) => {
+        const item = document.createElement('div');
+        item.className = 'answer-item';
+        item.innerHTML = `<span class="answer-num">(${idx+1})</span><span class="answer-val" style="font-size:12px;font-weight:700;">${prob.expr}</span>`;
+        agrid.appendChild(item);
+      });
+      section.appendChild(agrid);
+      ansPage.appendChild(section);
+    });
+
+    ansScaleBox.appendChild(ansPage);
+    ansWrap.appendChild(ansScaleBox);
+    container.appendChild(ansWrap);
+
+    // スケーリング
+    if(typeof applyMobilePageScaling === 'function') applyMobilePageScaling();
+  }
+
+  async function downloadPDF(){
+    const pages = document.querySelectorAll('.story-page, .story-answer-page');
+    if(!pages.length){ alert('先に「生成」を押してください。'); return; }
+    if(!window.html2canvas || !window.jspdf){ alert('PDFライブラリの読み込みに失敗しました。'); return; }
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    for(let i=0; i<pages.length; i++){
+      const canvas = await html2canvas(pages[i], { scale:2, useCORS:true });
+      const img = canvas.toDataURL('image/png');
+      if(i > 0) pdf.addPage();
+      pdf.addImage(img, 'PNG', 0, 0, 210, 297);
+    }
+    pdf.save('story_problems.pdf');
+  }
+
+  window.addEventListener('DOMContentLoaded', generate);
+  </script>
+</body>
+</html>

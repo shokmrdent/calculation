@@ -234,6 +234,7 @@ function applyMobilePageScaling(){
     const scaleBox = wrapper.querySelector('.page-scale-box');
     const page = wrapper.querySelector('.page');
     if(!scaleBox || !page) return;
+    if(page.classList.contains('answer-page')) return;
 
     wrapper.classList.remove('is-scaled');
     scaleBox.style.width = '';
@@ -370,12 +371,14 @@ function generate(){
   const isDivision = config.mode === 'hissan-division' || config.mode === 'horizontal-division';
   const isHorizontal = config.mode === 'horizontal' || config.mode === 'horizontal-division';
 
+  // 全ページの問題を記録（答えページ用）
+  const allProblems = []; // [{pageNo, num, label}]
+
   for(let p = 0; p < pageCount; p++){
     const page = document.createElement('div');
     page.className = isHorizontal ? 'page page-horizontal' : 'page';
     page.innerHTML = '';
 
-    // 1ページ内の重複チェック用セット（キー: "a,b" または "dividend,divisor"）
     const usedKeys = new Set();
     function uniqueProblem(genFn, args, maxTries = 200) {
       for (let t = 0; t < maxTries; t++) {
@@ -383,37 +386,44 @@ function generate(){
         const key = result.join(',');
         if (!usedKeys.has(key)) { usedKeys.add(key); return result; }
       }
-      // maxTries 超えたら重複でもそのまま返す
       return genFn(...args);
     }
 
     if(isHorizontal){
-      // 横式：1ページ20問
       const grid = document.createElement('div');
       grid.className = 'problem-horizontal-grid';
       for(let i = 1; i <= 20; i++){
         if(isDivision){
           const [dividend, divisor, rem] = uniqueProblem(config.generator, [topDigits, bottomDigits, remainderMode]);
           grid.innerHTML += divisionHorizontalProblemHTML(i, dividend, divisor, rem);
+          const ans = Math.floor(dividend / divisor);
+          const label = rem > 0 ? `${ans} あまり ${rem}` : `${ans}`;
+          allProblems.push({ pageNo: p+1, num: i, label });
         } else {
           const [a, b] = uniqueProblem(config.generator, [topDigits, bottomDigits]);
           grid.innerHTML += horizontalProblemHTML(i, a, b, config.operator);
+          const ans = calcAnswer(a, b, config.operator);
+          allProblems.push({ pageNo: p+1, num: i, label: String(ans) });
         }
       }
       page.appendChild(grid);
     } else {
-      // ひっ算：割り算は12問（解答スペース確保）、その他は18問
       const isDivHissan = config.mode === 'hissan-division';
       const grid = document.createElement('div');
       grid.className = isDivHissan ? 'problem-grid problem-grid-division' : 'problem-grid';
       const problemCount = isDivHissan ? 12 : 18;
       for(let i = 1; i <= problemCount; i++){
         if(isDivision){
-          const [dividend, divisor] = uniqueProblem(config.generator, [topDigits, bottomDigits, remainderMode]);
+          const [dividend, divisor, rem] = uniqueProblem(config.generator, [topDigits, bottomDigits, remainderMode]);
           grid.innerHTML += divisionHissanHTML(i, dividend, divisor);
+          const ans = Math.floor(dividend / divisor);
+          const label = rem > 0 ? `${ans} あまり ${rem}` : `${ans}`;
+          allProblems.push({ pageNo: p+1, num: i, label });
         } else {
           const [a, b] = uniqueProblem(config.generator, [topDigits, bottomDigits]);
           grid.innerHTML += problemHTML(i, a, b, config.operator);
+          const ans = calcAnswer(a, b, config.operator);
+          allProblems.push({ pageNo: p+1, num: i, label: String(ans) });
         }
       }
       page.appendChild(grid);
@@ -421,7 +431,66 @@ function generate(){
 
     container.appendChild(wrapPageForPreview(page));
   }
+
+  // 答えページを追加
+  appendAnswerPage(container, allProblems, config.title, pageCount);
+
   applyMobilePageScaling();
+}
+
+function calcAnswer(a, b, op){
+  if(op === '＋') return a + b;
+  if(op === '－') return a - b;
+  if(op === '×') return a * b;
+  if(op === '÷') return Math.floor(a / b);
+  return '';
+}
+
+function appendAnswerPage(container, allProblems, title, pageCount){
+  const wrap = document.createElement('div');
+  wrap.className = 'page-preview';
+  const scaleBox = document.createElement('div');
+  scaleBox.className = 'page-scale-box';
+
+  const page = document.createElement('div');
+  page.className = 'page answer-page';
+
+  // ヘッダー
+  const header = document.createElement('div');
+  header.className = 'answer-page-header';
+  header.textContent = `${title}　答え`;
+  page.appendChild(header);
+
+  // 答えグリッド（ページごとにセクション分け）
+  for(let p = 1; p <= pageCount; p++){
+    const probs = allProblems.filter(x => x.pageNo === p);
+    if(!probs.length) continue;
+
+    const section = document.createElement('div');
+    section.className = 'answer-section';
+
+    const label = document.createElement('div');
+    label.className = 'answer-section-label';
+    label.textContent = pageCount > 1 ? `${p}枚目` : '';
+    if(pageCount > 1) section.appendChild(label);
+
+    const grid = document.createElement('div');
+    grid.className = 'answer-grid';
+
+    probs.forEach(({ num, label }) => {
+      const item = document.createElement('div');
+      item.className = 'answer-item';
+      item.innerHTML = `<span class="answer-num">(${num})</span><span class="answer-val">${label}</span>`;
+      grid.appendChild(item);
+    });
+
+    section.appendChild(grid);
+    page.appendChild(section);
+  }
+
+  scaleBox.appendChild(page);
+  wrap.appendChild(scaleBox);
+  container.appendChild(wrap);
 }
 
 async function downloadPDF(){

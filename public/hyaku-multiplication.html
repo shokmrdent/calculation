@@ -157,60 +157,77 @@
       container.innerHTML = '';
 
       for(let p=0; p<count; p++){
-        const colNums = makeNumbers(); // 横ヘッダー 10個
-        const rowNums = makeNumbers(); // 縦ヘッダー 10個
+        const colNums = makeNumbers();
+        const rowNums = makeNumbers();
 
         const wrap = document.createElement('div');
         wrap.className = 'page-preview-hyaku';
 
         const sheet = document.createElement('div');
         sheet.className = 'hyaku-wrap';
-
         sheet.innerHTML = `<div class="hyaku-title">100マス計算　かけ算　${p+1}/${count}</div>`;
 
         const table = document.createElement('table');
         table.className = 'hyaku-table';
 
-        // ラベル行（たされる数）
-        const labelRow = document.createElement('tr');
-        labelRow.className = 'header-label-row';
-        const labelTh0 = document.createElement('th');
-        labelTh0.colSpan = 2;
-        labelRow.appendChild(labelTh0);
-        const labelTh1 = document.createElement('th');
-        labelTh1.colSpan = 10;
-        labelTh1.textContent = 'かけられる数';
-        labelRow.appendChild(labelTh1);
-        table.appendChild(labelRow);
+        // colgroup で列幅を固定
+        const cg = document.createElement('colgroup');
+        // col1: かける数ラベル列（細い）
+        const cLabel = document.createElement('col');
+        cLabel.style.width = '8mm';
+        cg.appendChild(cLabel);
+        // col2: 行ヘッダー列
+        const cRow = document.createElement('col');
+        cRow.style.width = '14mm';
+        cg.appendChild(cRow);
+        // col3〜12: データ列
+        for(let i=0;i<10;i++){
+          const c = document.createElement('col');
+          c.style.width = '17mm';
+          cg.appendChild(c);
+        }
+        table.appendChild(cg);
 
-        // ヘッダー行（演算子 ＋ 横数字10個）
-        const headRow = document.createElement('tr');
+        // 行1: ラベル行（かけられる数）
+        const tr0 = document.createElement('tr');
+        tr0.className = 'header-label-row';
+        // 左2列分の空白
+        const blank0 = document.createElement('th');
+        blank0.colSpan = 2;
+        tr0.appendChild(blank0);
+        // かけられる数ラベル
+        const lblTh = document.createElement('th');
+        lblTh.colSpan = 10;
+        lblTh.textContent = 'かけられる数';
+        tr0.appendChild(lblTh);
+        table.appendChild(tr0);
+
+        // 行2: ×ヘッダー行
+        const tr1 = document.createElement('tr');
+        // ×セル (縦ラベル列 + 行ヘッダー列をspan)
         const opTh = document.createElement('th');
+        opTh.colSpan = 2;
         opTh.className = 'cell-op';
         opTh.textContent = '×';
-        headRow.appendChild(opTh);
-        // 縦ラベルスペース
-        const spaceTh = document.createElement('th');
-        spaceTh.style.border = 'none';
-        spaceTh.style.background = '#fff';
-        headRow.appendChild(spaceTh);
+        tr1.appendChild(opTh);
+        // 横数字ヘッダー
         colNums.forEach(n => {
           const th = document.createElement('th');
           th.className = 'cell-col-header';
           th.textContent = n;
-          headRow.appendChild(th);
+          tr1.appendChild(th);
         });
-        table.appendChild(headRow);
+        table.appendChild(tr1);
 
-        // データ行
+        // データ行（10行）
         rowNums.forEach((rowNum, ri) => {
           const tr = document.createElement('tr');
 
-          // 縦ラベル（かける数）- 最初の行のみ表示
+          // 縦「かける数」ラベル（最初の行のみ rowspan=10）
           if(ri === 0){
             const labelTd = document.createElement('td');
-            labelTd.className = 'cell-label';
             labelTd.rowSpan = 10;
+            labelTd.style.cssText = 'writing-mode:vertical-rl;text-orientation:mixed;font-size:10px;color:#64748b;background:#fff;border:1px solid #b0b8c8;text-align:center;vertical-align:middle;padding:0;';
             labelTd.textContent = 'かける数';
             tr.appendChild(labelTd);
           }
@@ -234,6 +251,67 @@
         sheet.appendChild(table);
         wrap.appendChild(sheet);
         container.appendChild(wrap);
+
+        // ===== 答えページ（同じ表形式・答え入り）=====
+        const ansWrap = document.createElement('div');
+        ansWrap.className = 'page-preview-hyaku';
+
+        const ansSheet = document.createElement('div');
+        ansSheet.className = 'hyaku-wrap';
+        ansSheet.innerHTML = `<div class="hyaku-title">100マス計算　かけ算　答え　${p+1}/${count}</div>`;
+
+        const ansTable = document.createElement('table');
+        ansTable.className = 'hyaku-table';
+
+        // colgroup（同じ列幅）
+        const ansCg = document.createElement('colgroup');
+        const ansCLabel = document.createElement('col'); ansCLabel.style.width = '8mm';  ansCg.appendChild(ansCLabel);
+        const ansCRow   = document.createElement('col'); ansCRow.style.width   = '14mm'; ansCg.appendChild(ansCRow);
+        for(let i=0;i<10;i++){
+          const c = document.createElement('col'); c.style.width = '17mm'; ansCg.appendChild(c);
+        }
+        ansTable.appendChild(ansCg);
+
+        // ラベル行
+        const ansTr0 = document.createElement('tr'); ansTr0.className = 'header-label-row';
+        const ansBlank = document.createElement('th'); ansBlank.colSpan = 2; ansTr0.appendChild(ansBlank);
+        const ansLbl   = document.createElement('th'); ansLbl.colSpan = 10; ansLbl.textContent = 'かけられる数'; ansTr0.appendChild(ansLbl);
+        ansTable.appendChild(ansTr0);
+
+        // ×ヘッダー行
+        const ansTr1 = document.createElement('tr');
+        const ansOpTh = document.createElement('th'); ansOpTh.colSpan = 2; ansOpTh.className = 'cell-op'; ansOpTh.textContent = '×';
+        ansTr1.appendChild(ansOpTh);
+        colNums.forEach(n => {
+          const th = document.createElement('th'); th.className = 'cell-col-header'; th.textContent = n; ansTr1.appendChild(th);
+        });
+        ansTable.appendChild(ansTr1);
+
+        // データ行（答え入り）
+        rowNums.forEach((rowNum, ri) => {
+          const tr = document.createElement('tr');
+          if(ri === 0){
+            const labelTd = document.createElement('td');
+            labelTd.rowSpan = 10;
+            labelTd.style.cssText = 'writing-mode:vertical-rl;text-orientation:mixed;font-size:10px;color:#64748b;background:#fff;border:1px solid #b0b8c8;text-align:center;vertical-align:middle;padding:0;';
+            labelTd.textContent = 'かける数';
+            tr.appendChild(labelTd);
+          }
+          const rowTh = document.createElement('th'); rowTh.className = 'cell-row-header'; rowTh.textContent = rowNum; tr.appendChild(rowTh);
+          colNums.forEach(colNum => {
+            const td = document.createElement('td');
+            td.className = 'cell-answer';
+            td.textContent = rowNum * colNum;
+            td.style.fontWeight = '700';
+            td.style.color = '#1e40af';
+            tr.appendChild(td);
+          });
+          ansTable.appendChild(tr);
+        });
+
+        ansSheet.appendChild(ansTable);
+        ansWrap.appendChild(ansSheet);
+        container.appendChild(ansWrap);
       }
     }
 

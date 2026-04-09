@@ -194,23 +194,68 @@ body{
   <!-- コンテンツ一覧 -->
   <div class="section-title">📚 学習コンテンツ</div>
   <div class="cards">
-    <a href="#drill" class="card">
-      <div class="card-icon" style="background:#fff7ed;">🔢</div>
-      <div class="card-title">四則演算</div>
-      <div class="card-desc">足し算・引き算・かけ算・割り算。ひっ算と横式の両方に対応。</div>
+    <!-- 四則演算 4分割 -->
+    <a href="#drill" class="card" onclick="setDrillOp('addition')">
+      <div class="card-icon" style="background:#fff7ed;">➕</div>
+      <div class="card-title">足し算</div>
+      <div class="card-desc">繰り上がりあり。ひっ算・横式。</div>
       <div class="card-pills">
         <span class="pill pill-ok">✅ 使用可能</span>
         <span class="pill pill-new">✏️ タブレット対応</span>
       </div>
     </a>
-    <a href="#fraction-decimal" class="card">
-      <div class="card-icon" style="background:#f0fdf4;">🍕</div>
-      <div class="card-title">分数・小数</div>
-      <div class="card-desc">分数の足し算・引き算・通分、小数の計算など。</div>
+    <a href="#drill" class="card" onclick="setDrillOp('subtraction')">
+      <div class="card-icon" style="background:#fff7ed;">➖</div>
+      <div class="card-title">引き算</div>
+      <div class="card-desc">繰り下がりあり。ひっ算・横式。</div>
       <div class="card-pills">
         <span class="pill pill-ok">✅ 使用可能</span>
         <span class="pill pill-new">✏️ タブレット対応</span>
       </div>
+    </a>
+    <a href="#drill" class="card" onclick="setDrillOp('multiplication')">
+      <div class="card-icon" style="background:#fff7ed;">✖️</div>
+      <div class="card-title">かけ算</div>
+      <div class="card-desc">ひっ算・横式。桁数を選べる。</div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
+    </a>
+    <a href="#drill" class="card" onclick="setDrillOp('division')">
+      <div class="card-icon" style="background:#fff7ed;">➗</div>
+      <div class="card-title">割り算</div>
+      <div class="card-desc">あまりあり・なし選択可。ひっ算・横式。</div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
+    </a>
+    <!-- 分数・小数 2分割 -->
+    <a href="#fraction-decimal" class="card" onclick="setFdType('fraction')">
+      <div class="card-icon" style="background:#f0fdf4;">🍕</div>
+      <div class="card-title">分数の計算</div>
+      <div class="card-desc">足し算・引き算・かけ算・割り算。同分母・異分母。</div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
+    </a>
+    <a href="#fraction-decimal" class="card" onclick="setFdType('decimal')">
+      <div class="card-icon" style="background:#f0fdf4;">🔢</div>
+      <div class="card-title">小数の計算</div>
+      <div class="card-desc">足し算・引き算・かけ算・割り算。小数第1・2位。</div>
+      <div class="card-pills">
+        <span class="pill pill-ok">✅ 使用可能</span>
+        <span class="pill pill-new">✏️ タブレット対応</span>
+      </div>
+    </a>
+    <!-- 今後追加予定 -->
+    <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <div class="card-icon" style="background:#fef9c3;">📐</div>
+      <div class="card-title">約分・通分</div>
+      <div class="card-desc">分数の約分・通分・最大公約数。</div>
+      <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
     </a>
     <a href="#" class="card" style="opacity:.6;pointer-events:none;">
       <div class="card-icon" style="background:#eff6ff;">📈</div>
@@ -334,6 +379,20 @@ document.querySelectorAll('.fmt-btn').forEach(btn => {
     update();
   });
 });
+
+// カードから直接演算をセット
+function setDrillOp(op) {
+  selOp = op;
+  document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.op-btn[data-op="${op}"]`)?.classList.add('active');
+  update();
+}
+function setFdType(type) {
+  fdType = type;
+  document.querySelectorAll('#fraction-decimal .fmt-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`#fraction-decimal .fmt-btn[data-type="${type}"]`)?.classList.add('active');
+  updateFd();
+}
 
 // --- 分数・小数セクション ---
 const fdUrlMap   = { fraction: 'fraction.html', decimal: 'decimal.html' };

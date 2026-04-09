@@ -526,3 +526,12 @@ select{
   .tb-settings-inner input[type="range"]{width:110px;}
   .tb-setting-label{min-width:90px;font-size:12px;}
 }
+
+/* タブレットモード中のテキスト選択・長押しメニューを無効化 */
+.tablet-mode-active .page,
+.tablet-mode-active .page *,
+.tablet-mode-active .page-scale-box canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

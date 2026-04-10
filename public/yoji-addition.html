@@ -4,12 +4,81 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小数の計算 | うちトレ</title>
+  <title>足し算・引き算（幼児〜小1） | うちトレ</title>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* ===== 幼児・小1 専用スタイル ===== */
+    .yoji-page-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #334155;
+      text-align: center;
+      padding: 8px 0 6px;
+      border-bottom: 2.5px solid #334155;
+      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+    }
+
+    /* 10問を1列×10行で大きく表示 */
+    .yoji-prob-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(10, 1fr);
+      height: calc(297mm - 10mm - 28mm);
+    }
+
+    .yoji-prob-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .yoji-num-label {
+      font-size: 16px;
+      color: #64748b;
+      min-width: 32px;
+      flex-shrink: 0;
+    }
+
+    .yoji-expr {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .yoji-num {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1e293b;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .yoji-op {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f97316;
+    }
+
+    .yoji-eq {
+      font-size: 32px;
+      color: #475569;
+    }
+
+    .yoji-blank {
+      display: inline-block;
+      width: 72px;
+      height: 44px;
+      border-bottom: 2.5px solid #000;
+      vertical-align: bottom;
+    }
+  </style>
 </head>
-<body data-page-type="decimal">
+<body data-page-type="yoji-calc">
   <div class="container">
     <!-- ロゴ：中央配置 -->
     <div class="page-logo-area no-print">
@@ -23,7 +92,8 @@
     <div class="header-row no-print">
       <div>
         <div style="display:none;"></div>
-        <h1>小数の計算</h1>
+        <h1>足し算・引き算（幼児〜小1）</h1>
+        <div class="small-note">大きな数字でシンプルな計算練習。</div>
       </div>
       <div class="header-actions">
         <a href="top-home.html" class="secondary-button">トップへ戻る</a>
@@ -36,16 +106,14 @@
         <select id="op">
           <option value="add">足し算（＋）</option>
           <option value="sub">引き算（－）</option>
-          <option value="mul">かけ算（×）</option>
-          <option value="div">割り算（÷）</option>
         </select>
       </div>
 
       <div class="control-group">
-        <label for="dec-places">小数桁数</label>
-        <select id="dec-places">
-          <option value="1" selected>小数第1位</option>
-          <option value="2">小数第2位</option>
+        <label for="level">レベル</label>
+        <select id="level">
+          <option value="yoji" selected>幼児〜6A　10まで（繰り上がりなし）</option>
+          <option value="sho1">小1　1桁（繰り上がり・繰り下がりあり）</option>
         </select>
       </div>
 
@@ -68,7 +136,7 @@
 
     <div id="pages"></div>
   </div>
-  <script src="assets/fraction-generator.js"></script>
+  <script src="assets/yoji-generator.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
   <script src="assets/tablet-v2.js?v=28"></script>
 </body>

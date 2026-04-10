@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>単位換算 | うちトれ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .tansaku-page-title{font-size:15px;font-weight:800;color:#334155;text-align:center;padding:4px 0 3px;border-bottom:2px solid #3b82f6;margin-bottom:4px;}
+    .tansaku-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10,1fr);height:calc(297mm - 10mm - 22mm);}
+    .tansaku-item{display:flex;align-items:center;gap:4px;padding:0 10px;border-bottom:1px solid #e5e7eb;}
+    .tansaku-num{font-size:12px;color:#475569;min-width:24px;flex-shrink:0;}
+    .tansaku-expr{display:flex;align-items:center;gap:0;}
+    .tansaku-q{font-size:17px;font-weight:700;flex-shrink:0;}
+    /* ★ 解答スペース：flexで伸ばす */
+    .tansaku-blank{
+      flex:1;
+      min-width:80px;
+      height:22px;
+      border:none;
+      border-bottom:1.5px solid #000;
+      display:inline-block;
+      margin:0 10px;
+    }
+    /* ★ 単位は右端に固定 */
+    .tansaku-unit{font-size:16px;font-weight:700;color:#1e293b;flex-shrink:0;margin-left:4px;}
+    .tansaku-hint{font-size:10px;color:#94a3b8;margin-left:8px;flex-shrink:0;}
+  </style>
+</head>
+<body data-page-type="tansaku-nagasa">
+  <div class="container">
+    <!-- ロゴ：中央配置 -->
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ">
+      <div>
+        <div class="logo-text">うちトレ</div>
+        <div class="logo-sub">Uchitore</div>
+      </div>
+    </div>
+
+    <div class="header-row no-print">
+      <div>
+        <div style="display:none;"></div>
+        <h1>長さの単位換算</h1>
+        <div class="small-note">長さ・かさ・重さの単位を変換する練習。</div>
+      </div>
+      <div class="header-actions"><a href="top-home.html" class="secondary-button">トップへ戻る</a></div>
+    </div>
+    <div class="card controls no-print">
+      <input type="hidden" id="category" value="nagasa">
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option><option value="5">5</option>
+          <option value="10" selected>10</option><option value="20">20</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+    <div id="pages"></div>
+  </div>
+  <script src="assets/tansaku-generator.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+</body>
+</html>

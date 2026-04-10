@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>掛け算（ひっ算） | うちトレ</title>
+  <title>小数を含む分数計算 | うちトレ</title>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body data-page-type="multiplication-hissan">
+<body data-page-type="frac-dec-mix">
   <div class="container">
     <!-- ロゴ：中央配置 -->
     <div class="page-logo-area no-print">
@@ -23,8 +23,8 @@
     <div class="header-row no-print">
       <div>
         <div style="display:none;"></div>
-        <h1 id="pageTitle">掛け算（ひっ算）</h1>
-        <div class="small-note" id="pageNote"></div>
+        <h1>小数を含む分数計算</h1>
+        <div class="small-note">小数を分数に直してから計算します。</div>
       </div>
       <div class="header-actions">
         <a href="top-home.html" class="secondary-button">トップへ戻る</a>
@@ -33,20 +33,21 @@
 
     <div class="card controls no-print">
       <div class="control-group">
-        <label for="digit1">上段桁</label>
-        <select id="digit1">
-          <option value="1">1</option>
-          <option value="2" selected>2</option>
-          <option value="3">3</option>
+        <label for="op">演算</label>
+        <select id="op">
+          <option value="add">足し算（＋）</option>
+          <option value="sub">引き算（－）</option>
+          <option value="mul">かけ算（×）</option>
+          <option value="div">割り算（÷）</option>
         </select>
       </div>
 
       <div class="control-group">
-        <label for="digit2">下段桁</label>
-        <select id="digit2">
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+        <label for="mix-type">問題タイプ</label>
+        <select id="mix-type">
+          <option value="dec-frac">小数 ○ 分数</option>
+          <option value="frac-dec">分数 ○ 小数</option>
+          <option value="mixed" selected>混在</option>
         </select>
       </div>
 
@@ -69,7 +70,7 @@
 
     <div id="pages"></div>
   </div>
-  <script src="assets/generator.js"></script>
+  <script src="assets/frac-dec-generator.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
   <script src="assets/tablet-v2.js?v=28"></script>
 </body>

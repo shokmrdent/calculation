@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>うちトレ ｜ 家庭学習モード</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -36,6 +37,14 @@ body{
 .blob-3{width:300px;height:300px;background:#bfdbfe;top:40%;right:10%;}
 
 .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 24px 80px;}
+
+/* ---- hero logo ---- */
+.hero-logo{
+  width: min(50%, 350px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 
 /* ---- hero ---- */
 .hero{
@@ -191,12 +200,104 @@ body{
   <!-- hero -->
   <div class="hero">
     <div class="hero-badge">🏠 家庭学習モード</div>
-    <h1>楽しく続ける<br><span>計算ドリル</span></h1>
+    <img src="logo.svg" alt="うちトレ" class="hero-logo">
     <p>印刷して使う・タブレットで書き込む、2つの使い方で<br>毎日の計算練習をサポートします。</p>
   </div>
 
   <!-- コンテンツ一覧 -->
   <div class="section-title">📚 学習コンテンツ</div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">幼児　すうじをよもう・かこう</div>
+    <div class="cards">
+      <a href="suuji-yomu.html?range=1-10" class="card">
+        <div class="card-icon" style="background:#fef3c7;">👀</div>
+        <div class="card-title">すうじをよもう（１〜10）</div>
+        <div class="card-desc">大きな数字をランダムに表示。声に出して読む練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="suuji-yomu.html?range=11-20" class="card">
+        <div class="card-icon" style="background:#fef3c7;">👀</div>
+        <div class="card-title">すうじをよもう（11〜20）</div>
+        <div class="card-desc">11〜20の数字をランダムに表示。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="suuji-yomu.html?range=21-100" class="card">
+        <div class="card-icon" style="background:#fef3c7;">👀</div>
+        <div class="card-title">すうじをよもう（21〜100）</div>
+        <div class="card-desc">21〜100の数字をランダムに表示。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="suuji-kaku.html?range=1-10" class="card">
+        <div class="card-icon" style="background:#ede9fe;">✏️</div>
+        <div class="card-title">すうじをかこう（１〜10）</div>
+        <div class="card-desc">薄いガイドをなぞる練習。書き方罫線入り。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="suuji-kaku.html?range=11-20" class="card">
+        <div class="card-icon" style="background:#ede9fe;">✏️</div>
+        <div class="card-title">すうじをかこう（11〜20）</div>
+        <div class="card-desc">11〜20のなぞり練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="suuji-kaku.html?range=21-100" class="card">
+        <div class="card-icon" style="background:#ede9fe;">✏️</div>
+        <div class="card-title">すうじをかこう（21〜100）</div>
+        <div class="card-desc">21〜100のなぞり練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">幼児〜小1　10までのかずと計算</div>
+    <div class="cards">
+      <a href="yoji-addition.html?op=add&level=yoji" class="card">
+        <div class="card-icon" style="background:#fef3c7;">🌟</div>
+        <div class="card-title">10までの足し算</div>
+        <div class="card-desc">繰り上がりなし。答えが10以下。大きな文字。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="yoji-addition.html?op=sub&level=yoji" class="card">
+        <div class="card-icon" style="background:#fef3c7;">🌟</div>
+        <div class="card-title">10までの引き算</div>
+        <div class="card-desc">繰り下がりなし。10以下の数から引く。大きな文字。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="yoji-addition.html?op=add&level=sho1" class="card">
+        <div class="card-icon" style="background:#fff7ed;">⭐</div>
+        <div class="card-title">1桁の足し算（繰り上がりあり）</div>
+        <div class="card-desc">答えが11〜18。1桁＋1桁。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="yoji-addition.html?op=sub&level=sho1" class="card">
+        <div class="card-icon" style="background:#fff7ed;">⭐</div>
+        <div class="card-title">1桁の引き算（繰り下がりあり）</div>
+        <div class="card-desc">11〜18から1桁を引く。答えは1桁。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小1〜小2　とけい・時間</div>
+    <div class="cards">
+      <a href="tokei.html" class="card">
+        <div class="card-icon" style="background:#e0f2fe;">🕐</div>
+        <div class="card-title">とけいをよむ（5分きざみ）</div>
+        <div class="card-desc">アナログ時計を見てなんじなんぷんか答える。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="tokei-keisan.html" class="card">
+        <div class="card-icon" style="background:#e0f2fe;">⏱️</div>
+        <div class="card-title">じこくのけいさん（○分後・前）</div>
+        <div class="card-desc">○ふんご・○ふんまえのじこくを求める。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+    </div>
+  </div>
 
   <div class="curriculum-group">
     <div class="curriculum-label">小1〜小2　たし算・ひき算</div>
@@ -270,12 +371,60 @@ body{
         <div class="card-desc">あまりあり・なし・混在。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
+      <a href="story-mul-div.html" class="card">
+        <div class="card-icon" style="background:#fef9c3;">📖</div>
+        <div class="card-title">文章題（かけ算・わり算）</div>
+        <div class="card-desc">ランダム生成。式と答えを書く。10問。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小3　単位換算</div>
+    <div class="cards">
+      <a href="tansaku.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📏</div>
+        <div class="card-title">長さの単位換算</div>
+        <div class="card-desc">mm・cm・m・km の変換。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="tansaku-kasa.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🧴</div>
+        <div class="card-title">かさの単位換算</div>
+        <div class="card-desc">mL・dL・L の変換。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="tansaku-omosa.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">⚖️</div>
+        <div class="card-title">重さの単位換算</div>
+        <div class="card-desc">g・kg・t の変換。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小4　がい数・面積</div>
+    <div class="cards">
+      <a href="gaisuu.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🔢</div>
+        <div class="card-title">がい数（四捨五入）</div>
+        <div class="card-desc">千・百・十の位で四捨五入。混在問題も。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
     </div>
   </div>
 
   <div class="curriculum-group">
     <div class="curriculum-label">小4〜小5　分数・小数</div>
     <div class="cards">
+      <a href="yakubun-tsubun.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📐</div>
+        <div class="card-title">約分・通分</div>
+        <div class="card-desc">約分（既約分数）・通分（最小公倍数）。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
       <a href="fraction.html?op=add" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の足し算</div>
@@ -288,12 +437,6 @@ body{
         <div class="card-desc">同分母・異分母（通分）。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
-        <div class="card-icon" style="background:#fef9c3;">📐</div>
-        <div class="card-title">約分・通分</div>
-        <div class="card-desc">最大公約数・最小公倍数。</div>
-        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
       <a href="decimal.html?op=add" class="card">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数の足し算・引き算</div>
@@ -304,6 +447,60 @@ body{
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数のかけ算・わり算</div>
         <div class="card-desc">小数×整数、小数÷整数。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="decimal-hissan.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📝</div>
+        <div class="card-title">小数の足し算・引き算（ひっ算）</div>
+        <div class="card-desc">小数点の位置を揃えて計算。第1位・第2位・混在。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小5〜小6　図形の面積・体積</div>
+    <div class="cards">
+      <a href="zukei.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📐</div>
+        <div class="card-title">面積（三角形・台形・ひし形など）</div>
+        <div class="card-desc">図形を見て面積を求める。公式ヒント付き。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="zukei-en.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">⭕</div>
+        <div class="card-title">円の面積</div>
+        <div class="card-desc">半径 × 半径 × 3.14の計算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="zukei-taieki.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📦</div>
+        <div class="card-title">体積（直方体・立方体）</div>
+        <div class="card-desc">たて × よこ × 高さ。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="zukei-entai.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🧪</div>
+        <div class="card-title">円柱の体積</div>
+        <div class="card-desc">半径 × 半径 × 3.14 × 高さ。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小5　速さ・割合・百分率</div>
+    <div class="cards">
+      <a href="hayasa.html" class="card">
+        <div class="card-icon" style="background:#fef9c3;">🚗</div>
+        <div class="card-title">速さ（はじき）</div>
+        <div class="card-desc">速さ・きょり・時間の三角形で解く。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="wariai.html" class="card">
+        <div class="card-icon" style="background:#fef9c3;">📊</div>
+        <div class="card-title">割合・百分率</div>
+        <div class="card-desc">くらべる量・もとにする量・割合の計算。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
     </div>
@@ -324,11 +521,44 @@ body{
         <div class="card-desc">分数÷分数。逆数を使う。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
-        <div class="card-icon" style="background:#fef9c3;">🔄</div>
+      <a href="fraction-decimal-mix.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🔄</div>
         <div class="card-title">小数を含む分数計算</div>
-        <div class="card-desc">計算の順序・混合計算。</div>
-        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+        <div class="card-desc">小数を分数に直して計算。＋－×÷。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== 生活・応用算数 ===== -->
+  
+
+  
+
+  
+
+  
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">小6　比・比例・場合の数</div>
+    <div class="cards">
+      <a href="hi.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">⚖️</div>
+        <div class="card-title">比</div>
+        <div class="card-desc">最も簡単な比・比の値・比例配分。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="hirei.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">📈</div>
+        <div class="card-title">比例・反比例</div>
+        <div class="card-desc">y＝ax / y＝k÷x の計算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="basho.html" class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🎲</div>
+        <div class="card-title">場合の数</div>
+        <div class="card-desc">並び方・組み合わせ・樹形図。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
     </div>
   </div>
@@ -531,5 +761,10 @@ document.querySelectorAll('#fraction-decimal .fmt-btn').forEach(btn => {
   });
 });
 </script>
+  <!-- フッター -->
+  <div style="text-align:center;padding:32px 16px 48px;margin-top:40px;border-top:1px solid #e2e8f0;color:#94a3b8;font-size:13px;">
+    © 2026 うちトレ（Uchitore）All Rights Reserved.<br>
+    <a href="terms.html" style="color:#f97316;text-decoration:none;font-weight:700;margin-top:8px;display:inline-block;">📄 利用規約</a>
+  </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>足し算・引き算　文章題 | うちトレ</title>
+  <title>かけ算・わり算　文章題 | うちトレ</title>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -106,7 +106,7 @@
     <div class="header-row no-print">
       <div>
         <div style="display:none;"></div>
-        <h1>足し算・引き算　文章題</h1>
+        <h1>かけ算・わり算　文章題</h1>
         <div class="small-note">ランダム生成。10問／ページ。式と答えを書く。</div>
       </div>
       <div class="header-actions">
@@ -118,17 +118,17 @@
       <div class="control-group">
         <label for="level">レベル</label>
         <select id="level">
-          <option value="1">1桁（小1〜小2）</option>
-          <option value="2" selected>2桁（小2〜小3）</option>
-          <option value="3">3桁（小3〜）</option>
+          <option value="1" selected>九九（1〜9×1〜9）</option>
+          <option value="2">2桁×1桁</option>
+          <option value="3">3桁×1桁</option>
         </select>
       </div>
       <div class="control-group">
         <label for="op-type">演算</label>
         <select id="op-type">
-          <option value="both" selected>足し算・引き算 混在</option>
-          <option value="add">足し算のみ</option>
-          <option value="sub">引き算のみ</option>
+          <option value="both" selected>かけ算・わり算 混在</option>
+          <option value="add">かけ算のみ</option>
+          <option value="sub">わり算のみ</option>
         </select>
       </div>
       <div class="control-group">
@@ -153,49 +153,60 @@
   <script>
   function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
-  // 足し算テンプレート
+  // かけ算テンプレート
+  // かけ算テンプレート
   const addTemplates = [
-    (a,b) => `はこの中に りんごが ${a}こ あります。\nそこへ ${b}こ いれました。\nりんごは ぜんぶで なんこですか。`,
-    (a,b) => `あかい はなが ${a}ほん さいています。\nしろい はなも ${b}ほん さいています。\nあわせて なんぼんですか。`,
-    (a,b) => `バスに おきゃくさんが ${a}にん のっています。\nつぎの ていりゅうじょで ${b}にん のってきました。\nぜんぶで なんにんですか。`,
-    (a,b) => `本だなに ほんが ${a}さつ あります。\nきょう ${b}さつ かいました。\nぜんぶで なんさつですか。`,
-    (a,b) => `こうえんで こどもが ${a}にん あそんでいます。\nあとから ${b}にん やってきました。\nぜんぶで なんにんですか。`,
-    (a,b) => `えんぴつが ${a}ほん あります。\nともだちに ${b}ほん もらいました。\nえんぴつは ぜんぶで なんぼんですか。`,
-    (a,b) => `おかしが ${a}こ ありました。\nおかあさんが ${b}こ かってきました。\nおかしは あわせて なんこですか。`,
-    (a,b) => `きいろい ふうせんが ${a}こ、\nあおい ふうせんが ${b}こ あります。\nあわせて なんこですか。`,
+    (a,b) => `1はこに みかんが ${a}こ はいっています。\n${b}はこ では みかんは なんこですか。`,
+    (a,b) => `1れつに ${a}にん ならんでいます。\n${b}れつ あると ぜんぶで なんにんですか。`,
+    (a,b) => `おかしが 1ふくろに ${a}こ はいっています。\n${b}ふくろ かいました。\nぜんぶで なんこですか。`,
+    (a,b) => `1まいに ${a}まい のシールを はりました。\n${b}まい では なんまい ひつようですか。`,
+    (a,b) => `ノートが 1たばに ${a}さつ あります。\n${b}たば あると なんさつですか。`,
+    (a,b) => `こどもが ${b}にん います。\n1人に えんぴつを ${a}ほん くばります。\nぜんぶで なんぼん ひつようですか。`,
+    (a,b) => `1日に ${a}ページ 本を よみます。\n${b}日間 では なんページ よめますか。`,
+    (a,b) => `テーブルが ${b}きゃく あります。\n1きゃくに いすが ${a}きゃく あります。\nいすは ぜんぶで なんきゃくですか。`,
   ];
 
-  // 引き算テンプレート
+  // わり算テンプレート
   const subTemplates = [
-    (a,b) => `はこの中に りんごが ${a}こ あります。\n${b}こ たべました。\nのこりは なんこですか。`,
-    (a,b) => `クラスに ${a}にん います。\nきょう ${b}にん やすみました。\nがっこうに きているのは なんにんですか。`,
-    (a,b) => `おかしが ${a}こ ありました。\nともだちに ${b}こ あげました。\nのこりは なんこですか。`,
-    (a,b) => `本が ${a}さつ あります。\n${b}さつ よみました。\nまだ よんでいない本は なんさつですか。`,
-    (a,b) => `どうぶつえんに ${a}ひき どうぶつがいます。\nきょう ${b}ひき べつのいけに うつりました。\nのこりは なんびきですか。`,
-    (a,b) => `えんぴつが ${a}ほん ありました。\n${b}ほん つかいました。\nのこりは なんぼんですか。`,
-    (a,b) => `シールが ${a}まい あります。\n${b}まい つかいました。\nのこりは なんまいですか。`,
-    (a,b) => `かごに たまごが ${a}こ ありました。\nりょうりに ${b}こ つかいました。\nのこりは なんこですか。`,
+    (a,b) => `りんごが ${a*b}こ あります。\n${b}人で おなじ かずずつ わけると\n1人 なんこですか。`,
+    (a,b) => `えんぴつが ${a*b}ほん あります。\n1人に ${b}ほんずつ くばると\nなんにんに くばれますか。`,
+    (a,b) => `シールが ${a*b}まい あります。\n${b}まいずつ はこに いれると\nはこは なんこ できますか。`,
+    (a,b) => `${a*b}このあめを ${b}人で おなじ かずずつ わけます。\n1人 なんこですか。`,
+    (a,b) => `テープが ${a*b}cm あります。\n${b}cmずつ きると なんほん できますか。`,
+    (a,b) => `本が ${a*b}さつ あります。\n1だんに ${b}さつ ならべると\nなんだん できますか。`,
+    (a,b) => `${a*b}人の こどもを ${b}人ずつの グループに\nわけます。なんグループ できますか。`,
+    (a,b) => `クッキーが ${a*b}こ あります。\n${b}まいの おさらに おなじかずずつ のせると\n1まい なんこですか。`,
   ];
 
   function makeNumbers(level){
-    const max = level === 1 ? 9 : level === 2 ? 99 : 999;
-    const min = level === 1 ? 1 : level === 2 ? 10 : 100;
-    return [rand(min, max), rand(1, Math.floor(max/2))];
+    if(level === 1){
+      // 九九
+      const a = rand(2,9);
+      const b = rand(2,9);
+      return [a, b];
+    } else if(level === 2){
+      // 2桁×1桁
+      const a = rand(11,99);
+      const b = rand(2,9);
+      return [a, b];
+    } else {
+      // 3桁×1桁
+      const a = rand(101,999);
+      const b = rand(2,9);
+      return [a, b];
+    }
   }
 
   function makeAddProblem(level){
     const [a, b] = makeNumbers(level);
     const tmpl = addTemplates[rand(0, addTemplates.length-1)];
-    return { text: tmpl(a, b), answer: a + b, expr: `${a} ＋ ${b} ＝ ${a+b}` };
+    return { text: tmpl(a, b), answer: a * b, expr: `${a} × ${b} ＝ ${a*b}` };
   }
 
   function makeSubProblem(level){
-    let a, b;
-    do {
-      [a, b] = makeNumbers(level);
-    } while(a <= b);
+    const [a, b] = makeNumbers(level);
     const tmpl = subTemplates[rand(0, subTemplates.length-1)];
-    return { text: tmpl(a, b), answer: a - b, expr: `${a} － ${b} ＝ ${a-b}` };
+    return { text: tmpl(a, b), answer: a, expr: `${a*b} ÷ ${b} ＝ ${a}` };
   }
 
   function makeProblem(level, opType){
@@ -265,7 +276,7 @@
 
     const header = document.createElement('div');
     header.className = 'answer-page-header';
-    header.textContent = '足し算・引き算　文章題　答え';
+    header.textContent = 'かけ算・わり算　文章題　答え';
     ansPage.appendChild(header);
 
     allProblems.forEach(({ pageNo, problems }) => {
@@ -309,7 +320,7 @@
       if(i > 0) pdf.addPage();
       pdf.addImage(img, 'PNG', 0, 0, 210, 297);
     }
-    pdf.save('story_problems.pdf');
+    pdf.save('story_mul_div.pdf');
   }
 
   window.addEventListener('DOMContentLoaded', generate);

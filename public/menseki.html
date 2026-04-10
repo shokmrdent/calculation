@@ -4,12 +4,19 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>掛け算（ひっ算） | うちトレ</title>
+  <title>面積 | うちトレ</title>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .seikatsu-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(8,1fr);height:calc(297mm - 10mm - 28mm);}
+    .seikatsu-item{display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid #e2e8f0;font-size:14px;}
+    .seikatsu-num{font-size:12px;color:#64748b;min-width:24px;flex-shrink:0;}
+    .seikatsu-q{flex:1;line-height:1.4;}
+    .seikatsu-blank{display:inline-block;min-width:60px;border-bottom:1.5px solid #000;margin-left:8px;flex-shrink:0;}
+  </style>
 </head>
-<body data-page-type="multiplication-hissan">
+<body data-page-type="menseki" data-math-mode="menseki">
   <div class="container">
     <!-- ロゴ：中央配置 -->
     <div class="page-logo-area no-print">
@@ -23,53 +30,35 @@
     <div class="header-row no-print">
       <div>
         <div style="display:none;"></div>
-        <h1 id="pageTitle">掛け算（ひっ算）</h1>
-        <div class="small-note" id="pageNote"></div>
+        <h1>面積</h1>
+        <div class="small-note">長方形・正方形・三角形・円の面積</div>
       </div>
-      <div class="header-actions">
-        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
-      </div>
+      <div class="header-actions"><a href="top-home.html" class="secondary-button">トップへ戻る</a></div>
     </div>
-
     <div class="card controls no-print">
       <div class="control-group">
-        <label for="digit1">上段桁</label>
-        <select id="digit1">
-          <option value="1">1</option>
-          <option value="2" selected>2</option>
-          <option value="3">3</option>
+        <label for="subtype">種類</label>
+        <select id="subtype">
+          <option value="rectangle">長方形</option>
+          <option value="square">正方形</option>
+          <option value="triangle">三角形</option>
+          <option value="circle">円（π=3.14）</option>
+          <option value="mixed">混在</option>
         </select>
       </div>
-
-      <div class="control-group">
-        <label for="digit2">下段桁</label>
-        <select id="digit2">
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </div>
-
       <div class="control-group">
         <label for="count">枚数</label>
-        <select id="count">
-          <option value="1">1</option>
-          <option value="5">5</option>
-          <option value="10" selected>10</option>
-          <option value="20">20</option>
-        </select>
+        <select id="count"><option value="1">1</option><option value="5">5</option><option value="10" selected>10</option></select>
       </div>
-
       <div class="page-actions">
         <button class="primary" onclick="generate()">生成</button>
         <button class="secondary" onclick="window.print()">印刷</button>
         <button class="secondary" onclick="downloadPDF()">PDF保存</button>
       </div>
     </div>
-
     <div id="pages"></div>
   </div>
-  <script src="assets/generator.js"></script>
+  <script src="assets/seikatsu-generator.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
   <script src="assets/tablet-v2.js?v=28"></script>
 </body>

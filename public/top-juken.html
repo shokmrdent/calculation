@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>うちトレ 受験算数 ｜ 中学受験モード</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,12 +53,19 @@ body::before{
   display:flex;justify-content:space-between;align-items:center;
   padding:24px 0 0;
 }
-.nav-logo{
-  font-family:'Shippori Mincho',serif;
-  font-size:20px;font-weight:800;
-  color:var(--text);letter-spacing:1px;
+.nav-logo-img{
+  height: 36px;
+  width: auto;
+  /* SVGの黒線をゴールドに変換 */
+  filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1);
 }
-.nav-logo span{color:var(--gold);}
+.juken-hero-logo{
+  width: min(50%, 280px);
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+  filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1);
+}
 .nav-link{
   color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;
   border:1px solid var(--border);border-radius:999px;padding:6px 16px;
@@ -224,12 +232,13 @@ a.tokushu-card{text-decoration:none;color:inherit;display:block;}
 
   <!-- nav -->
   <nav class="nav">
-    <div class="nav-logo">受験<span>算数</span>ドリル</div>
+    <img src="logo.svg" alt="うちトレ" class="nav-logo-img">
   </nav>
 
   <!-- hero -->
   <div class="hero">
     <div class="hero-badge">🎯 中学受験モード</div>
+    <img src="logo.svg" alt="うちトレ" class="juken-hero-logo">
     <h1>算数で、<br><em>合格をつかむ。</em></h1>
     <p class="hero-sub">
       特殊算26ジャンル・各100問の演習環境。<br>

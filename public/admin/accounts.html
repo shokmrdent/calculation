@@ -66,6 +66,10 @@ body { background: #f0f2f5; }
         <span class="icon">💬</span> お問い合わせ
         <span id="msgBadge" style="background:var(--red);color:#fff;border-radius:999px;padding:2px 7px;font-size:11px;margin-left:auto;display:none"></span>
       </a>
+      <div style="height:1px;background:#292524;margin:8px 0"></div>
+      <a href="/top-home.html" class="sidebar-item" style="color:#94a3b8">
+        <span class="icon">📚</span> 問題ページへ
+      </a>
     </nav>
     <div class="sidebar-bottom">
       <div class="admin-name" id="adminName"></div>
@@ -222,6 +226,58 @@ body { background: #f0f2f5; }
   </div>
 </div>
 
+
+<!-- 顧客詳細モーダル -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title" id="detailModalTitle">👤 顧客詳細</div>
+      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+
+    <!-- 基本情報（読み取り専用） -->
+    <div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">基本情報</div>
+      <div id="detailBasicInfo" style="display:grid;gap:8px;font-size:14px"></div>
+    </div>
+
+    <!-- 管理者作成のアカウントのみ編集可 -->
+    <div id="detailEditSection" style="display:none">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">編集</div>
+      <div id="editMsg2" class="msg-box"></div>
+      <div class="form-group">
+        <label>お名前</label>
+        <input type="text" id="d-name">
+      </div>
+      <div class="form-group">
+        <label>電話番号</label>
+        <input type="tel" id="d-phone">
+      </div>
+      <div class="form-group">
+        <label>ステータス</label>
+        <select id="d-status">
+          <option value="active">利用中</option>
+          <option value="canceled">解約済み</option>
+          <option value="pending">処理中</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>同時接続台数</label>
+        <input type="number" id="d-sessions" min="1" max="10">
+      </div>
+      <button class="btn btn-primary" id="detailSaveBtn" onclick="saveDetailEdit()">
+        <span class="btn-label">💾 保存する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+
+    <!-- 進捗情報 -->
+    <div style="margin-top:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🏆 テスト合格記録</div>
+      <div id="detailProgress" style="font-size:13px;color:var(--muted)">読み込み中...</div>
+    </div>
+  </div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
@@ -275,8 +331,8 @@ function filterTable() {
     const d = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('ja-JP') : '—';
     return `
       <tr>
-        <td>
-          <div style="font-weight:700">${u.name || '—'}</div>
+        <td style="cursor:pointer" onclick="openDetailModal('${u.id}')">
+          <div style="font-weight:700;color:var(--blue);text-decoration:underline">${u.name || '—'}</div>
           <div style="font-size:11px;color:var(--muted)">${u.role === 'admin' ? '👑 管理者' : ''}</div>
         </td>
         <td style="font-size:13px">${u.email || '—'}</td>
@@ -385,6 +441,107 @@ async function saveEdit() {
 }
 
 // ── 共通 ────────────────────────────────────────
+
+// ── 顧客詳細モーダル ─────────────────────────────
+let detailUid = null;
+
+async function openDetailModal(uid) {
+  detailUid = uid;
+  const u = allUsers.find(x => x.id === uid);
+  if (!u) return;
+
+  document.getElementById('detailModalTitle').textContent = `👤 ${u.name || u.email}`;
+  document.getElementById('editMsg2').className = 'msg-box';
+
+  // 基本情報表示
+  const rows = [
+    ['UID',        u.id],
+    ['名前',       u.name || '—'],
+    ['メール',     u.email || '—'],
+    ['電話番号',   u.phone || '—'],
+    ['生年月日',   u.birthday || '—'],
+    ['ロール',     u.role === 'admin' ? '👑 管理者' : '一般ユーザー'],
+    ['ステータス', { active:'✅ 利用中', canceled:'❌ 解約済み', pending:'⏳ 処理中' }[u.subscriptionStatus] || u.subscriptionStatus],
+    ['同時接続上限', `${u.maxConcurrentSessions || 1}台`],
+    ['登録日',     u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('ja-JP') : '—'],
+    ['作成者',     u.createdBy ? '管理者が作成' : '本人登録'],
+  ];
+  document.getElementById('detailBasicInfo').innerHTML = rows.map(([l,v]) => `
+    <div style="display:flex;gap:12px">
+      <span style="color:var(--muted);font-weight:700;width:100px;flex-shrink:0">${l}</span>
+      <span style="font-weight:${l==='UID'?'400':'700'};font-size:${l==='UID'?'11px':'14px'};word-break:break-all">${v}</span>
+    </div>`).join('');
+
+  // 管理者作成のアカウントのみ編集セクションを表示
+  const editSection = document.getElementById('detailEditSection');
+  if (u.createdBy) {
+    editSection.style.display = '';
+    document.getElementById('d-name').value     = u.name || '';
+    document.getElementById('d-phone').value    = u.phone || '';
+    document.getElementById('d-status').value   = u.subscriptionStatus || 'active';
+    document.getElementById('d-sessions').value = u.maxConcurrentSessions || 1;
+  } else {
+    editSection.style.display = 'none';
+  }
+
+  // テスト進捗を読み込み
+  document.getElementById('detailProgress').innerHTML = '読み込み中...';
+  document.getElementById('detailModal').classList.add('open');
+
+  try {
+    const progSnap = await db.collection('users').doc(uid).collection('progress').get();
+    const passed = progSnap.docs
+      .map(d => ({id: d.id, ...d.data()}))
+      .filter(d => d.passed)
+      .sort((a,b) => {
+        const ta = a.passedAt?.toDate?.() || new Date(0);
+        const tb = b.passedAt?.toDate?.() || new Date(0);
+        return ta - tb;
+      });
+
+    const UNIT_N = {
+      'addition-10':'10までのたし算','subtraction-10':'10までのひき算',
+      'addition-20':'20までのたし算','subtraction-20':'20までのひき算',
+      'addition-horizontal':'足し算横式','subtraction-horizontal':'引き算横式',
+      'addition-hissan':'たし算筆算','subtraction-hissan':'ひき算筆算',
+      'multiplication-hissan':'かけ算筆算','division-hissan':'わり算筆算',
+    };
+
+    document.getElementById('detailProgress').innerHTML = passed.length === 0
+      ? '<span style="color:var(--muted)">まだ合格した問題はありません</span>'
+      : passed.map(p => {
+          const date = p.passedAt?.toDate
+            ? p.passedAt.toDate().toLocaleDateString('ja-JP') : '—';
+          return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+            <span>✅ ${UNIT_N[p.id]||p.id}</span>
+            <span style="color:var(--muted)">${date} ${p.passedAge||''}</span>
+          </div>`;
+        }).join('');
+  } catch(e) {
+    document.getElementById('detailProgress').innerHTML = `<span style="color:var(--red)">エラー: ${e.message}</span>`;
+  }
+}
+
+async function saveDetailEdit() {
+  const btn = document.getElementById('detailSaveBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    await db.collection('users').doc(detailUid).update({
+      name:                  document.getElementById('d-name').value.trim(),
+      phone:                 document.getElementById('d-phone').value.trim(),
+      subscriptionStatus:    document.getElementById('d-status').value,
+      maxConcurrentSessions: parseInt(document.getElementById('d-sessions').value) || 1,
+      updatedAt:             firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    const msgEl = document.getElementById('editMsg2');
+    msgEl.textContent = '✅ 保存しました'; msgEl.className = 'msg-box show success';
+  } catch(e) {
+    const msgEl = document.getElementById('editMsg2');
+    msgEl.textContent = 'エラー: ' + e.message; msgEl.className = 'msg-box show error';
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
 }

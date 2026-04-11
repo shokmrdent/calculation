@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ログイン | うちトレ</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared-auth.css">
+<style>
+.login-wrap {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+}
+.blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: .3; pointer-events: none; }
+.blob-1 { width:500px;height:500px;background:#fde68a;top:-100px;left:-80px; }
+.blob-2 { width:400px;height:400px;background:#bbf7d0;bottom:-80px;right:-60px; }
+
+.login-box {
+  width: 100%; max-width: 420px;
+  position: relative; z-index: 1;
+}
+.login-logo {
+  text-align: center; margin-bottom: 32px;
+}
+.login-logo-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 40px; font-weight: 900;
+  color: var(--orange);
+  display: block;
+}
+.login-logo-sub {
+  font-size: 13px; color: var(--muted); margin-top: 4px;
+}
+.login-card { border-radius: 24px; }
+.login-card h1 {
+  font-size: 22px; font-weight: 900; margin-bottom: 24px;
+  text-align: center;
+}
+
+.divider {
+  text-align: center; margin: 20px 0;
+  position: relative;
+}
+.divider::before {
+  content: '';
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px; background: var(--border);
+}
+.divider span {
+  background: #fff; padding: 0 12px;
+  position: relative; font-size: 12px; color: var(--muted);
+}
+
+.msg-box {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+.msg-box.show { display: block; }
+.msg-box.error   { background: #fee2e2; color: #991b1b; }
+.msg-box.success { background: #dcfce7; color: #166534; }
+.msg-box.info    { background: #eff6ff; color: #1e40af; }
+
+.login-footer {
+  text-align: center; margin-top: 20px;
+  font-size: 13px; color: var(--muted);
+}
+.login-footer a { color: var(--orange); font-weight: 700; text-decoration: none; }
+
+.eye-btn {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 18px; padding: 4px;
+}
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 44px; }
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="login-wrap">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="login-logo-text">うちトレ</span>
+      <p class="login-logo-sub">家庭学習・受験対策 計算アプリ</p>
+    </div>
+
+    <div class="card login-card">
+      <h1>ログイン</h1>
+
+      <div id="msgBox" class="msg-box"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label>メールアドレス</label>
+          <input type="email" id="email" placeholder="example@email.com" autocomplete="email" required>
+          <div class="form-error" id="emailErr"></div>
+        </div>
+
+        <div class="form-group">
+          <label>パスワード</label>
+          <div class="pw-wrap">
+            <input type="password" id="password" placeholder="パスワードを入力" autocomplete="current-password" required>
+            <button type="button" class="eye-btn" id="eyeBtn">👁</button>
+          </div>
+          <div class="form-error" id="pwErr"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+          <span class="btn-label">ログイン</span>
+          <div class="loader"></div>
+        </button>
+      </form>
+
+      <div class="divider"><span>または</span></div>
+
+      <a href="signup.html" class="btn btn-secondary btn-full">
+        🆕 新規アカウント登録
+      </a>
+    </div>
+
+    <div class="login-footer">
+      <a href="#" id="forgotPwLink">パスワードを忘れた方はこちら</a>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+// URLパラメータのメッセージ
+const params  = new URLSearchParams(location.search);
+const msgBox  = document.getElementById('msgBox');
+const msgMap  = {
+  session_expired: { text: '別のデバイスからログインされたため、セッションが終了しました。', cls: 'info' },
+  unauthorized:    { text: '権限がありません。', cls: 'error' },
+  logged_out:      { text: 'ログアウトしました。', cls: 'success' },
+};
+if (params.get('msg') && msgMap[params.get('msg')]) {
+  const m = msgMap[params.get('msg')];
+  msgBox.textContent = m.text;
+  msgBox.className = `msg-box show ${m.cls}`;
+}
+
+// すでにログイン済みの場合はリダイレクト
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+  const valid = await verifySession(user.uid);
+  if (!valid) return;
+  const snap = await db.collection('users').doc(user.uid).get();
+  const role = snap.data()?.role;
+  window.location.href = role === 'admin' ? '/admin/index.html' : '/top-home.html';
+});
+
+// パスワード表示切替
+document.getElementById('eyeBtn').addEventListener('click', () => {
+  const pw = document.getElementById('password');
+  pw.type = pw.type === 'password' ? 'text' : 'password';
+});
+
+// ログインフォーム
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn   = document.getElementById('loginBtn');
+  const email = document.getElementById('email').value.trim();
+  const pw    = document.getElementById('password').value;
+
+  document.querySelectorAll('.form-error').forEach(el => el.classList.remove('show'));
+  msgBox.className = 'msg-box';
+
+  let ok = true;
+  if (!email) { showErr('emailErr', 'メールアドレスを入力してください'); ok = false; }
+  if (!pw)    { showErr('pwErr',    'パスワードを入力してください');     ok = false; }
+  if (!ok)    return;
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  try {
+    const cred = await auth.signInWithEmailAndPassword(email, pw);
+
+    // サブスクリプション状態チェック
+    const snap = await db.collection('users').doc(cred.user.uid).get();
+    const data = snap.data() || {};
+
+    if (data.subscriptionStatus === 'canceled') {
+      await auth.signOut();
+      msgBox.textContent = 'このアカウントのサブスクリプションは解約済みです。新規登録からご利用ください。';
+      msgBox.className = 'msg-box show error';
+      return;
+    }
+
+    // セッション登録（1デバイス制限）
+    await registerSession(cred.user.uid);
+
+    // リダイレクト
+    window.location.href = data.role === 'admin' ? '/admin/index.html' : '/top-home.html';
+
+  } catch (err) {
+    const errMap = {
+      'auth/user-not-found':   'このメールアドレスは登録されていません。',
+      'auth/wrong-password':   'パスワードが間違っています。',
+      'auth/too-many-requests':'ログイン試行が多すぎます。しばらくしてから再試行してください。',
+      'auth/invalid-email':    'メールアドレスの形式が正しくありません。',
+      'auth/invalid-credential': 'メールアドレスまたはパスワードが間違っています。',
+    };
+    msgBox.textContent = errMap[err.code] || `エラーが発生しました（${err.code}）`;
+    msgBox.className = 'msg-box show error';
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+});
+
+// パスワードリセット
+document.getElementById('forgotPwLink').addEventListener('click', async e => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  if (!email) {
+    msgBox.textContent = 'メールアドレスを入力してからクリックしてください。';
+    msgBox.className = 'msg-box show error';
+    return;
+  }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    msgBox.textContent = 'パスワードリセットメールを送信しました。メールをご確認ください。';
+    msgBox.className = 'msg-box show success';
+  } catch {
+    msgBox.textContent = 'メール送信に失敗しました。メールアドレスをご確認ください。';
+    msgBox.className = 'msg-box show error';
+  }
+});
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+</script>
+</body>
+</html>

@@ -97,6 +97,59 @@ body{
   background:var(--yellow);border-color:var(--yellow);color:#78350f;
 }
 
+
+/* ── カードロック ── */
+.card[data-test-unit] {
+  position: relative;
+}
+.card.locked-card {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.3);
+  cursor: not-allowed;
+}
+.card.locked-card::after {
+  content: '🔒';
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 20px;
+  opacity: 0.8;
+}
+
+/* ── テストボタン ── */
+.test-btn-wrap {
+  margin-top: 8px;
+  display: flex; gap: 6px; align-items: center;
+}
+.test-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 12px; border-radius: 8px;
+  font-size: 12px; font-weight: 800;
+  text-decoration: none; cursor: pointer;
+  border: none; font-family: inherit;
+  transition: .15s; flex-shrink: 0;
+}
+.test-btn.unlocked {
+  background: #f97316; color: #fff;
+  box-shadow: 0 2px 8px rgba(249,115,22,.3);
+}
+.test-btn.unlocked:hover { background: #ea6c0a; transform: translateY(-1px); }
+.test-btn.passed {
+  background: #dcfce7; color: #166534;
+  box-shadow: none;
+}
+.test-btn.locked {
+  background: #f5f5f4; color: #a8a29e;
+  cursor: not-allowed;
+}
+.test-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 4px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  background: #fef9c3; color: #854d0e;
+}
+.test-badge.passed { background: #dcfce7; color: #166534; }
+
 /* ---- subject cards ---- */
 .section-title{
   font-size:20px;font-weight:900;margin-bottom:20px;
@@ -188,9 +241,53 @@ body{
   .op-grid{grid-template-columns:repeat(2,1fr);}
   .mode-tabs{flex-wrap:wrap;}
 }
+
+/* ---- ユーザーナビバー ---- */
+.user-nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(255,253,247,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  font-family:'Noto Sans JP',sans-serif;
+}
+.user-nav-left{
+  font-size:13px;color:#78716c;
+  display:flex;align-items:center;gap:8px;
+}
+.user-nav-name{
+  font-weight:800;color:#1c1917;font-size:14px;
+}
+.user-nav-right{
+  display:flex;align-items:center;gap:8px;
+}
+.user-nav-btn{
+  padding:6px 14px;border-radius:999px;
+  border:1.5px solid #e7e5e4;background:#fff;
+  font:inherit;font-size:12px;font-weight:700;
+  cursor:pointer;text-decoration:none;color:#1c1917;
+  transition:.15s;
+}
+.user-nav-btn:hover{border-color:#f97316;color:#f97316;}
+.user-nav-btn.logout{color:#ef4444;border-color:#fecaca;}
+.user-nav-btn.logout:hover{background:#fee2e2;}
+body{padding-top:52px;}
+
 </style>
 </head>
 <body>
+<div class="user-nav">
+  <div class="user-nav-left">
+    👋 こんにちは、<span class="user-nav-name" id="navUserName">...</span> さん
+  </div>
+  <div class="user-nav-right">
+    <a href="/settings.html" class="user-nav-btn">⚙️ 設定</a>
+    <a href="/contact.html"  class="user-nav-btn">💬 お問い合わせ</a>
+    <button class="user-nav-btn logout" onclick="signOutUser()">ログアウト</button>
+  </div>
+</div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
@@ -252,25 +349,25 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">幼児〜小1　10までのかずと計算</div>
     <div class="cards">
-      <a href="yoji-addition.html?op=add&level=yoji" class="card">
+      <a href="yoji-addition.html?op=add&level=yoji" class="card" data-test-unit="addition-10">
         <div class="card-icon" style="background:#fef3c7;">🌟</div>
         <div class="card-title">10までの足し算</div>
         <div class="card-desc">繰り上がりなし。答えが10以下。大きな文字。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="yoji-addition.html?op=sub&level=yoji" class="card">
+      <a href="yoji-addition.html?op=sub&level=yoji" class="card" data-test-unit="subtraction-10">
         <div class="card-icon" style="background:#fef3c7;">🌟</div>
         <div class="card-title">10までの引き算</div>
         <div class="card-desc">繰り下がりなし。10以下の数から引く。大きな文字。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="yoji-addition.html?op=add&level=sho1" class="card">
+      <a href="yoji-addition.html?op=add&level=sho1" class="card" data-test-unit="addition-20">
         <div class="card-icon" style="background:#fff7ed;">⭐</div>
         <div class="card-title">1桁の足し算（繰り上がりあり）</div>
         <div class="card-desc">答えが11〜18。1桁＋1桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="yoji-addition.html?op=sub&level=sho1" class="card">
+      <a href="yoji-addition.html?op=sub&level=sho1" class="card" data-test-unit="subtraction-20">
         <div class="card-icon" style="background:#fff7ed;">⭐</div>
         <div class="card-title">1桁の引き算（繰り下がりあり）</div>
         <div class="card-desc">11〜18から1桁を引く。答えは1桁。</div>
@@ -284,13 +381,13 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小1〜小2　とけい・時間</div>
     <div class="cards">
-      <a href="tokei.html" class="card">
+      <a href="tokei.html" class="card" data-test-unit="tokei">
         <div class="card-icon" style="background:#e0f2fe;">🕐</div>
         <div class="card-title">とけいをよむ（5分きざみ）</div>
         <div class="card-desc">アナログ時計を見てなんじなんぷんか答える。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
       </a>
-      <a href="tokei-keisan.html" class="card">
+      <a href="tokei-keisan.html" class="card" data-test-unit="tokei-keisan">
         <div class="card-icon" style="background:#e0f2fe;">⏱️</div>
         <div class="card-title">じこくのけいさん（○分後・前）</div>
         <div class="card-desc">○ふんご・○ふんまえのじこくを求める。</div>
@@ -302,31 +399,31 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小1〜小2　たし算・ひき算</div>
     <div class="cards">
-      <a href="addition-horizontal.html" class="card">
+      <a href="addition-horizontal.html" class="card" data-test-unit="addition-horizontal">
         <div class="card-icon" style="background:#fff7ed;">➕</div>
         <div class="card-title">足し算（横式）</div>
         <div class="card-desc">繰り上がりあり。1〜3桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="subtraction-horizontal.html" class="card">
+      <a href="subtraction-horizontal.html" class="card" data-test-unit="subtraction-horizontal">
         <div class="card-icon" style="background:#fff7ed;">➖</div>
         <div class="card-title">引き算（横式）</div>
         <div class="card-desc">繰り下がりあり。1〜3桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="addition-hissan.html" class="card">
+      <a href="addition-hissan.html" class="card" data-test-unit="addition-hissan">
         <div class="card-icon" style="background:#fff7ed;">📝</div>
         <div class="card-title">足し算（ひっ算）</div>
         <div class="card-desc">繰り上がりあり。桁数選択。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="subtraction-hissan.html" class="card">
+      <a href="subtraction-hissan.html" class="card" data-test-unit="subtraction-hissan">
         <div class="card-icon" style="background:#fff7ed;">📝</div>
         <div class="card-title">引き算（ひっ算）</div>
         <div class="card-desc">繰り下がりあり。桁数選択。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="story-problems.html" class="card">
+      <a href="story-problems.html" class="card" data-test-unit="story-add-sub">
         <div class="card-icon" style="background:#fef9c3;">📖</div>
         <div class="card-title">文章題（足し算・引き算）</div>
         <div class="card-desc">ランダム生成。式と答えを書く。10問。</div>
@@ -347,31 +444,31 @@ body{
           <span class="pill pill-new">✏️ タブレット</span>
         </div>
       </a>
-      <a href="multiplication-hissan.html" class="card">
+      <a href="multiplication-hissan.html" class="card" data-test-unit="multiplication-hissan">
         <div class="card-icon" style="background:#fff7ed;">✖️</div>
         <div class="card-title">かけ算（ひっ算）</div>
         <div class="card-desc">2〜3桁×1〜2桁。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="division-hissan.html" class="card">
+      <a href="division-hissan.html" class="card" data-test-unit="division-hissan">
         <div class="card-icon" style="background:#fff7ed;">➗</div>
         <div class="card-title">わり算（ひっ算）</div>
         <div class="card-desc">1〜3桁÷1〜2桁。あまりあり・なし。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="multiplication-horizontal.html" class="card">
+      <a href="multiplication-horizontal.html" class="card" data-test-unit="multiplication-horizontal">
         <div class="card-icon" style="background:#fff7ed;">✖️</div>
         <div class="card-title">かけ算（横式）</div>
         <div class="card-desc">横式で桁数選択。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="division-horizontal.html" class="card">
+      <a href="division-horizontal.html" class="card" data-test-unit="division-horizontal">
         <div class="card-icon" style="background:#fff7ed;">➗</div>
         <div class="card-title">わり算（横式）</div>
         <div class="card-desc">あまりあり・なし・混在。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="story-mul-div.html" class="card">
+      <a href="story-mul-div.html" class="card" data-test-unit="story-mul-div">
         <div class="card-icon" style="background:#fef9c3;">📖</div>
         <div class="card-title">文章題（かけ算・わり算）</div>
         <div class="card-desc">ランダム生成。式と答えを書く。10問。</div>
@@ -383,19 +480,19 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小3　単位換算</div>
     <div class="cards">
-      <a href="tansaku.html" class="card">
+      <a href="tansaku.html" class="card" data-test-unit="tansaku">
         <div class="card-icon" style="background:#f0fdf4;">📏</div>
         <div class="card-title">長さの単位換算</div>
         <div class="card-desc">mm・cm・m・km の変換。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="tansaku-kasa.html" class="card">
+      <a href="tansaku-kasa.html" class="card" data-test-unit="tansaku-kasa">
         <div class="card-icon" style="background:#f0fdf4;">🧴</div>
         <div class="card-title">かさの単位換算</div>
         <div class="card-desc">mL・dL・L の変換。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="tansaku-omosa.html" class="card">
+      <a href="tansaku-omosa.html" class="card" data-test-unit="tansaku-omosa">
         <div class="card-icon" style="background:#f0fdf4;">⚖️</div>
         <div class="card-title">重さの単位換算</div>
         <div class="card-desc">g・kg・t の変換。</div>
@@ -407,7 +504,7 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小4　がい数・面積</div>
     <div class="cards">
-      <a href="gaisuu.html" class="card">
+      <a href="gaisuu.html" class="card" data-test-unit="gaisuu">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">がい数（四捨五入）</div>
         <div class="card-desc">千・百・十の位で四捨五入。混在問題も。</div>
@@ -419,37 +516,37 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小4〜小5　分数・小数</div>
     <div class="cards">
-      <a href="yakubun-tsubun.html" class="card">
+      <a href="yakubun-tsubun.html" class="card" data-test-unit="yakubun">
         <div class="card-icon" style="background:#f0fdf4;">📐</div>
         <div class="card-title">約分・通分</div>
         <div class="card-desc">約分（既約分数）・通分（最小公倍数）。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="fraction.html?op=add" class="card">
+      <a href="fraction.html?op=add" class="card" data-test-unit="fraction-add">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の足し算</div>
         <div class="card-desc">同分母・異分母（通分）。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="fraction.html?op=sub" class="card">
+      <a href="fraction.html?op=sub" class="card" data-test-unit="fraction-sub">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の引き算</div>
         <div class="card-desc">同分母・異分母（通分）。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="decimal.html?op=add" class="card">
+      <a href="decimal.html?op=add" class="card" data-test-unit="decimal-add">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数の足し算・引き算</div>
         <div class="card-desc">小数第1・2位。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="decimal.html?op=mul" class="card">
+      <a href="decimal.html?op=mul" class="card" data-test-unit="decimal-mul">
         <div class="card-icon" style="background:#f0fdf4;">🔢</div>
         <div class="card-title">小数のかけ算・わり算</div>
         <div class="card-desc">小数×整数、小数÷整数。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="decimal-hissan.html" class="card">
+      <a href="decimal-hissan.html" class="card" data-test-unit="decimal-hissan">
         <div class="card-icon" style="background:#f0fdf4;">📝</div>
         <div class="card-title">小数の足し算・引き算（ひっ算）</div>
         <div class="card-desc">小数点の位置を揃えて計算。第1位・第2位・混在。</div>
@@ -461,25 +558,25 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小5〜小6　図形の面積・体積</div>
     <div class="cards">
-      <a href="zukei.html" class="card">
+      <a href="zukei.html" class="card" data-test-unit="zukei">
         <div class="card-icon" style="background:#f0fdf4;">📐</div>
         <div class="card-title">面積（三角形・台形・ひし形など）</div>
         <div class="card-desc">図形を見て面積を求める。公式ヒント付き。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="zukei-en.html" class="card">
+      <a href="zukei-en.html" class="card" data-test-unit="zukei-en">
         <div class="card-icon" style="background:#f0fdf4;">⭕</div>
         <div class="card-title">円の面積</div>
         <div class="card-desc">半径 × 半径 × 3.14の計算。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="zukei-taieki.html" class="card">
+      <a href="zukei-taieki.html" class="card" data-test-unit="zukei-taieki">
         <div class="card-icon" style="background:#f0fdf4;">📦</div>
         <div class="card-title">体積（直方体・立方体）</div>
         <div class="card-desc">たて × よこ × 高さ。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="zukei-entai.html" class="card">
+      <a href="zukei-entai.html" class="card" data-test-unit="zukei-entai">
         <div class="card-icon" style="background:#f0fdf4;">🧪</div>
         <div class="card-title">円柱の体積</div>
         <div class="card-desc">半径 × 半径 × 3.14 × 高さ。</div>
@@ -491,13 +588,13 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小5　速さ・割合・百分率</div>
     <div class="cards">
-      <a href="hayasa.html" class="card">
+      <a href="hayasa.html" class="card" data-test-unit="hayasa">
         <div class="card-icon" style="background:#fef9c3;">🚗</div>
         <div class="card-title">速さ（はじき）</div>
         <div class="card-desc">速さ・きょり・時間の三角形で解く。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="wariai.html" class="card">
+      <a href="wariai.html" class="card" data-test-unit="wariai">
         <div class="card-icon" style="background:#fef9c3;">📊</div>
         <div class="card-title">割合・百分率</div>
         <div class="card-desc">くらべる量・もとにする量・割合の計算。</div>
@@ -509,13 +606,13 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小6　分数の乗除・混合計算</div>
     <div class="cards">
-      <a href="fraction.html?op=mul" class="card">
+      <a href="fraction.html?op=mul" class="card" data-test-unit="fraction-mul">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数のかけ算</div>
         <div class="card-desc">分数×分数。約分あり。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="fraction.html?op=div" class="card">
+      <a href="fraction.html?op=div" class="card" data-test-unit="fraction-div">
         <div class="card-icon" style="background:#f0fdf4;">🍕</div>
         <div class="card-title">分数の割り算</div>
         <div class="card-desc">分数÷分数。逆数を使う。</div>
@@ -542,19 +639,19 @@ body{
   <div class="curriculum-group">
     <div class="curriculum-label">小6　比・比例・場合の数</div>
     <div class="cards">
-      <a href="hi.html" class="card">
+      <a href="hi.html" class="card" data-test-unit="hi">
         <div class="card-icon" style="background:#f0fdf4;">⚖️</div>
         <div class="card-title">比</div>
         <div class="card-desc">最も簡単な比・比の値・比例配分。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="hirei.html" class="card">
+      <a href="hirei.html" class="card" data-test-unit="hirei">
         <div class="card-icon" style="background:#f0fdf4;">📈</div>
         <div class="card-title">比例・反比例</div>
         <div class="card-desc">y＝ax / y＝k÷x の計算。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="basho.html" class="card">
+      <a href="basho.html" class="card" data-test-unit="basho">
         <div class="card-icon" style="background:#f0fdf4;">🎲</div>
         <div class="card-title">場合の数</div>
         <div class="card-desc">並び方・組み合わせ・樹形図。</div>
@@ -766,5 +863,112 @@ document.querySelectorAll('#fraction-decimal .fmt-btn').forEach(btn => {
     © 2026 うちトレ（Uchitore）All Rights Reserved.<br>
     <a href="terms.html" style="color:#f97316;text-decoration:none;font-weight:700;margin-top:8px;display:inline-block;">📄 利用規約</a>
   </div>
+
+<script>
+// ナビバーにユーザー名を表示（Firebase読み込み後に実行）
+window.addEventListener('DOMContentLoaded', () => {
+  const unsub = firebase.auth().onAuthStateChanged(async user => {
+    if (!user) return;
+    try {
+      const snap = await firebase.firestore().collection('users').doc(user.uid).get();
+      const name = snap.data()?.name || user.email;
+      document.getElementById('navUserName').textContent = name;
+    } catch(e) {
+      document.getElementById('navUserName').textContent = user.email;
+    }
+    unsub();
+  });
+});
+</script>
+
+<script>
+// ── テスト進捗を読み込んでカードにボタンを追加 ──
+(async function loadTestProgress() {
+  // Firebase初期化待ち
+  await new Promise(r => {
+    const check = () => {
+      if (typeof firebase !== 'undefined' && firebase.apps?.length) r();
+      else setTimeout(check, 100);
+    };
+    check();
+  });
+
+  const authUser = await new Promise(r => firebase.auth().onAuthStateChanged(r));
+  if (!authUser) return;
+
+  // Firestoreから進捗を取得
+  const progressSnap = await firebase.firestore()
+    .collection('users').doc(authUser.uid)
+    .collection('progress').get();
+
+  const progress = {};
+  progressSnap.forEach(doc => { progress[doc.id] = doc.data(); });
+
+  // 管理者チェック
+  const userSnap = await firebase.firestore().collection('users').doc(authUser.uid).get();
+  const isAdmin  = userSnap.data()?.role === 'admin';
+
+  // 最初の単元は常にアンロック
+  const FIRST_UNIT = 'addition-10';
+
+  // 全カードにテストボタンを追加
+  document.querySelectorAll('[data-test-unit]').forEach(card => {
+    const unitId = card.dataset.testUnit;
+    const prog   = progress[unitId] || {};
+    const passed  = prog.passed || false;
+    // 管理者は全アンロック
+    const unlocked = isAdmin || prog.unlocked || passed || unitId === FIRST_UNIT;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'test-btn-wrap';
+
+    if (isAdmin) {
+      // 管理者：全問オープン表示（テストボタンなし）
+      wrap.innerHTML = `<span class="test-badge" style="background:#ede9fe;color:#5b21b6">👑 管理者モード</span>`;
+    } else if (passed) {
+      // 合格済み：カードもテストボタンも使える
+      wrap.innerHTML = `
+        <a href="/test.html?unit=${unitId}" class="test-btn passed">
+          ✅ 合格済み
+        </a>
+        <span class="test-badge passed">🏆 ${prog.bestScore || 10}/10</span>
+      `;
+    } else if (unlocked) {
+      // 解放済み（未合格）：カードは使える、テストボタンも表示
+      wrap.innerHTML = `
+        <a href="/test.html?unit=${unitId}" class="test-btn unlocked">
+          📝 テストを受ける
+        </a>
+      `;
+    } else {
+      // ロック：カード自体をクリック不可にする
+      card.classList.add('locked-card');
+      // カードのhrefを無効化
+      card.addEventListener('click', e => e.preventDefault(), true);
+      wrap.innerHTML = `
+        <span class="test-btn locked">🔒 前のテストをクリアして解放</span>
+      `;
+    }
+
+    // テストボタンのクリックでカード遷移しないよう制御
+    wrap.querySelectorAll('a.test-btn').forEach(btn => {
+      btn.addEventListener('click', e => e.stopPropagation());
+    });
+
+    // card-pillsの後に追加
+    const pills = card.querySelector('.card-pills');
+    if (pills) pills.after(wrap);
+    else card.appendChild(wrap);
+  });
+})();
+</script>
+
+<!-- ログインガード -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
 </body>
 </html>

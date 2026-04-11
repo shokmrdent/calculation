@@ -24,5 +24,8 @@
         { "source": "**", "destination": "/top-home.html" }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "source": "functions"
+  }
 }

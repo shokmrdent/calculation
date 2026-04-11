@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── ヘルパー関数 ─────────────────────────────
+    function isLoggedIn()   { return request.auth != null; }
+    function isOwner(uid)   { return isLoggedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return isLoggedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── users コレクション ────────────────────────
+    match /users/{uid} {
+      // 自分のデータは読める / 管理者はすべて読める
+      allow read: if isOwner(uid) || isAdmin();
+
+      // 新規作成: 自分のデータのみ（signup時）
+      allow create: if isOwner(uid)
+        && request.resource.data.role == 'user'
+        && request.resource.data.subscriptionStatus == 'pending';
+
+      // 更新: 自分は限られたフィールドのみ / 管理者は全フィールド
+      allow update: if isAdmin()
+        || (isOwner(uid) && onlyUpdating(['name','birthday','email','phone','updatedAt']));
+
+      // 削除: 管理者のみ
+      allow delete: if isAdmin();
+    }
+
+    // ── sessions コレクション ─────────────────────
+    match /sessions/{uid} {
+      allow read, write: if isOwner(uid) || isAdmin();
+    }
+
+    // ── tickets（お問い合わせ）コレクション ────────
+    match /tickets/{ticketId} {
+      // 管理者はすべて読める
+      allow read: if isAdmin();
+
+      // 自分のチケットは読める
+      allow read: if isLoggedIn()
+        && resource.data.uid == request.auth.uid;
+
+      // ユーザーは新規作成可
+      allow create: if isLoggedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'open';
+
+      // ユーザーは自分のチケットにメッセージ追加のみ
+      allow update: if isAdmin()
+        || (isLoggedIn()
+          && resource.data.uid == request.auth.uid
+          && onlyUpdating(['messages','updatedAt','unreadAdmin','unreadUser']));
+
+      allow delete: if isAdmin();
+    }
+
+    // ── ヘルパー: 指定フィールド以外更新しないか確認 ──
+    function onlyUpdating(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+  }
+}

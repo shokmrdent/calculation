@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ | うちトレ</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #f5f5f4;
+  height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; height: 56px;
+  background: #fff; border-bottom: 1px solid #e7e5e4; flex-shrink: 0;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo {
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px;
+  color: #f97316; text-decoration: none;
+}
+.nav-logo span { color: #1c1917; font-size: 14px; font-weight: 700; }
+.btn-sm {
+  padding: 6px 14px; border-radius: 999px;
+  border: 1.5px solid #e7e5e4; background: #fff;
+  font: inherit; font-size: 12px; font-weight: 700;
+  cursor: pointer; text-decoration: none; color: #1c1917; transition: .15s;
+}
+.btn-sm:hover { border-color: #f97316; color: #f97316; }
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* 左チケット一覧 */
+.ticket-pane {
+  width: 280px; flex-shrink: 0;
+  background: #fff; border-right: 1px solid #e7e5e4;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.pane-header {
+  padding: 14px 16px; border-bottom: 1px solid #e7e5e4;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pane-title { font-size: 15px; font-weight: 900; }
+.btn-new {
+  padding: 7px 14px; border-radius: 999px;
+  background: #f97316; color: #fff; border: none;
+  font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+}
+.btn-new:hover { background: #ea6c0a; }
+.ticket-list { flex: 1; overflow-y: auto; }
+.ticket-item {
+  padding: 13px 16px; border-bottom: 1px solid #f5f5f4;
+  cursor: pointer; transition: .12s;
+}
+.ticket-item:hover  { background: #fafaf9; }
+.ticket-item.active { background: #fff7ed; }
+.ticket-item.unread { background: #eff6ff; }
+.t-subject { font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-preview { font-size: 12px; color: #78716c; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-meta    { display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #78716c; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 800; }
+.badge-open   { background: #dcfce7; color: #166534; }
+.badge-closed { background: #f3f4f6; color: #6b7280; }
+.no-tickets   { padding: 40px 16px; text-align: center; color: #78716c; font-size: 13px; line-height: 1.8; }
+
+/* 右チャット */
+.chat-pane { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+.chat-empty {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; color: #78716c; gap: 10px;
+}
+.chat-empty .icon { font-size: 48px; }
+.chat-empty p { font-size: 13px; line-height: 1.8; text-align: center; }
+.chat-header {
+  padding: 14px 20px; border-bottom: 1px solid #e7e5e4;
+  flex-shrink: 0;
+}
+.chat-header-subject { font-size: 15px; font-weight: 900; }
+.chat-header-status  { font-size: 12px; color: #78716c; margin-top: 2px; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.bubble-row { display: flex; align-items: flex-end; gap: 8px; flex-wrap: nowrap; }
+.bubble-row.me { flex-direction: row-reverse; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; background: #f5f5f4;
+}
+.bubble { max-width: 72%; min-width: 60px; padding: 11px 15px; font-size: 14px; line-height: 1.7; border-radius: 18px; word-break: break-word; white-space: pre-wrap; }
+.bubble-row.admin .bubble { background: #f5f5f4; color: #1c1917; border-radius: 4px 18px 18px 18px; }
+.bubble-row.me    .bubble { background: #f97316; color: #fff;    border-radius: 18px 4px 18px 18px; }
+.bubble-time { font-size: 10px; color: #a8a29e; flex-shrink: 0; margin-bottom: 4px; }
+.chat-input-area {
+  padding: 14px 20px; border-top: 1px solid #e7e5e4;
+  display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; background: #fff;
+}
+.chat-input-area textarea {
+  flex: 1; padding: 11px 14px; border: 2px solid #e7e5e4; border-radius: 14px;
+  font: inherit; font-size: 14px; resize: none; min-height: 48px; max-height: 120px;
+  outline: none; transition: border-color .15s;
+}
+.chat-input-area textarea:focus { border-color: #f97316; }
+.btn-send {
+  padding: 11px 20px; border-radius: 14px; background: #f97316; color: #fff;
+  border: none; font: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+}
+.btn-send:disabled { opacity: .5; cursor: not-allowed; }
+.closed-note {
+  text-align: center; padding: 12px; font-size: 13px; color: #78716c;
+  background: #f9fafb; border-top: 1px solid #e7e5e4; flex-shrink: 0;
+}
+/* モーダル */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px; opacity: 0; pointer-events: none; transition: .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: #fff; border-radius: 20px; padding: 28px; max-width: 460px; width: 100%; }
+.modal-title { font-size: 18px; font-weight: 900; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 12px; font-weight: 700; color: #78716c; margin-bottom: 5px; }
+.form-group input, .form-group textarea {
+  width: 100%; padding: 11px 13px; border: 2px solid #e7e5e4; border-radius: 10px;
+  font: inherit; font-size: 14px; outline: none; transition: border-color .15s;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: #f97316; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.modal-actions { display: flex; gap: 10px; }
+.btn-cancel {
+  flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #e7e5e4;
+  background: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.btn-submit {
+  flex: 1; padding: 12px; border-radius: 12px; background: #f97316; color: #fff;
+  border: none; font: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+.err-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+.err-msg.show { display: block; background: #fee2e2; color: #991b1b; }
+/* ローダー */
+.loader { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+.loading .loader { display: block; }
+.loading .lbl    { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <a href="top-home.html" class="btn-sm">← 戻る</a>
+    <a href="top-home.html" class="nav-logo">うちトレ <span>| お問い合わせ</span></a>
+  </div>
+  <a href="settings.html" class="btn-sm">⚙️ 設定</a>
+</nav>
+
+<div class="main">
+  <!-- 左：一覧 -->
+  <div class="ticket-pane">
+    <div class="pane-header">
+      <div class="pane-title">💬 履歴</div>
+      <button class="btn-new" onclick="openModal()">＋ 新規</button>
+    </div>
+    <div class="ticket-list" id="ticketList">
+      <div class="no-tickets">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- 右：チャット -->
+  <div class="chat-pane">
+    <div class="chat-empty" id="chatEmpty">
+      <div class="icon">💬</div>
+      <p>チケットを選択するか<br>「＋ 新規」から問い合わせを作成してください</p>
+    </div>
+    <div id="chatBody" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+      <div class="chat-header">
+        <div class="chat-header-subject" id="chatSubject"></div>
+        <div class="chat-header-status"  id="chatStatus"></div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div id="inputWrap">
+        <div class="chat-input-area">
+          <textarea id="msgInput" placeholder="メッセージを入力... (Enterで送信、Shift+Enterで改行)"></textarea>
+          <button class="btn-send" id="sendBtn" onclick="sendMsg()">
+            <span class="lbl">送信</span>
+            <div class="loader"></div>
+          </button>
+        </div>
+      </div>
+      <div class="closed-note" id="closedNote" style="display:none">
+        このお問い合わせはクローズされました。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 新規モーダル -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">✉️ 新しいお問い合わせ</div>
+    <div class="err-msg" id="modalErr"></div>
+    <div class="form-group">
+      <label>件名</label>
+      <input type="text" id="newSubject" placeholder="例：ログインできない、機能について など">
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="newBody" placeholder="詳しい内容をご記入ください..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitNew()">
+        <span class="lbl">送信する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+let currentUser, userData, currentTicketId = null, unsubChat = null;
+
+requireAuth().then(({ user, userData: ud }) => {
+  currentUser = user; userData = ud;
+  loadTickets();
+});
+
+// チケット一覧
+function loadTickets() {
+  db.collection('tickets')
+    .where('uid', '==', currentUser.uid)
+    .orderBy('updatedAt', 'desc')
+    .onSnapshot(snap => {
+      const el = document.getElementById('ticketList');
+      if (snap.empty) {
+        el.innerHTML = '<div class="no-tickets">まだ問い合わせはありません<br>「＋ 新規」から作成できます</div>';
+        return;
+      }
+      el.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        const last = (d.messages || []).slice(-1)[0]?.text || '';
+        const dateStr = d.updatedAt?.toDate
+          ? d.updatedAt.toDate().toLocaleDateString('ja-JP',{month:'2-digit',day:'2-digit'}) : '';
+        return `<div class="ticket-item ${d.unreadUser?'unread':''} ${doc.id===currentTicketId?'active':''}"
+                     onclick="openTicket('${doc.id}')">
+          <div class="t-subject">${d.unreadUser?'🔵 ':''}${esc(d.subject)}</div>
+          <div class="t-preview">${esc(last)}</div>
+          <div class="t-meta">
+            <span class="badge ${d.status==='open'?'badge-open':'badge-closed'}">${d.status==='open'?'対応中':'完了'}</span>
+            <span>${dateStr}</span>
+          </div>
+        </div>`;
+      }).join('');
+    });
+}
+
+// チケットを開く
+function openTicket(id) {
+  currentTicketId = id;
+  db.collection('tickets').doc(id).update({ unreadUser: false }).catch(()=>{});
+
+  const body = document.getElementById('chatBody');
+  document.getElementById('chatEmpty').style.display = 'none';
+  body.style.cssText = 'display:flex;flex:1;flex-direction:column;overflow:hidden';
+
+  if (unsubChat) unsubChat();
+  unsubChat = db.collection('tickets').doc(id).onSnapshot(doc => {
+    if (!doc.exists) return;
+    const d = doc.data();
+    document.getElementById('chatSubject').textContent = '📌 ' + (d.subject||'');
+    document.getElementById('chatStatus').textContent  = d.status==='open' ? '✅ 対応中' : '🔒 クローズ済み';
+    document.getElementById('inputWrap').style.display  = d.status==='open' ? '' : 'none';
+    document.getElementById('closedNote').style.display = d.status==='open' ? 'none' : '';
+
+    const msgs = d.messages || [];
+    const wrap = document.getElementById('chatMessages');
+    wrap.innerHTML = msgs.length === 0
+      ? '<div style="text-align:center;color:#a8a29e;font-size:13px;margin-top:40px">メッセージを送ってください</div>'
+      : msgs.map(m => {
+          const isMe = m.role === 'user';
+          const ts   = m.createdAt
+            ? new Date(m.createdAt.toDate ? m.createdAt.toDate() : m.createdAt)
+                .toLocaleString('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
+            : '';
+          return `<div class="bubble-row ${isMe?'me':'admin'}">
+            <div class="avatar">${isMe?'👤':'🧑‍💼'}</div>
+            <div>
+              <div class="bubble">${esc(m.text)}</div>
+              <div class="bubble-time">${ts}</div>
+            </div>
+          </div>`;
+        }).join('');
+    wrap.scrollTop = wrap.scrollHeight;
+  });
+}
+
+// 送信
+async function sendMsg() {
+  const text = document.getElementById('msgInput').value.trim();
+  if (!text || !currentTicketId) return;
+  const btn = document.getElementById('sendBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    await db.collection('tickets').doc(currentTicketId).update({
+      messages:    firebase.firestore.FieldValue.arrayUnion({ role:'user', text, createdAt: new Date() }),
+      updatedAt:   firebase.firestore.FieldValue.serverTimestamp(),
+      unreadAdmin: true, unreadUser: false,
+    });
+    document.getElementById('msgInput').value = '';
+  } catch(e) { alert('送信失敗: ' + e.message); }
+  finally { btn.classList.remove('loading'); btn.disabled = false; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('msgInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+  });
+});
+
+// 新規モーダル
+function openModal()  { document.getElementById('modal').classList.add('open'); }
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('newSubject').value = '';
+  document.getElementById('newBody').value    = '';
+  document.getElementById('modalErr').className = 'err-msg';
+}
+
+async function submitNew() {
+  const subject = document.getElementById('newSubject').value.trim();
+  const body    = document.getElementById('newBody').value.trim();
+  const btn     = document.getElementById('submitBtn');
+  if (!subject) { showErr('件名を入力してください'); return; }
+  if (!body)    { showErr('内容を入力してください'); return; }
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    const ref = await db.collection('tickets').add({
+      uid: currentUser.uid, userName: userData.name||currentUser.email,
+      userEmail: currentUser.email, subject,
+      messages: [{ role:'user', text: body, createdAt: new Date() }],
+      status: 'open', unreadAdmin: true, unreadUser: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    closeModal();
+    openTicket(ref.id);
+  } catch(e) {
+    showErr('送信失敗: ' + e.message);
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('modalErr');
+  el.textContent = msg; el.className = 'err-msg show';
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+</script>
+</body>
+</html>

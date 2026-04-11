@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者ダッシュボード | うちトレ</title>
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/shared-auth.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+body { background: #f0f2f5; }
+.admin-layout { display: flex; min-height: 100vh; }
+
+/* サイドバー */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: #1c1917; color: #fff;
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+}
+.sidebar-logo {
+  padding: 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px; font-weight: 900;
+  color: var(--orange);
+  border-bottom: 1px solid #292524;
+}
+.sidebar-logo span { color: #fff; font-size: 13px; display: block; font-family: inherit; font-weight: 400; margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 16px 0; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  color: #a8a29e;
+  text-decoration: none;
+  font-size: 14px; font-weight: 700;
+  transition: .15s;
+  border-left: 3px solid transparent;
+}
+.sidebar-item:hover  { background: #292524; color: #fff; }
+.sidebar-item.active { background: #292524; color: var(--orange); border-left-color: var(--orange); }
+.sidebar-item .icon  { font-size: 18px; flex-shrink: 0; }
+.sidebar-bottom { padding: 16px 20px; border-top: 1px solid #292524; }
+.admin-name { font-size: 12px; color: #78716c; margin-bottom: 10px; }
+
+/* メインコンテンツ */
+.main-content { flex: 1; padding: 32px; min-width: 0; }
+.main-title   { font-size: 26px; font-weight: 900; margin-bottom: 28px; }
+.sub-title    { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 8px; }
+
+/* KPIカード */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  position: relative; overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.kpi-card.orange::before { background: var(--orange); }
+.kpi-card.green::before  { background: var(--green);  }
+.kpi-card.blue::before   { background: var(--blue);   }
+.kpi-card.red::before    { background: var(--red);    }
+.kpi-card.yellow::before { background: var(--yellow); }
+
+.kpi-label  { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.kpi-value  { font-family: 'Nunito', sans-serif; font-size: 36px; font-weight: 900; margin: 6px 0 0; }
+.kpi-sub    { font-size: 12px; color: var(--muted); }
+.kpi-delta  { font-size: 12px; font-weight: 700; }
+.kpi-delta.up   { color: var(--green); }
+.kpi-delta.down { color: var(--red);   }
+
+/* グラフグリッド */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.chart-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.chart-title { font-size: 16px; font-weight: 900; margin-bottom: 20px; }
+
+/* 直近アクティビティ */
+.activity-list { list-style: none; }
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.activity-text { flex: 1; line-height: 1.5; }
+.activity-time { color: var(--muted); font-size: 11px; flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .sidebar { width: 56px; }
+  .sidebar-logo, .sidebar-logo span, .admin-name, .sidebar-item > *:not(.icon), .sidebar-bottom .btn { display: none; }
+  .sidebar-item { padding: 14px; justify-content: center; }
+  .sidebar-item .icon { font-size: 22px; }
+  .sidebar-bottom { padding: 12px 0; display: flex; justify-content: center; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .main-content { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- サイドバー -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      うちトレ
+      <span>管理者パネル</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html"    class="sidebar-item active"><span class="icon">📊</span> ダッシュボード</a>
+      <a href="accounts.html" class="sidebar-item"><span class="icon">👥</span> アカウント管理</a>
+      <a href="messages.html" class="sidebar-item" id="msgNavItem">
+        <span class="icon">💬</span> お問い合わせ
+        <span id="msgBadge" style="background:var(--red);color:#fff;border-radius:999px;padding:2px 7px;font-size:11px;margin-left:auto;display:none"></span>
+      </a>
+      <div style="height:1px;background:#292524;margin:8px 0"></div>
+      <a href="/top-home.html" class="sidebar-item" style="color:#94a3b8">
+        <span class="icon">📚</span> 問題ページへ
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="admin-name" id="adminName">読み込み中...</div>
+      <button class="btn btn-secondary btn-sm btn-full" onclick="signOutUser()">ログアウト</button>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="main-content">
+    <div class="main-title">
+      📊 ダッシュボード
+      <span class="sub-title" id="lastUpdated"></span>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi-card orange">
+        <div class="kpi-label">契約者数（合計）</div>
+        <div class="kpi-value" id="kpi-total">—</div>
+        <div class="kpi-sub">アクティブサブスクリプション</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">MRR（月次収益）</div>
+        <div class="kpi-value" id="kpi-mrr">—</div>
+        <div class="kpi-sub">全プラン合算</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">今月の新規</div>
+        <div class="kpi-value" id="kpi-new">—</div>
+        <div class="kpi-delta up" id="kpi-new-delta"></div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">今月の解約</div>
+        <div class="kpi-value" id="kpi-cancel">—</div>
+        <div class="kpi-delta" id="kpi-cancel-delta"></div>
+      </div>
+      <div class="kpi-card yellow">
+        <div class="kpi-label">チャーンレート</div>
+        <div class="kpi-value" id="kpi-churn">—</div>
+        <div class="kpi-sub">今月の解約率</div>
+      </div>
+    </div>
+
+    <!-- プラン別KPI -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+      <!-- 家庭学習プラン -->
+      <div style="background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid #3b82f6">
+        <div style="font-size:13px;font-weight:800;color:#3b82f6;margin-bottom:12px">🏠 家庭学習プラン</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">契約者数</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900" id="kpi-home-count">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">月額</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900" id="kpi-home-price">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">MRR</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:#3b82f6" id="kpi-home-mrr">—</div>
+          </div>
+        </div>
+      </div>
+      <!-- 受験対策プラン -->
+      <div style="background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid #8b5cf6">
+        <div style="font-size:13px;font-weight:800;color:#8b5cf6;margin-bottom:12px">📚 受験対策プラン</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">契約者数</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900" id="kpi-juken-count">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">月額</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900" id="kpi-juken-price">—</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">MRR</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:#8b5cf6" id="kpi-juken-mrr">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- グラフ -->
+
+    <!-- 月額設定 -->
+    <div class="chart-card" style="margin-bottom:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="chart-title" style="margin-bottom:0">⚙️ サービス設定</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+        <!-- 月額変更 -->
+        <div style="border:2px solid var(--border);border-radius:12px;padding:18px">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">月額料金</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:13px;font-weight:700;color:#3b82f6;width:80px">🏠 家庭</span>
+              <span style="font-size:18px;font-weight:900;color:var(--orange)" id="currentHomePrice">¥—</span>
+              <span style="font-size:12px;color:var(--muted)">/月</span>
+              <button class="btn btn-secondary btn-sm" onclick="openPriceModal('home')" style="margin-left:auto">変更</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:13px;font-weight:700;color:#8b5cf6;width:80px">📚 受験</span>
+              <span style="font-size:18px;font-weight:900;color:var(--orange)" id="currentJukenPrice">¥—</span>
+              <span style="font-size:12px;color:var(--muted)">/月</span>
+              <button class="btn btn-secondary btn-sm" onclick="openPriceModal('juken')" style="margin-left:auto">変更</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px">
+            ※ 表示のみ。Stripe側の変更は別途必要です
+          </div>
+        </div>
+        <!-- Stripe管理リンク -->
+        <div style="border:2px solid var(--border);border-radius:12px;padding:18px">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Stripe管理</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://dashboard.stripe.com/subscriptions" target="_blank"
+               class="btn btn-secondary btn-sm" style="text-align:center">
+              💳 サブスク一覧を開く
+            </a>
+            <a href="https://dashboard.stripe.com/products" target="_blank"
+               class="btn btn-secondary btn-sm" style="text-align:center">
+              📦 商品・プラン管理
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">📈 契約者数の推移（過去6ヶ月）</div>
+        <canvas id="subscribersChart" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">🥧 新規 vs 解約</div>
+        <canvas id="donutChart" height="200"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">📅 月別 新規・解約数</div>
+        <canvas id="barChart" height="180"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">🕐 直近のアクティビティ</div>
+        <ul class="activity-list" id="activityList">
+          <li class="activity-item"><div class="activity-text" style="color:var(--muted)">読み込み中...</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- テスト分析セクション -->
+    <div class="chart-card" style="margin-bottom:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div class="chart-title" style="margin:0">🏆 テスト合格分析</div>
+        <button class="btn btn-secondary btn-sm" onclick="loadTestAnalytics()">🔄 更新</button>
+      </div>
+
+      <!-- 単元別合格者数ランキング -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">
+            📊 単元別合格者数
+          </div>
+          <div id="unitPassCount" style="font-size:13px;color:var(--muted)">読み込み中...</div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">
+            🌟 最年少合格記録
+          </div>
+          <div id="youngestPass" style="font-size:13px;color:var(--muted)">読み込み中...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 月額変更モーダル -->
+<div class="modal-overlay" id="priceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="priceModalTitle">💴 月額料金の変更</div>
+      <button class="modal-close" onclick="closePriceModal()">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.7">
+      ここで変更するのはシステム上の表示金額です。<br>
+      実際の課金額を変更するには<strong>Stripeダッシュボード</strong>でプランを変更してください。
+    </div>
+    <div class="form-group">
+      <label id="priceInputLabel">新しい月額料金（円）</label>
+      <input type="number" id="newPriceInput" placeholder="例: 980" min="1">
+    </div>
+    <div id="priceMsgBox" class="msg-box"></div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closePriceModal()">キャンセル</button>
+      <button class="btn btn-primary" id="savePriceBtn" style="flex:1" onclick="savePrice()">
+        <span class="btn-label">💾 保存する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="../assets/firebase-config.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+requireAdmin().then(({ userData }) => {
+  document.getElementById('adminName').textContent = userData.name || '管理者';
+  loadDashboard();
+  loadPrice();
+  loadTestAnalytics();
+  checkUnreadMessages();
+  document.getElementById('lastUpdated').textContent =
+    '最終更新: ' + new Date().toLocaleString('ja-JP');
+});
+
+async function loadDashboard() {
+  // 全ユーザーデータを取得
+  const usersSnap = await db.collection('users').where('role', '==', 'user').get();
+  const users = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  const total    = users.filter(u => u.subscriptionStatus === 'active').length;
+  const mrr      = total * MONTHLY_PRICE;
+  const canceled = users.filter(u => u.subscriptionStatus === 'canceled').length;
+
+  // 今月の新規・解約
+  const now       = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const newThisMonth = users.filter(u => {
+    if (!u.createdAt) return false;
+    const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+    return d >= monthStart;
+  }).length;
+  const cancelThisMonth = users.filter(u => {
+    if (u.subscriptionStatus !== 'canceled' || !u.canceledAt) return false;
+    const d = u.canceledAt.toDate ? u.canceledAt.toDate() : new Date(u.canceledAt);
+    return d >= monthStart;
+  }).length;
+  const churnRate = total > 0
+    ? ((cancelThisMonth / (total + cancelThisMonth)) * 100).toFixed(1) + '%'
+    : '0%';
+
+  // KPI表示
+  document.getElementById('kpi-total').textContent  = total.toLocaleString();
+  document.getElementById('kpi-mrr').textContent    = '¥' + mrr.toLocaleString();
+  document.getElementById('kpi-new').textContent    = newThisMonth.toLocaleString();
+  document.getElementById('kpi-cancel').textContent = cancelThisMonth.toLocaleString();
+  document.getElementById('kpi-churn').textContent  = churnRate;
+
+  // プラン別KPI
+  const homeUsers  = users.filter(u => u.subscriptionStatus==='active' && u.planType !== 'juken');
+  const jukenUsers = users.filter(u => u.subscriptionStatus==='active' && u.planType === 'juken');
+
+  // 価格はFirestoreのconfig/pricingから取得、なければデフォルト
+  let homePrice  = PLANS.home.price;
+  let jukenPrice = PLANS.juken.price;
+  try {
+    const pricingDoc = await db.collection('config').doc('pricing').get();
+    if (pricingDoc.exists) {
+      homePrice  = pricingDoc.data().homePlanPrice  || homePrice;
+      jukenPrice = pricingDoc.data().jukenPlanPrice || jukenPrice;
+    }
+  } catch(e) {}
+
+  document.getElementById('kpi-home-count').textContent = homeUsers.length.toLocaleString();
+  document.getElementById('kpi-home-price').textContent = '¥' + homePrice.toLocaleString();
+  document.getElementById('kpi-home-mrr').textContent   = '¥' + (homeUsers.length * homePrice).toLocaleString();
+  document.getElementById('kpi-juken-count').textContent = jukenUsers.length.toLocaleString();
+  document.getElementById('kpi-juken-price').textContent = '¥' + jukenPrice.toLocaleString();
+  document.getElementById('kpi-juken-mrr').textContent   = '¥' + (jukenUsers.length * jukenPrice).toLocaleString();
+
+  // 過去6ヶ月の推移データを構築
+  const months = [];
+  const monthLabels = [];
+  const newCounts    = [];
+  const cancelCounts = [];
+  const cumulActive  = [];
+  let runningActive = total;
+
+  for (let i = 5; i >= 0; i--) {
+    const mStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const mEnd   = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+    monthLabels.push(`${mStart.getMonth() + 1}月`);
+
+    const n = users.filter(u => {
+      if (!u.createdAt) return false;
+      const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+      return d >= mStart && d <= mEnd;
+    }).length;
+    const c = users.filter(u => {
+      if (!u.canceledAt) return false;
+      const d = u.canceledAt.toDate ? u.canceledAt.toDate() : new Date(u.canceledAt);
+      return d >= mStart && d <= mEnd;
+    }).length;
+    newCounts.push(n);
+    cancelCounts.push(c);
+    months.push({ n, c });
+  }
+
+  // 累積アクティブを逆算
+  let active = total;
+  for (let i = 5; i >= 0; i--) {
+    cumulActive[i] = active;
+    active = active - months[i].n + months[i].c;
+  }
+
+  // グラフ描画
+  drawSubscribersChart(monthLabels, cumulActive);
+  drawDonutChart(newThisMonth, cancelThisMonth);
+  drawBarChart(monthLabels, newCounts, cancelCounts);
+
+  // アクティビティ
+  const recent = [...users]
+    .filter(u => u.createdAt)
+    .sort((a, b) => {
+      const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt||0);
+      const db_ = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt||0);
+      return db_ - da;
+    })
+    .slice(0, 8);
+
+  document.getElementById('activityList').innerHTML = recent.map(u => {
+    const d = u.createdAt?.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+    return `
+      <li class="activity-item">
+        <div class="activity-icon">🆕</div>
+        <div class="activity-text">
+          <strong>${u.name || u.email}</strong> が登録
+        </div>
+        <div class="activity-time">${d.toLocaleDateString('ja-JP')}</div>
+      </li>`;
+  }).join('') || '<li class="activity-item"><div class="activity-text" style="color:var(--muted)">アクティビティなし</div></li>';
+}
+
+// 未読メッセージバッジ
+
+// ── 月額設定 ────────────────────────────────────
+let editingPlanType = 'home';
+
+async function loadPrice() {
+  try {
+    const doc = await db.collection('config').doc('pricing').get();
+    const hp = doc.exists && doc.data().homePlanPrice  ? doc.data().homePlanPrice  : PLANS.home.price;
+    const jp = doc.exists && doc.data().jukenPlanPrice ? doc.data().jukenPlanPrice : PLANS.juken.price;
+    document.getElementById('currentHomePrice').textContent  = '¥' + hp.toLocaleString();
+    document.getElementById('currentJukenPrice').textContent = '¥' + jp.toLocaleString();
+  } catch(e) {
+    document.getElementById('currentHomePrice').textContent  = '¥' + PLANS.home.price.toLocaleString();
+    document.getElementById('currentJukenPrice').textContent = '¥' + PLANS.juken.price.toLocaleString();
+  }
+}
+
+function openPriceModal(planType) {
+  editingPlanType = planType;
+  const label = planType === 'home' ? '🏠 家庭学習プラン' : '📚 受験対策プラン';
+  document.getElementById('priceModalTitle').textContent = `💴 ${label}の月額変更`;
+  const curText = planType === 'home'
+    ? document.getElementById('currentHomePrice').textContent
+    : document.getElementById('currentJukenPrice').textContent;
+  document.getElementById('newPriceInput').value = curText.replace(/[¥,]/g,'');
+  document.getElementById('priceMsgBox').className = 'msg-box';
+  document.getElementById('priceModal').classList.add('open');
+}
+function closePriceModal() {
+  document.getElementById('priceModal').classList.remove('open');
+}
+
+async function savePrice() {
+  const val = parseInt(document.getElementById('newPriceInput').value);
+  if (!val || val < 1) {
+    const m = document.getElementById('priceMsgBox');
+    m.textContent = '正しい金額を入力してください'; m.className = 'msg-box show error'; return;
+  }
+  const btn = document.getElementById('savePriceBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    const field = editingPlanType === 'home' ? 'homePlanPrice' : 'jukenPlanPrice';
+    await db.collection('config').doc('pricing').set({
+      [field]: val,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    const elId = editingPlanType === 'home' ? 'currentHomePrice' : 'currentJukenPrice';
+    document.getElementById(elId).textContent = '¥' + val.toLocaleString();
+    closePriceModal();
+    showToast('✅ 月額料金を更新しました');
+    loadDashboard(); // KPI再読み込み
+  } catch(e) {
+    const m = document.getElementById('priceMsgBox');
+    m.textContent = 'エラー: ' + e.message; m.className = 'msg-box show error';
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ── テスト分析 ──────────────────────────────────
+const UNIT_NAMES_ADMIN = {
+  'addition-10':'10までのたし算','subtraction-10':'10までのひき算',
+  'addition-20':'20までのたし算','subtraction-20':'20までのひき算',
+  'addition-horizontal':'足し算（横式）','subtraction-horizontal':'引き算（横式）',
+  'addition-hissan':'たし算（筆算）','subtraction-hissan':'ひき算（筆算）',
+  'multiplication-horizontal':'かけ算（横式）','multiplication-hissan':'かけ算（筆算）',
+  'division-horizontal':'わり算（横式）','division-hissan':'わり算（筆算）',
+  'story-add-sub':'文章題（たし・ひき）','story-mul-div':'文章題（か・わ）',
+  'fraction-add':'分数たし算','fraction-sub':'分数ひき算',
+  'fraction-mul':'分数かけ算','fraction-div':'分数わり算',
+  'decimal-add':'小数たし算','decimal-mul':'小数かけ算','decimal-hissan':'小数筆算',
+  'yakubun':'約分・通分','gaisuu':'がい数',
+};
+
+async function loadTestAnalytics() {
+  try {
+    const usersSnap = await db.collection('users').where('role','==','user').get();
+    const unitStats = {}; // unitId -> { count, youngest, youngestName, totalAge }
+
+    await Promise.all(usersSnap.docs.map(async userDoc => {
+      const uid = userDoc.id;
+      const userName = userDoc.data().name || userDoc.data().email || '—';
+      const progSnap = await db.collection('users').doc(uid).collection('progress').get();
+      progSnap.forEach(pDoc => {
+        const d = pDoc.data();
+        if (!d.passed) return;
+        const uid2 = pDoc.id;
+        if (!unitStats[uid2]) unitStats[uid2] = { count:0, youngest:null, youngestName:'', ageSum:0 };
+        unitStats[uid2].count++;
+        // 年齢比較（passedAge: "X歳Y月Z日"）
+        if (d.passedAge && d.passedAge !== '不明') {
+          const m = d.passedAge.match(/(\d+)歳(\d+)ヶ月(\d+)日/);
+          if (m) {
+            const totalDays = parseInt(m[1])*365 + parseInt(m[2])*30 + parseInt(m[3]);
+            if (!unitStats[uid2].youngest || totalDays < unitStats[uid2].youngest) {
+              unitStats[uid2].youngest = totalDays;
+              unitStats[uid2].youngestAge = d.passedAge;
+              unitStats[uid2].youngestName = userName;
+            }
+          }
+        }
+      });
+    }));
+
+    // 合格者数ランキング
+    const sorted = Object.entries(unitStats)
+      .sort((a,b) => b[1].count - a[1].count)
+      .slice(0, 10);
+
+    document.getElementById('unitPassCount').innerHTML = sorted.length === 0
+      ? '<span style="color:var(--muted)">データなし</span>'
+      : sorted.map(([uid, s], i) => `
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f4">
+            <span style="font-size:16px;flex-shrink:0">${['🥇','🥈','🥉'][i]||'▸'}</span>
+            <span style="flex:1;font-weight:700">${UNIT_NAMES_ADMIN[uid]||uid}</span>
+            <span style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--orange)">${s.count}人</span>
+          </div>`
+        ).join('');
+
+    // 最年少記録
+    const withYoungest = Object.entries(unitStats)
+      .filter(([,s]) => s.youngest)
+      .sort((a,b) => a[1].youngest - b[1].youngest)
+      .slice(0, 8);
+
+    document.getElementById('youngestPass').innerHTML = withYoungest.length === 0
+      ? '<span style="color:var(--muted)">データなし</span>'
+      : withYoungest.map(([uid, s]) => `
+          <div style="padding:6px 0;border-bottom:1px solid #f5f5f4">
+            <div style="font-weight:800;font-size:13px">${UNIT_NAMES_ADMIN[uid]||uid}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">
+              🌟 ${s.youngestAge} — ${s.youngestName}
+            </div>
+          </div>`
+        ).join('');
+
+  } catch(e) {
+    console.error('analytics error:', e);
+    document.getElementById('unitPassCount').textContent = 'エラー: ' + e.message;
+  }
+}
+function checkUnreadMessages() {
+  db.collection('tickets').where('unreadAdmin', '==', true)
+    .onSnapshot(snap => {
+      const badge = document.getElementById('msgBadge');
+      if (snap.size > 0) {
+        badge.textContent = snap.size;
+        badge.style.display = '';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+}
+
+// ── Chart.js グラフ ─────────────────────────────
+function drawSubscribersChart(labels, data) {
+  new Chart(document.getElementById('subscribersChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: '契約者数',
+        data,
+        borderColor: '#f97316',
+        backgroundColor: 'rgba(249,115,22,.1)',
+        fill: true,
+        tension: .4,
+        pointBackgroundColor: '#f97316',
+        pointRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  });
+}
+
+function drawDonutChart(newCount, cancelCount) {
+  new Chart(document.getElementById('donutChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['新規登録', '解約'],
+      datasets: [{
+        data: [newCount || 0, cancelCount || 0],
+        backgroundColor: ['#22c55e', '#ef4444'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom' },
+      }
+    }
+  });
+}
+
+function drawBarChart(labels, newData, cancelData) {
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: '新規', data: newData,    backgroundColor: '#22c55e', borderRadius: 6 },
+        { label: '解約', data: cancelData, backgroundColor: '#ef4444', borderRadius: 6 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

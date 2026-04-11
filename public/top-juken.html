@@ -222,9 +222,53 @@ a.tokushu-card{text-decoration:none;color:inherit;display:block;}
   .op-grid{grid-template-columns:repeat(2,1fr);}
   .hero-stats{gap:20px;}
 }
+
+/* ---- ユーザーナビバー ---- */
+.user-nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(255,253,247,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  font-family:'Noto Sans JP',sans-serif;
+}
+.user-nav-left{
+  font-size:13px;color:#78716c;
+  display:flex;align-items:center;gap:8px;
+}
+.user-nav-name{
+  font-weight:800;color:#1c1917;font-size:14px;
+}
+.user-nav-right{
+  display:flex;align-items:center;gap:8px;
+}
+.user-nav-btn{
+  padding:6px 14px;border-radius:999px;
+  border:1.5px solid #e7e5e4;background:#fff;
+  font:inherit;font-size:12px;font-weight:700;
+  cursor:pointer;text-decoration:none;color:#1c1917;
+  transition:.15s;
+}
+.user-nav-btn:hover{border-color:#f97316;color:#f97316;}
+.user-nav-btn.logout{color:#ef4444;border-color:#fecaca;}
+.user-nav-btn.logout:hover{background:#fee2e2;}
+body{padding-top:52px;}
+
 </style>
 </head>
 <body>
+<div class="user-nav">
+  <div class="user-nav-left">
+    👋 こんにちは、<span class="user-nav-name" id="navUserName">...</span> さん
+  </div>
+  <div class="user-nav-right">
+    <a href="/settings.html" class="user-nav-btn">⚙️ 設定</a>
+    <a href="/contact.html"  class="user-nav-btn">💬 お問い合わせ</a>
+    <button class="user-nav-btn logout" onclick="signOutUser()">ログアウト</button>
+  </div>
+</div>
 <div class="glow glow-1"></div>
 <div class="glow glow-2"></div>
 
@@ -401,5 +445,29 @@ document.querySelectorAll('.fmt-btn').forEach(btn => {
   });
 });
 </script>
+
+<script>
+// ナビバーにユーザー名を表示（Firebase読み込み後に実行）
+window.addEventListener('DOMContentLoaded', () => {
+  const unsub = firebase.auth().onAuthStateChanged(async user => {
+    if (!user) return;
+    try {
+      const snap = await firebase.firestore().collection('users').doc(user.uid).get();
+      const name = snap.data()?.name || user.email;
+      document.getElementById('navUserName').textContent = name;
+    } catch(e) {
+      document.getElementById('navUserName').textContent = user.email;
+    }
+    unsub();
+  });
+});
+</script>
+<!-- ログインガード -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
 </body>
 </html>

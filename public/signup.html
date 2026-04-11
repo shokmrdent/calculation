@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新規登録 | うちトレ</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared-auth.css">
+<style>
+.signup-wrap {
+  max-width: 560px; margin: 0 auto;
+  padding: 40px 20px 80px;
+  position: relative; z-index: 1;
+}
+.blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: .3; pointer-events: none; z-index: 0; }
+.blob-1 { width:500px;height:500px;background:#fde68a;top:-100px;left:-80px; }
+.blob-2 { width:400px;height:400px;background:#bbf7d0;bottom:-80px;right:-60px; }
+
+.signup-header { text-align: center; margin-bottom: 32px; }
+.signup-logo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900; font-size: 36px; color: var(--orange);
+  display: block; text-decoration: none;
+}
+.signup-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* ステッパー */
+.stepper {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin-bottom: 32px;
+}
+.step-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+}
+.step-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 14px;
+  border: 2px solid var(--border); color: var(--muted);
+  background: #fff; transition: .2s;
+}
+.step-label { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.step-item.active .step-circle { background: var(--orange); border-color: var(--orange); color: #fff; }
+.step-item.done   .step-circle { background: var(--green);  border-color: var(--green);  color: #fff; }
+.step-item.active .step-label,
+.step-item.done   .step-label  { color: var(--text); }
+.step-line {
+  flex: 1; height: 2px;
+  background: var(--border);
+  margin: 0 8px; margin-bottom: 18px;
+  transition: .2s;
+}
+.step-line.done { background: var(--green); }
+
+/* プランカード */
+.plan-card {
+  background: linear-gradient(135deg, #fff7ed, #fff);
+  border: 2px solid var(--orange);
+  border-radius: 16px; padding: 20px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.plan-price {
+  font-family: 'Nunito', sans-serif;
+  font-size: 36px; font-weight: 900; color: var(--orange);
+  white-space: nowrap;
+}
+.plan-price span { font-size: 14px; color: var(--muted); font-weight: 400; font-family: inherit; }
+.plan-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* Stripe Element */
+#card-element {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 14px;
+  background: #fff;
+  transition: border-color .15s;
+}
+#card-element.focused { border-color: var(--orange); }
+#card-errors { font-size: 12px; color: var(--red); margin-top: 6px; min-height: 18px; }
+
+/* 注意書き */
+.notice-box {
+  background: #fef9c3;
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #78350f;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.notice-box strong { font-weight: 800; }
+
+/* 確認画面 */
+.confirm-row {
+  display: flex; justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.confirm-row:last-child { border-bottom: none; }
+.confirm-row .label { color: var(--muted); }
+.confirm-row .value { font-weight: 700; }
+
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+.msg-box { padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
+.msg-box.show { display: block; }
+.msg-box.error { background: #fee2e2; color: #991b1b; }
+.msg-box.success { background: #dcfce7; color: #166534; }
+
+.success-screen { text-align: center; padding: 40px 20px; }
+.success-icon { font-size: 64px; margin-bottom: 16px; }
+.success-title { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+.success-desc { color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="signup-wrap">
+  <div class="signup-header">
+    <a href="login.html" class="signup-logo">うちトレ</a>
+    <p class="signup-sub">月額 ¥980 で全問題が使い放題</p>
+  </div>
+
+  <!-- ステッパー -->
+  <div class="stepper">
+    <div class="step-item active" id="step1-item">
+      <div class="step-circle">1</div>
+      <div class="step-label">アカウント情報</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-item" id="step2-item">
+      <div class="step-circle">2</div>
+      <div class="step-label">お支払い</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-item" id="step3-item">
+      <div class="step-circle">3</div>
+      <div class="step-label">確認・完了</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: アカウント情報 -->
+  <div class="card step-panel active" id="panel1">
+    <h2 class="section-title">📝 アカウント情報</h2>
+    <div id="msgBox1" class="msg-box"></div>
+
+    <div class="form-group">
+      <label>お名前（氏名）</label>
+      <input type="text" id="s1-name" placeholder="例：山田 太郎" required>
+      <div class="form-error" id="err-name"></div>
+    </div>
+    <div class="form-group">
+      <label>生年月日</label>
+      <input type="date" id="s1-birthday" required>
+      <div class="form-error" id="err-birthday"></div>
+    </div>
+    <div class="form-group">
+      <label>メールアドレス</label>
+      <input type="email" id="s1-email" placeholder="example@email.com" required>
+      <div class="form-error" id="err-email"></div>
+    </div>
+    <div class="form-group">
+      <label>電話番号</label>
+      <input type="tel" id="s1-phone" placeholder="090-0000-0000" required>
+      <div class="form-hint">ハイフンあり・なし、どちらでも可</div>
+      <div class="form-error" id="err-phone"></div>
+    </div>
+    <div class="form-group">
+      <label>パスワード</label>
+      <input type="password" id="s1-password" placeholder="8文字以上" required>
+      <div class="form-hint">英数字8文字以上</div>
+      <div class="form-error" id="err-pw"></div>
+    </div>
+    <div class="form-group">
+      <label>パスワード（確認）</label>
+      <input type="password" id="s1-password2" placeholder="もう一度入力" required>
+      <div class="form-error" id="err-pw2"></div>
+    </div>
+
+    <button class="btn btn-primary btn-full" onclick="goStep2()">
+      次へ　→
+    </button>
+    <div style="text-align:center;margin-top:16px">
+      <a href="login.html" style="font-size:13px;color:var(--muted)">すでにアカウントをお持ちの方</a>
+    </div>
+  </div>
+
+  <!-- STEP 2: お支払い -->
+  <div class="card step-panel" id="panel2">
+    <h2 class="section-title">💳 お支払い情報</h2>
+    <div id="msgBox2" class="msg-box"></div>
+
+    <div class="plan-card">
+      <div>
+        <div class="plan-price">¥980<span>/月（税込）</span></div>
+      </div>
+      <div class="plan-desc">
+        ✅ 全問題ジャンル使い放題<br>
+        ✅ タブレット手書きモード<br>
+        ✅ いつでも解約可能
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>クレジットカード情報</label>
+      <div id="card-element"></div>
+      <div id="card-errors"></div>
+    </div>
+
+    <div class="notice-box">
+      <strong>⚠️ ご確認ください</strong><br>
+      登録完了後、すぐに月額 ¥980 のサブスクリプションが開始されます。
+      毎月同日に自動更新されます。解約はいつでも設定画面から行えます。
+    </div>
+
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-secondary" onclick="goStep1()">← 戻る</button>
+      <button class="btn btn-primary" id="nextStep3Btn" onclick="goStep3()" style="flex:1">
+        <span class="btn-label">確認へ　→</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 3: 確認 -->
+  <div class="card step-panel" id="panel3">
+    <h2 class="section-title">✅ 内容確認</h2>
+    <div id="msgBox3" class="msg-box"></div>
+
+    <div id="confirmContent"></div>
+
+    <div class="notice-box" style="margin-top:20px">
+      「登録を完了する」をクリックすると、アカウントが作成され、
+      <strong>月額 ¥980 の請求が開始</strong>されます。
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:20px">
+      <button class="btn btn-secondary" onclick="goStep2()">← 戻る</button>
+      <button class="btn btn-primary" id="submitBtn" style="flex:1">
+        <span class="btn-label">🎉 登録を完了する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- 完了画面 -->
+  <div class="card step-panel" id="panelDone">
+    <div class="success-screen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">登録完了！</div>
+      <div class="success-desc">
+        うちトレへようこそ！<br>
+        アカウントが作成され、すぐにご利用いただけます。
+      </div>
+      <a href="top-home.html" class="btn btn-primary">
+        🚀 うちトレを始める
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+let stripe, cardElement;
+let formData = {};
+
+// Stripe初期化
+window.addEventListener('DOMContentLoaded', () => {
+  stripe      = Stripe(STRIPE_PUBLISHABLE_KEY);
+  const elems = stripe.elements({ locale: 'ja' });
+  cardElement = elems.create('card', {
+    style: {
+      base: {
+        fontFamily: "'Noto Sans JP', sans-serif",
+        fontSize: '15px', color: '#1c1917',
+        '::placeholder': { color: '#78716c' }
+      }
+    }
+  });
+  cardElement.mount('#card-element');
+  cardElement.on('focus',  () => document.getElementById('card-element').classList.add('focused'));
+  cardElement.on('blur',   () => document.getElementById('card-element').classList.remove('focused'));
+  cardElement.on('change', e => {
+    document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
+  });
+});
+
+// STEP 1 → 2
+function goStep1() {
+  setStep(1);
+}
+function goStep2() {
+  // バリデーション
+  const fields = [
+    ['s1-name',      'err-name',     'お名前を入力してください'],
+    ['s1-birthday',  'err-birthday', '生年月日を入力してください'],
+    ['s1-email',     'err-email',    'メールアドレスを入力してください'],
+    ['s1-phone',     'err-phone',    '電話番号を入力してください'],
+    ['s1-password',  'err-pw',       'パスワードを入力してください'],
+    ['s1-password2', 'err-pw2',      'パスワード（確認）を入力してください'],
+  ];
+  let ok = true;
+  document.querySelectorAll('.form-error').forEach(e => e.classList.remove('show'));
+
+  for (const [id, errId, msg] of fields) {
+    if (!document.getElementById(id).value.trim()) {
+      showErr(errId, msg); ok = false;
+    }
+  }
+  if (!ok) return;
+
+  const email = document.getElementById('s1-email').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showErr('err-email', 'メールアドレスの形式が正しくありません'); return;
+  }
+  const pw  = document.getElementById('s1-password').value;
+  const pw2 = document.getElementById('s1-password2').value;
+  if (pw.length < 8) { showErr('err-pw', '8文字以上で入力してください'); return; }
+  if (pw !== pw2)    { showErr('err-pw2', 'パスワードが一致しません'); return; }
+
+  formData.name     = document.getElementById('s1-name').value.trim();
+  formData.birthday = document.getElementById('s1-birthday').value;
+  formData.email    = email;
+  formData.phone    = document.getElementById('s1-phone').value.trim();
+  formData.password = pw;
+
+  setStep(2);
+}
+
+// STEP 2 → 3（カード確認）
+async function goStep3() {
+  const btn = document.getElementById('nextStep3Btn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  const { paymentMethod, error } = await stripe.createPaymentMethod({
+    type: 'card', card: cardElement,
+    billing_details: { name: formData.name, email: formData.email }
+  });
+
+  btn.classList.remove('loading'); btn.disabled = false;
+
+  if (error) {
+    document.getElementById('card-errors').textContent = error.message;
+    return;
+  }
+
+  formData.paymentMethodId = paymentMethod.id;
+  formData.cardLast4       = paymentMethod.card.last4;
+  formData.cardBrand       = paymentMethod.card.brand;
+
+  // 確認画面に表示
+  const rows = [
+    ['お名前',            formData.name],
+    ['生年月日',          formData.birthday],
+    ['メールアドレス',    formData.email],
+    ['電話番号',          formData.phone],
+    ['お支払い方法',      `${formData.cardBrand.toUpperCase()} •••• ${formData.cardLast4}`],
+    ['プラン',            '月額プラン　¥980/月（税込）'],
+    ['初回請求',          '登録完了後すぐ'],
+  ];
+  document.getElementById('confirmContent').innerHTML = rows.map(([l,v]) =>
+    `<div class="confirm-row"><span class="label">${l}</span><span class="value">${v}</span></div>`
+  ).join('');
+
+  setStep(3);
+}
+
+// 最終送信
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('msgBox3').className = 'msg-box';
+
+  try {
+    // 1) Firebase Auth アカウント作成
+    const cred = await auth.createUserWithEmailAndPassword(formData.email, formData.password);
+    const uid  = cred.user.uid;
+
+    // 2) Firestoreにユーザー情報を保存（pending状態）
+    await db.collection('users').doc(uid).set({
+      uid,
+      name:     formData.name,
+      birthday: formData.birthday,
+      email:    formData.email,
+      phone:    formData.phone,
+      role:     'user',
+      subscriptionStatus:   'pending',
+      maxConcurrentSessions: 1,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // 3) Cloud Function を呼び出してStripe顧客 + サブスクリプション作成
+    const fn = firebase.functions();
+    const createSubscription = fn.httpsCallable('createUserSubscription');
+    const result = await createSubscription({
+      paymentMethodId: formData.paymentMethodId,
+      priceId:         STRIPE_PRICE_ID,
+    });
+
+    if (!result.data.success) throw new Error(result.data.message || '決済処理に失敗しました');
+
+    // 4) セッション登録
+    await registerSession(uid);
+
+    // 完了画面へ
+    setStep('done');
+
+  } catch (err) {
+    const errMap = {
+      'auth/email-already-in-use': 'このメールアドレスはすでに登録されています。',
+      'auth/weak-password':        'パスワードが弱すぎます。',
+    };
+    const msgBox = document.getElementById('msgBox3');
+    msgBox.textContent = errMap[err.code] || err.message || 'エラーが発生しました。もう一度お試しください。';
+    msgBox.className = 'msg-box show error';
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+});
+
+// ステップ切替
+function setStep(n) {
+  ['panel1','panel2','panel3','panelDone'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  if (n === 'done') {
+    document.getElementById('panelDone').classList.add('active');
+    ['step1-item','step2-item','step3-item'].forEach(id =>
+      document.getElementById(id).classList.replace('active','done') ||
+      document.getElementById(id).classList.add('done')
+    );
+    return;
+  }
+  document.getElementById(`panel${n}`).classList.add('active');
+
+  for (let i = 1; i <= 3; i++) {
+    const item = document.getElementById(`step${i}-item`);
+    item.classList.remove('active','done');
+    if (i < n)  item.classList.add('done');
+    if (i === n) item.classList.add('active');
+  }
+  ['line1','line2'].forEach((id,idx) => {
+    document.getElementById(id).classList.toggle('done', n > idx + 1);
+  });
+  window.scrollTo(0,0);
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+</script>
+</body>
+</html>

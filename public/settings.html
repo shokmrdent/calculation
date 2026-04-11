@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個人設定 | うちトレ</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared-auth.css">
+<style>
+body { background: var(--bg); }
+.page-wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+
+.page-title {
+  font-size: 24px; font-weight: 900; margin-bottom: 28px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.sub-status-card {
+  background: linear-gradient(135deg, #fff7ed, #fff);
+  border: 2px solid var(--orange);
+  border-radius: 16px; padding: 20px 24px;
+  margin-bottom: 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+.sub-status-info .label { font-size: 12px; color: var(--muted); font-weight: 700; }
+.sub-status-info .value { font-size: 16px; font-weight: 900; margin-top: 2px; }
+
+.warn-box {
+  background: #fef9c3; border: 1px solid #fcd34d;
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 13px; color: #78350f; line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.cancel-zone {
+  border: 2px solid #fecaca;
+  border-radius: 16px; padding: 24px;
+  margin-top: 32px;
+}
+.cancel-zone h3 { color: var(--red); font-size: 16px; margin-bottom: 10px; }
+.cancel-zone p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="top-home.html" class="btn btn-secondary btn-sm">← 戻る</a>
+    <a href="top-home.html" class="nav-logo">うちトレ<span> | 設定</span></a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-secondary btn-sm" onclick="signOutUser()">ログアウト</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-title">⚙️ 個人設定</div>
+
+  <!-- サブスク状態 -->
+  <div class="sub-status-card" id="subStatusCard">
+    <div class="sub-status-info">
+      <div class="label">プラン</div>
+      <div class="value" id="subPlan">読み込み中...</div>
+    </div>
+    <div class="sub-status-info">
+      <div class="label">ステータス</div>
+      <div class="value" id="subStatus">—</div>
+    </div>
+    <div class="sub-status-info">
+      <div class="label">次回請求日</div>
+      <div class="value" id="subNextDate">—</div>
+    </div>
+  </div>
+
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('profile',this)">👤 プロフィール</button>
+    <button class="tab" onclick="switchTab('security',this)">🔒 セキュリティ</button>
+    <button class="tab" onclick="switchTab('subscription',this)">💳 サブスク管理</button>
+    <button class="tab" onclick="switchTab('tsumitage',this)">🏆 つみあげ</button>
+  </div>
+
+  <!-- ── プロフィールタブ ── -->
+  <div id="tab-profile">
+    <div class="card">
+      <div class="section-title">基本情報</div>
+      <div id="profileMsg" class="msg-box"></div>
+
+      <div class="form-group">
+        <label>ユーザーID（変更不可）</label>
+        <input type="text" id="uid-display" readonly
+          style="background:#f5f5f4;color:var(--muted);cursor:default">
+      </div>
+      <div class="form-group">
+        <label>お名前</label>
+        <input type="text" id="p-name" placeholder="山田 太郎">
+      </div>
+      <div class="form-group">
+        <label>生年月日</label>
+        <input type="date" id="p-birthday">
+        <div id="birthdayWarn" style="margin-top:8px;background:#fef9c3;border:1px solid #fcd34d;border-radius:10px;padding:12px 14px;font-size:13px;color:#78350f;line-height:1.7;display:none">
+          ⚠️ <strong>生年月日は一度登録すると変更できません。</strong><br>
+          慎重に入力してください。登録後は変更不可となります。
+        </div>
+        <div id="birthdayLocked" style="margin-top:8px;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:10px;padding:12px 14px;font-size:13px;color:#78716c;line-height:1.7;display:none">
+          🔒 生年月日は登録後に変更できません。変更が必要な場合はお問い合わせください。
+        </div>
+      </div>
+      <div class="form-group">
+        <label>メールアドレス</label>
+        <input type="email" id="p-email" placeholder="example@email.com">
+      </div>
+      <div class="form-group">
+        <label>電話番号</label>
+        <input type="tel" id="p-phone" placeholder="090-0000-0000">
+        <div class="warn-box" style="margin-top:8px">
+          ⚠️ <strong>電話番号を変更する場合は注意：</strong>
+          変更後の電話番号はアカウントの本人確認に使用されます。
+          誤って変更した場合、サポートへのお問い合わせが必要になることがあります。
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="saveProfileBtn" onclick="saveProfile()">
+        <span class="btn-label">💾 保存する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── セキュリティタブ ── -->
+  <div id="tab-security" style="display:none">
+    <div class="card">
+      <div class="section-title">パスワード変更</div>
+      <div id="securityMsg" class="msg-box"></div>
+
+      <div class="form-group">
+        <label>現在のパスワード</label>
+        <input type="password" id="cur-pw" placeholder="現在のパスワード">
+      </div>
+      <div class="form-group">
+        <label>新しいパスワード</label>
+        <input type="password" id="new-pw" placeholder="8文字以上">
+      </div>
+      <div class="form-group">
+        <label>新しいパスワード（確認）</label>
+        <input type="password" id="new-pw2" placeholder="もう一度入力">
+      </div>
+      <button class="btn btn-primary" id="changePwBtn" onclick="changePassword()">
+        <span class="btn-label">🔒 パスワードを変更</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="section-title">ログイン中のデバイス</div>
+      <div id="deviceList">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- ── サブスク管理タブ ── -->
+  <div id="tab-subscription" style="display:none">
+    <div class="card">
+      <div class="section-title">💳 現在のプラン</div>
+      <div id="subDetailMsg" class="msg-box"></div>
+
+      <div id="subDetail">読み込み中...</div>
+    </div>
+
+    <div class="cancel-zone">
+      <h3>⛔ サービス解約</h3>
+      <p>
+        解約すると、現在の契約期間終了後にサービスが停止されます。
+        契約期間中は引き続きご利用いただけます。<br>
+        <strong>解約後の再開は、新規登録が必要になります。</strong>
+      </p>
+      <button class="btn btn-danger btn-sm" onclick="openCancelModal()">
+        解約手続きをする
+      </button>
+    </div>
+  </div>
+
+  <!-- ── つみあげタブ ── -->
+  <div id="tab-tsumitage" style="display:none">
+    <div class="card">
+      <div class="section-title">🏆 つみあげ記録</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7">
+        テストに合格した記録です。合格した時の年齢も記録されています。<br>
+        将来的には全ユーザーとの比較データも表示される予定です。
+      </p>
+      <div id="tsumiList">
+        <div style="text-align:center;padding:40px;color:var(--muted)">読み込み中...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 解約確認モーダル -->
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⛔ 解約の確認</div>
+      <button class="modal-close" onclick="closeCancelModal()">✕</button>
+    </div>
+    <div style="margin-bottom:20px;font-size:14px;line-height:1.8;color:var(--muted)">
+      本当に解約しますか？<br>
+      解約後は現在の契約期間終了まで利用可能ですが、
+      期間終了後はすべての機能が使えなくなります。
+    </div>
+    <div class="form-group">
+      <label>確認のため「解約する」と入力</label>
+      <input type="text" id="cancelConfirmInput" placeholder="解約する">
+    </div>
+    <div id="cancelMsg" class="msg-box"></div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeCancelModal()">キャンセル</button>
+      <button class="btn btn-danger" id="confirmCancelBtn" style="flex:1" onclick="doCancel()">
+        <span class="btn-label">解約する</span>
+        <div class="loader"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+let currentUser, userData;
+
+requireAuth().then(({ user, userData: ud }) => {
+  currentUser = user; userData = ud;
+  loadProfile();
+  loadSubStatus();
+  loadDevices();
+  loadSubDetail();
+});
+
+// ── プロフィール読み込み ──────────────────────────
+function loadProfile() {
+  document.getElementById('uid-display').value = currentUser.uid;
+  document.getElementById('p-name').value     = userData.name     || '';
+  document.getElementById('p-birthday').value = userData.birthday || '';
+  document.getElementById('p-email').value    = userData.email    || '';
+  document.getElementById('p-phone').value    = userData.phone    || '';
+
+  // 生年月日：登録済みなら変更不可にする
+  const bdayInput = document.getElementById('p-birthday');
+  if (userData.birthday) {
+    bdayInput.readOnly = true;
+    bdayInput.style.cssText = 'background:#f5f5f4;color:var(--muted);cursor:default;width:100%;padding:12px 14px;border:2px solid #e7e5e4;border-radius:10px;font:inherit;font-size:15px;';
+    document.getElementById('birthdayLocked').style.display = '';
+    document.getElementById('birthdayWarn').style.display   = 'none';
+  } else {
+    bdayInput.readOnly = false;
+    document.getElementById('birthdayWarn').style.display   = '';
+    document.getElementById('birthdayLocked').style.display = 'none';
+  }
+}
+
+// ── サブスク状態 ─────────────────────────────────
+async function loadSubStatus() {
+  const statusMap = {
+    active:   { text: '利用中',   cls: 'badge-active' },
+    trial:    { text: 'お試し中', cls: 'badge-trial'  },
+    canceled: { text: '解約済み', cls: 'badge-canceled'},
+    pending:  { text: '処理中',   cls: 'badge-trial'  },
+  };
+  const s = statusMap[userData.subscriptionStatus] || { text: '不明', cls: '' };
+
+  // プランと価格をFirestoreから取得
+  const planType = userData.planType || 'home';
+  let price = planType === 'juken' ? PLANS.juken.price : PLANS.home.price;
+  let planName = planType === 'juken' ? '受験対策プラン' : '家庭学習プラン';
+  try {
+    const doc = await db.collection('config').doc('pricing').get();
+    if (doc.exists) {
+      price = planType === 'juken'
+        ? (doc.data().jukenPlanPrice || price)
+        : (doc.data().homePlanPrice  || price);
+    }
+  } catch(e) {}
+
+  document.getElementById('subPlan').textContent    = `${planName}　¥${price.toLocaleString()}/月`;
+  document.getElementById('subStatus').innerHTML    = `<span class="badge ${s.cls}">${s.text}</span>`;
+  document.getElementById('subNextDate').textContent =
+    userData.subscriptionNextDate
+      ? new Date(userData.subscriptionNextDate).toLocaleDateString('ja-JP')
+      : '—';
+}
+
+// ── プロフィール保存 ─────────────────────────────
+async function saveProfile() {
+  const btn = document.getElementById('saveProfileBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  const name     = document.getElementById('p-name').value.trim();
+  const birthday = document.getElementById('p-birthday').value;
+  const email    = document.getElementById('p-email').value.trim();
+  const phone    = document.getElementById('p-phone').value.trim();
+
+  // 生年月日：未登録の場合のみ保存（登録済みは変更不可）
+  const updateData = {
+    name, email, phone,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if (!userData.birthday && birthday) updateData.birthday = birthday;
+
+  try {
+    await db.collection('users').doc(currentUser.uid).update(updateData);
+    // Firebase Auth メールアドレスも更新
+    if (email !== currentUser.email) {
+      await currentUser.updateEmail(email);
+    }
+    userData = { ...userData, name, birthday, email, phone };
+    showMsg('profileMsg', '✅ プロフィールを保存しました', 'success');
+  } catch (e) {
+    showMsg('profileMsg', `エラー: ${e.message}`, 'error');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ── パスワード変更 ───────────────────────────────
+async function changePassword() {
+  const curPw = document.getElementById('cur-pw').value;
+  const newPw = document.getElementById('new-pw').value;
+  const newPw2= document.getElementById('new-pw2').value;
+  const btn   = document.getElementById('changePwBtn');
+
+  if (!curPw || !newPw || !newPw2) {
+    showMsg('securityMsg', 'すべての項目を入力してください', 'error'); return;
+  }
+  if (newPw.length < 8) {
+    showMsg('securityMsg', '新しいパスワードは8文字以上で入力してください', 'error'); return;
+  }
+  if (newPw !== newPw2) {
+    showMsg('securityMsg', 'パスワードが一致しません', 'error'); return;
+  }
+
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, curPw);
+    await currentUser.reauthenticateWithCredential(cred);
+    await currentUser.updatePassword(newPw);
+    showMsg('securityMsg', '✅ パスワードを変更しました', 'success');
+    ['cur-pw','new-pw','new-pw2'].forEach(id => document.getElementById(id).value = '');
+  } catch (e) {
+    const msg = e.code === 'auth/wrong-password'
+      ? '現在のパスワードが間違っています'
+      : e.message;
+    showMsg('securityMsg', msg, 'error');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ── デバイス一覧 ─────────────────────────────────
+async function loadDevices() {
+  const sessDoc = await db.collection('sessions').doc(currentUser.uid).get();
+  const el = document.getElementById('deviceList');
+  if (!sessDoc.exists || !sessDoc.data().devices?.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:14px">セッション情報なし</p>';
+    return;
+  }
+  const devId = localStorage.getItem('uchitore_device_id');
+  el.innerHTML = sessDoc.data().devices.map(d => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:14px;font-weight:700">
+          ${d.deviceId === devId ? '📱 このデバイス' : '💻 別のデバイス'}
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">
+          最終接続: ${new Date(d.lastSeen).toLocaleString('ja-JP')}
+        </div>
+      </div>
+      ${d.deviceId !== devId
+        ? `<button class="btn btn-secondary btn-sm" onclick="logoutDevice('${d.deviceId}')">
+             強制ログアウト
+           </button>`
+        : '<span class="badge badge-active">現在ログイン中</span>'}
+    </div>
+  `).join('');
+}
+
+async function logoutDevice(deviceId) {
+  if (!confirm('このデバイスを強制ログアウトしますか？')) return;
+  const ref = db.collection('sessions').doc(currentUser.uid);
+  const doc = await ref.get();
+  const devices = (doc.data().devices || []).filter(d => d.deviceId !== deviceId);
+  await ref.update({ devices });
+  loadDevices();
+  showToast('強制ログアウトしました');
+}
+
+// ── サブスク詳細 ─────────────────────────────────
+async function loadSubDetail() {
+  const status = userData.subscriptionStatus;
+  const nextDate = userData.subscriptionNextDate
+    ? new Date(userData.subscriptionNextDate).toLocaleDateString('ja-JP')
+    : '—';
+  const startDate = userData.subscriptionStartAt
+    ? (userData.subscriptionStartAt.toDate
+        ? userData.subscriptionStartAt.toDate().toLocaleDateString('ja-JP')
+        : new Date(userData.subscriptionStartAt).toLocaleDateString('ja-JP'))
+    : '—';
+
+  // 価格取得
+  let detailPrice = userData.planType === 'juken' ? PLANS.juken.price : PLANS.home.price;
+  try {
+    const doc = await db.collection('config').doc('pricing').get();
+    if (doc.exists) {
+      detailPrice = userData.planType === 'juken'
+        ? (doc.data().jukenPlanPrice || detailPrice)
+        : (doc.data().homePlanPrice  || detailPrice);
+    }
+  } catch(e) {}
+
+  document.getElementById('subDetail').innerHTML = `
+    <div class="confirm-row">
+      <span class="label">プラン名</span>
+      <span class="value">月額プラン</span>
+    </div>
+    <div class="confirm-row">
+      <span class="label">金額</span>
+      <span class="value" id="subDetailPrice">読み込み中...</span>
+    </div>
+    <div class="confirm-row">
+      <span class="label">ステータス</span>
+      <span class="value">${
+        { active:'✅ 利用中', trial:'🔶 お試し中',
+          canceled:'❌ 解約済み', pending:'⏳ 処理中' }[status] || status
+      }</span>
+    </div>
+    <div class="confirm-row">
+      <span class="label">開始日</span>
+      <span class="value">${startDate}</span>
+    </div>
+    <div class="confirm-row">
+      <span class="label">次回請求日</span>
+      <span class="value">${nextDate}</span>
+    </div>
+  `;
+}
+
+// ── 解約 ─────────────────────────────────────────
+function openCancelModal() {
+  if (userData.subscriptionStatus === 'canceled') {
+    showMsg('subDetailMsg', 'すでに解約済みです', 'error'); return;
+  }
+  document.getElementById('cancelModal').classList.add('open');
+}
+function closeCancelModal() {
+  document.getElementById('cancelModal').classList.remove('open');
+  document.getElementById('cancelConfirmInput').value = '';
+  document.getElementById('cancelMsg').className = 'msg-box';
+}
+
+async function doCancel() {
+  const input = document.getElementById('cancelConfirmInput').value.trim();
+  if (input !== '解約する') {
+    showMsg('cancelMsg', '「解約する」と入力してください', 'error'); return;
+  }
+  const btn = document.getElementById('confirmCancelBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const fn = firebase.functions();
+    const cancel = fn.httpsCallable('cancelUserSubscription');
+    await cancel({});
+    userData.subscriptionStatus = 'canceled';
+    loadSubStatus(); loadSubDetail();
+    closeCancelModal();
+    showToast('解約手続きが完了しました。現在の契約期間終了までご利用いただけます。');
+  } catch (e) {
+    showMsg('cancelMsg', `エラー: ${e.message}`, 'error');
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ── タブ切替 ─────────────────────────────────────
+function switchTab(name, el) {
+  ['profile','security','subscription','tsumitage'].forEach(t => {
+    document.getElementById(`tab-${t}`).style.display = t === name ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (name === 'tsumitage') loadTsumitage();
+}
+
+// ── つみあげ読み込み ──
+const UNIT_NAMES = {
+  'addition-10':'10までのたし算','subtraction-10':'10までのひき算',
+  'addition-20':'20までのたし算','subtraction-20':'20までのひき算',
+  'addition-horizontal':'足し算（横式）','subtraction-horizontal':'引き算（横式）',
+  'addition-hissan':'たし算（筆算）','subtraction-hissan':'ひき算（筆算）',
+  'multiplication-horizontal':'かけ算（横式）','multiplication-hissan':'かけ算（筆算）',
+  'division-horizontal':'わり算（横式）','division-hissan':'わり算（筆算）',
+  'story-add-sub':'文章題（たし算・ひき算）','story-mul-div':'文章題（かけ算・わり算）',
+  'fraction-add':'分数のたし算','fraction-sub':'分数のひき算',
+  'fraction-mul':'分数のかけ算','fraction-div':'分数のわり算',
+  'decimal-add':'小数のたし算','decimal-mul':'小数のかけ算','decimal-hissan':'小数の筆算',
+  'yakubun':'約分・通分','gaisuu':'がい数','tansaku':'長さの単位換算',
+  'tansaku-kasa':'かさの単位換算','tansaku-omosa':'重さの単位換算',
+  'hayasa':'速さ','wariai':'割合・百分率','tokei':'とけいをよむ','tokei-keisan':'時刻の計算',
+  'zukei':'面積','zukei-en':'円の面積','zukei-taieki':'体積','zukei-entai':'円柱の体積',
+  'hi':'比','hirei':'比例・反比例','menseki':'面積の計算',
+  'hyakubunritsu':'百分率','tsurukame':'つるかめ算','basho':'場合の数',
+};
+
+async function loadTsumitage() {
+  const el = document.getElementById('tsumiList');
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid)
+      .collection('progress').get();
+
+    const passed = snap.docs
+      .map(d => ({id: d.id, ...d.data()}))
+      .filter(d => d.passed)
+      .sort((a, b) => {
+        const ta = a.passedAt?.toDate?.() || new Date(0);
+        const tb = b.passedAt?.toDate?.() || new Date(0);
+        return ta - tb;
+      });
+
+    if (passed.length === 0) {
+      el.innerHTML = `
+        <div style="text-align:center;padding:40px;color:var(--muted)">
+          <div style="font-size:48px;margin-bottom:12px">🌱</div>
+          <p>まだ合格した問題はありません。<br>トップページからテストに挑戦しよう！</p>
+          <a href="/top-home.html" class="btn btn-primary" style="margin-top:16px;display:inline-block">
+            📚 学習ページへ
+          </a>
+        </div>`;
+      return;
+    }
+
+    el.innerHTML = `
+      <div style="margin-bottom:16px;font-size:13px;font-weight:700;color:var(--muted)">
+        合格済み：${passed.length} 単元
+      </div>
+      ${passed.map((p, i) => {
+        const name = UNIT_NAMES[p.id] || p.id;
+        const date = p.passedAt?.toDate
+          ? p.passedAt.toDate().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'})
+          : '—';
+        const time = p.passedTime ? formatSec(p.passedTime) : '—';
+        const attempts = p.attempts || 1;
+        return `
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)">
+            <div style="font-size:28px;flex-shrink:0">
+              ${['🥇','🥈','🥉'][i] || '⭐'}
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:800;font-size:15px">${name}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap">
+                <span>📅 ${date}</span>
+                <span>⏱ ${time}</span>
+                <span>🔄 ${attempts}回目で合格</span>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:13px;font-weight:900;color:var(--green)">✅ 合格</div>
+              ${p.passedAge ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">${p.passedAge}</div>` : ''}
+            </div>
+          </div>`;
+      }).join('')}
+    `;
+  } catch(e) {
+    el.innerHTML = `<div style="color:var(--red);font-size:13px">読み込みエラー: ${e.message}</div>`;
+  }
+}
+
+function formatSec(s) {
+  const m = Math.floor(s/60), ss = s%60;
+  return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+}
+
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `msg-box show ${type}`;
+}
+</script>
+</body>
+</html>

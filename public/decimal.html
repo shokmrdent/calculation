@@ -34,10 +34,7 @@
       <div class="control-group">
         <label for="op">演算</label>
         <select id="op">
-          <option value="add">足し算（＋）</option>
-          <option value="sub">引き算（－）</option>
-          <option value="mul">かけ算（×）</option>
-          <option value="div">割り算（÷）</option>
+          <!-- options set dynamically by initPage() -->
         </select>
       </div>
 
@@ -68,6 +65,26 @@
 
     <div id="pages"></div>
   </div>
+  <script>
+  // URLパラメータに応じて選択肢と初期値を制限
+  function initPage(){
+    const params = new URLSearchParams(location.search);
+    const opParam = params.get('op') || 'add';
+    const sel = document.getElementById('op');
+    sel.innerHTML = '';
+    // add/subグループ or mul/divグループ
+    if(opParam === 'add' || opParam === 'sub'){
+      sel.innerHTML = '<option value="add">足し算（＋）</option><option value="sub">引き算（－）</option>';
+    } else {
+      sel.innerHTML = '<option value="mul">かけ算（×）</option><option value="div">割り算（÷）</option>';
+    }
+    sel.value = opParam;
+    // タイトルも変える
+    const h1 = document.querySelector('h1');
+    if(h1) h1.textContent = (opParam==='add'||opParam==='sub') ? '小数の足し算・引き算' : '小数のかけ算・わり算';
+  }
+  window.addEventListener('DOMContentLoaded', initPage);
+  </script>
   <script src="assets/fraction-generator.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
   <script src="assets/tablet-v2.js?v=28"></script>

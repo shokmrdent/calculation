@@ -1,1 +1,351 @@
-const a0_0x15a15b=a0_0x5e3d;(function(_0x4263b6,_0x3459a0){const _0x2cd306=a0_0x5e3d,_0x2d458d=_0x4263b6();while(!![]){try{const _0x5c1870=-parseInt(_0x2cd306(0x197))/0x1+parseInt(_0x2cd306(0x104))/0x2*(-parseInt(_0x2cd306(0x113))/0x3)+parseInt(_0x2cd306(0x14b))/0x4+-parseInt(_0x2cd306(0x10f))/0x5+parseInt(_0x2cd306(0x122))/0x6*(-parseInt(_0x2cd306(0x106))/0x7)+-parseInt(_0x2cd306(0x190))/0x8+parseInt(_0x2cd306(0x18b))/0x9;if(_0x5c1870===_0x3459a0)break;else _0x2d458d['push'](_0x2d458d['shift']());}catch(_0x1371fb){_0x2d458d['push'](_0x2d458d['shift']());}}}(a0_0x2afa,0x24871));const a0_0x50eca5=(function(){let _0xd6076=!![];return function(_0xc31a51,_0x44838e){const _0x3e71ae=_0xd6076?function(){const _0x44fdd4=a0_0x5e3d;if(_0x44838e){const _0x5a9db7=_0x44838e[_0x44fdd4(0x198)](_0xc31a51,arguments);return _0x44838e=null,_0x5a9db7;}}:function(){};return _0xd6076=![],_0x3e71ae;};}()),a0_0x4e4dbe=a0_0x50eca5(this,function(){const _0x499204=a0_0x5e3d;return a0_0x4e4dbe[_0x499204(0x130)]()[_0x499204(0x11c)](_0x499204(0x12c))[_0x499204(0x130)]()[_0x499204(0x114)](a0_0x4e4dbe)[_0x499204(0x11c)](_0x499204(0x12c));});function a0_0x5e3d(_0x44d6af,_0x5d50b9){_0x44d6af=_0x44d6af-0xff;const _0x1eb87a=a0_0x2afa();let _0x4e4dbe=_0x1eb87a[_0x44d6af];if(a0_0x5e3d['cPbYut']===undefined){var _0x50eca5=function(_0x5c936c){const _0x17e7af='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x5d579a='',_0x1fce10='',_0x482af1=_0x5d579a+_0x50eca5;for(let _0xd6076=0x0,_0xc31a51,_0x44838e,_0x3e71ae=0x0;_0x44838e=_0x5c936c['charAt'](_0x3e71ae++);~_0x44838e&&(_0xc31a51=_0xd6076%0x4?_0xc31a51*0x40+_0x44838e:_0x44838e,_0xd6076++%0x4)?_0x5d579a+=_0x482af1['charCodeAt'](_0x3e71ae+0xa)-0xa!==0x0?String['fromCharCode'](0xff&_0xc31a51>>(-0x2*_0xd6076&0x6)):_0xd6076:0x0){_0x44838e=_0x17e7af['indexOf'](_0x44838e);}for(let _0x5a9db7=0x0,_0x4a3a46=_0x5d579a['length'];_0x5a9db7<_0x4a3a46;_0x5a9db7++){_0x1fce10+='%'+('00'+_0x5d579a['charCodeAt'](_0x5a9db7)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x1fce10);};a0_0x5e3d['FMwAOQ']=_0x50eca5,a0_0x5e3d['wbWawU']={},a0_0x5e3d['cPbYut']=!![];}const _0x2afa3b=_0x1eb87a[0x0],_0x5e3d04=_0x44d6af+_0x2afa3b,_0xe04b6a=a0_0x5e3d['wbWawU'][_0x5e3d04];if(!_0xe04b6a){const _0x4f87d8=function(_0xf9779b){this['uOMKFn']=_0xf9779b,this['fipzJG']=[0x1,0x0,0x0],this['QeIRdc']=function(){return'newState';},this['tMcZeA']='\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*',this['oKZpPp']='[\x27|\x22].+[\x27|\x22];?\x20*}';};_0x4f87d8['prototype']['cDalWg']=function(){const _0xe47dd1=new RegExp(this['tMcZeA']+this['oKZpPp']),_0x4ed665=_0xe47dd1['test'](this['QeIRdc']['toString']())?--this['fipzJG'][0x1]:--this['fipzJG'][0x0];return this['XqlELP'](_0x4ed665);},_0x4f87d8['prototype']['XqlELP']=function(_0x1e5ad3){if(!Boolean(~_0x1e5ad3))return _0x1e5ad3;return this['nXCfIS'](this['uOMKFn']);},_0x4f87d8['prototype']['nXCfIS']=function(_0x4f2463){for(let _0x55655b=0x0,_0x2982a9=this['fipzJG']['length'];_0x55655b<_0x2982a9;_0x55655b++){this['fipzJG']['push'](Math['round'](Math['random']())),_0x2982a9=this['fipzJG']['length'];}return _0x4f2463(this['fipzJG'][0x0]);},new _0x4f87d8(a0_0x5e3d)['cDalWg'](),_0x4e4dbe=a0_0x5e3d['FMwAOQ'](_0x4e4dbe),a0_0x5e3d['wbWawU'][_0x5e3d04]=_0x4e4dbe;}else _0x4e4dbe=_0xe04b6a;return _0x4e4dbe;}a0_0x4e4dbe();function wrapPageForPreview(_0x4a3a46){const _0x428ca1=a0_0x5e3d,_0x4f87d8=document[_0x428ca1(0x152)](_0x428ca1(0x16d));_0x4f87d8[_0x428ca1(0x11a)]=_0x428ca1(0x18c);const _0xf9779b=document['createElement'](_0x428ca1(0x16d));return _0xf9779b['className']=_0x428ca1(0x121),_0xf9779b['appendChild'](_0x4a3a46),_0x4f87d8['appendChild'](_0xf9779b),_0x4f87d8;}function applyMobilePageScaling(){const _0x5c756a=a0_0x5e3d;document['querySelectorAll'](_0x5c756a(0x17f))['forEach'](_0xe47dd1=>{const _0x296525=_0x5c756a,_0x4ed665=_0xe47dd1[_0x296525(0x13b)](_0x296525(0x13e)),_0x1e5ad3=_0xe47dd1[_0x296525(0x13b)](_0x296525(0x111));if(!_0x4ed665||!_0x1e5ad3||_0x1e5ad3[_0x296525(0x196)][_0x296525(0x14d)](_0x296525(0x108)))return;_0xe47dd1[_0x296525(0x196)][_0x296525(0x176)](_0x296525(0x180)),_0x4ed665[_0x296525(0x13c)]['width']='',_0x4ed665[_0x296525(0x13c)][_0x296525(0x105)]='',_0x1e5ad3[_0x296525(0x13c)][_0x296525(0x171)]='';const _0x4f2463=_0x1e5ad3[_0x296525(0x187)],_0x55655b=_0x1e5ad3[_0x296525(0x16e)];if(!_0x4f2463||!_0x55655b)return;if(window['innerWidth']>0x280||window[_0x296525(0x10a)](_0x296525(0x15c))['matches']){_0x4ed665[_0x296525(0x13c)][_0x296525(0x170)]=_0x4f2463+'px',_0x4ed665[_0x296525(0x13c)]['height']=_0x55655b+'px';return;}const _0x2982a9=Math[_0x296525(0x159)](_0xe47dd1[_0x296525(0x138)]-0x8,0x0);if(!_0x2982a9)return;const _0x305772=Math[_0x296525(0x151)](0x1,_0x2982a9/_0x4f2463);_0xe47dd1['classList'][_0x296525(0x186)](_0x296525(0x180)),_0x4ed665[_0x296525(0x13c)][_0x296525(0x170)]=_0x4f2463*_0x305772+'px',_0x4ed665[_0x296525(0x13c)][_0x296525(0x105)]=_0x55655b*_0x305772+'px',_0x1e5ad3[_0x296525(0x13c)][_0x296525(0x171)]='scale('+_0x305772+')';});}async function downloadPDF(){const _0x2bed48=a0_0x5e3d,_0x5cdef4=document['querySelectorAll'](_0x2bed48(0x111));if(!_0x5cdef4[_0x2bed48(0x116)]){alert(_0x2bed48(0x192));return;}if(!window[_0x2bed48(0x10e)]||!window[_0x2bed48(0x188)]){alert('ライブラリ読み込み失敗。');return;}const {jsPDF:_0x12acc2}=window['jspdf'],_0x35a9fc=new _0x12acc2({'orientation':_0x2bed48(0x165),'unit':'mm','format':'a4'});for(let _0x541950=0x0;_0x541950<_0x5cdef4[_0x2bed48(0x116)];_0x541950++){const _0x204ccf=await html2canvas(_0x5cdef4[_0x541950],{'scale':0x2,'useCORS':!![]});if(_0x541950>0x0)_0x35a9fc[_0x2bed48(0x155)]();_0x35a9fc['addImage'](_0x204ccf[_0x2bed48(0x148)](_0x2bed48(0x154)),_0x2bed48(0x15e),0x0,0x0,0xd2,0x129);}_0x35a9fc[_0x2bed48(0x183)](_0x2bed48(0x158));}function rand(_0xe3c002,_0x2c92a1){const _0x4faa85=a0_0x5e3d;return Math[_0x4faa85(0x11d)](Math[_0x4faa85(0x194)]()*(_0x2c92a1-_0xe3c002+0x1))+_0xe3c002;}const PI=Math['PI'],FILL='#dbeafe',STROKE=a0_0x15a15b(0x12a);function a0_0x2afa(){const _0x2bf1ad=['CgfNzs1Zy2fSzs1IB3G','mJu0mJm4tg5dq3Hs','iIbZDhjVA2uTD2LKDgG9iJiIlZ4kicaGidXSAw5LihGXpsi','iIbZDhjVA2uTD2LKDgG9iJiIlZ4kicaGidXLBgXPChnLign4psi','iIb0zxH0lwfUy2HVCJ0IBwLKzgXLiIbKB21PBMfUDc1IyxnLBgLUzt0Iy2vUDhjHBciGzM9UDc1ZAxPLpsiXmciGzMLSBd0IiZfLndbHzIiGzM9UDc13zwLNAhq9iJCWmci+','5A++6kEs57EAimoxiowVVUINKUE3MIddTYaY','cIaGica','Aw5Uzxjive1m','iIbZDhjVA2uTD2LKDgG9iJiIlZ4kicaGidX0zxH0ihG9iG','iZfLndbHzG','iIbMAwXSpsi','kcGOlISPkYKRksSK','pc9ZDMC+','yw5ZD2vYlxbHz2uTAgvHzgvY','44ks5Rgc44kb44gQ44gv44ge44ccpc9ZCgfUpGOGicaGpc9KAxy+cIaGica8zgL2ignSyxnZpsj6DwTLAs1MB3jTDwXHlwHPBNqIpUwfRow8J++8MG','Dg9tDhjPBMC','BwvUC2vRAq','DhjHCgv6B2LK','iIbMAwXSpsiJzwzMnMzMiIbZDhjVA2u9iG','iIb0zxH0lwfUy2HVCJ0IBwLKzgXLiIbMB250lxnPEMu9iJGIigzPBgW9iIm2ndC0ogiIpU+8IownIUw+Ho+8ItWVDgv4Dd4kicaGidX0zxH0ihG9iG','iIbMAwXSpsiJzgjLywzLiIbZDhjVA2u9iG','iIbZDhjVA2uTD2LKDgG9iJiIlZ4kicaGia','iIbZDhjVA2u9iIm5ngeZyJGIihn0CM9Rzs13Awr0Ad0ImsiGC3rYB2TLlwrHC2HHCNjHEt0ImYWYiI8+cIaGica8BgLUzsb4mt0I','y2XPzw50v2LKDgG','iIb3Awr0Ad0I','iIbZDhjVA2uTD2LKDgG9iJiIlZ4kicaGidXWB2X5z29UihbVAw50CZ0I','CxvLCNLtzwXLy3rVCG','C3r5Bgu','CMvZAxPL','lNbHz2uTC2nHBguTyM94','ktWVC3bHBJ48C3bHBIbJBgfZCZ0Iyw5ZD2vYlxzHBci+','pgXPBMuGEde9iG','CgfNzu5V','iIbOzwLNAhq9iG','iIbZDhjVA2u9iIm2ndC0ogiIihn0CM9Rzs13Awr0Ad0ImsiGC3rYB2TLlwrHC2HHCNjHEt0ImYWYiI8+cIaGpgXPBMuGEde9iG','iIb5psi','5y2k5B6eimoxiownIUw+HcddLYaZlJe0imoxioMRMoobLq','44gF44gMimoxioocIoobKYddLYdPQ5JJGzu','z2v0','Dg9eyxrHvvjm','yw5ZD2vYlxnLy3rPB24TBgfIzwW','DMfSDwu','ntCWmdHoueHZy1a','C3f1yxjL','y29UDgfPBNm','5BMZ6kgm5zUB6l665B2I44gU6z2I56Mn','CgfNzsbHBNn3zxiTCgfNzq','iIb0zxH0lwfUy2HVCJ0Izw5KiIbMB250lxnPEMu9iJeWiIbMAwXSpsiJmwu0mgfMiIbMB250lxDLAwDODd0InZaWiJ4','BwLU','y3jLyxrLrwXLBwvUDa','Bg9JyxrPB24','Aw1Hz2uVCg5N','ywrKugfNzq','yxbWzw5Kq2HPBgq','CgfNzxm','ENvRzwKUCgrM','Bwf4','y23cSW','iIbZDhjVA2u9iIm5ngeZyJGIihn0CM9Rzs13Awr0Ad0ImsiGC3rYB2TLlwrHC2HHCNjHEt0ImYWYiI8+cIaGica','ChjPBNq','pgrPDIbJBgfZCZ0IENvRzwKTAxrLBsi+cIaGica8zgL2ignSyxnZpsj6DwTLAs1OzwfKzxiIpGOGicaGica8C3bHBIbJBgfZCZ0IENvRzwKTBNvTiJ4O','ue5h','iIbZDhjVA2u9iIm2ndC0ogiIihn0CM9Rzs13Awr0Ad0ImsiGC3rYB2TLlwrHC2HHCNjHEt0ImYWYiI8+cIaGica8Dgv4Dcb4psi','mEI+UIddLYaX6l66','ENvRzwKTz3jPza','ktWVC3bHBJ4kicaGicaGphnWyw4Gy2XHC3m9iNP1A2vPlxeIpG','5lIj6kEs5B2I44gU6z2I56Mn','iIb5mJ0I','Cg9YDhjHAxq','iIbZDhjVA2u9iG','y3vIB2LK','iIbMB250lxnPEMu9iJeWiIbMAwXSpsiJmwu0mgfMiIbMB250lxDLAwDODd0InZaWiJ4','CgfYywXSzwW','5yAg5P+X44gU5l2t56Mn','y2HHBMDL','iIbZDhjVA2u9iIm5ngeZyJGIihn0CM9Rzs13Awr0Ad0ImsiVpGOGicaG','zgL2','B2zMC2v0sgvPz2H0','pc9ZCgfUpG','D2LKDgG','DhjHBNnMB3jT','iIbZDhjVA2u9iIm5ngeZyJGIihn0CM9Rzs13Awr0Ad0ImsiGC3rYB2TLlwrHC2HHCNjHEt0ImYWYiI8+cIaGica8Dgv4Dcb4psi','CgfNzsb6DwTLAs1WywDL','44gF44gMimoxioocIoobKW','yw5Z','CMvTB3zL','iIb0zxH0lwfUy2HVCJ0IBwLKzgXLiIbMB250lxnPEMu9iJeWiIbMAwXSpsiJmwu0mgfMiIbMB250lxDLAwDODd0InZaWiJ4','C3fYDa','cIaG','cIaGica8Dgv4Dcb4psi','iIb5mt0I','iIbYEd0I','iIbJEt0I','Dg9gAxHLza','lNbHz2uTChjLDMLLDW','AxmTC2nHBgvK','5l2t56Mn77Yi55U05PA55l2t44o756Ul5PA55l2t77Yj','CMvJDa','C2f2zq','zM9YBxvSyq','cIaGica8Cg9SEwDVBIbWB2LUDhm9iG','ywrK','B2zMC2v0v2LKDgG','ANnWzgy','iIbZDhjVA2u9iIm2ndC0ogiIihn0CM9Rzs13Awr0Ad0ImsiVpGOGidXSAw5LihGXpsi','5y+W5B2I44gU6z2I56Mn','mtaWnJuZnJzyA3j2v3m','CgfNzs1WCMv2Awv3','y2LYy2XL','5y2k5B6eimoxiownIUw+HcddLYaZlJe0','iIb4mJ0I','mZC0mdy0vxzPEgzk','5zUZ5B2I44gU6z2I56Mn','5ywi44gR44cm55sF5OIq44cn44ks5OQ844gx44gM44gp44gG44gv44ge44cc','DhjPyw5NBgu','CMfUzg9T','cIaGica8CMvJDcb4psi','y2XHC3nmAxn0','nZaZmtHsz3DlzuO','yxbWBhK','5yAg44gU6z2I56Mn','ywrKrxzLBNrmAxn0zw5LCG','z2v0rwXLBwvUDej5swq','5Q2J5PA55B2I44gU6z2I56Mn','C3zN','ndu4mdzmzMvxteu','AgvPz2H0','ndLgqK1bAuO','iIb4BwXUCZ0IAhr0CdOVl3D3DY53mY5VCMCVmJaWmc9ZDMCIcIaGicbZDhLSzt0IzgLZCgXHEtPIBg9JAZTTyxjNAw46mcbHDxrVo292zxjMBg93oNzPC2LIBgu7iJ4','yw5ZD2vYlxbHz2u','y291BNq','Bwf0y2HnzwrPyq','44gY44gx5B2I44gU6z2I56Mn','Bw9Kzq','zMLSDgvY','AhrTBdjJyw52yxm','mtm1nZKXnvHKA2Hqza','5yAg44gU6z2I56Mn77YiZ4dIIziZlJe077Yj','lNbHz2u','Dgv4DenVBNrLBNq','mZLUDvzPz0y','y29UC3rYDwn0B3i','re9nq29UDgvUDeXVywrLza','BgvUz3rO','y23cSG','phnWyw4Gy2XHC3m9iMfUC3DLCI1UDw0IpIG','CMHVBwj1CW','y2XHC3noyw1L','5BQv6l66imoxioMRMoobLsddTYaY','C2vHCMnO','zMXVB3i','y208l3rLEhq+cIaG','iIb2Awv3qM94psiTnsaTnsa','y208l3rLEhq+cIaGica8Dgv4Dcb4psi'];a0_0x2afa=function(){return _0x2bf1ad;};return a0_0x2afa();}function svgWrap(_0x358954,_0x245ca0=0x82,_0x36088a=0x6e){const _0x55196d=a0_0x15a15b;return'<svg\x20width=\x22'+_0x245ca0+_0x55196d(0x142)+_0x36088a+_0x55196d(0x11f)+(_0x245ca0+0xa)+'\x20'+(_0x36088a+0xa)+_0x55196d(0x107)+_0x358954+_0x55196d(0x12d);}function dimLine(_0x5a3c86,_0x279ede,_0x57a900,_0x37ebf1,_0x31c489){const _0x1cff6c=a0_0x15a15b,_0xc7afcc=(_0x5a3c86+_0x57a900)/0x2,_0x400f56=(_0x279ede+_0x37ebf1)/0x2,_0x59e316=-(_0x37ebf1-_0x279ede),_0x145a65=_0x57a900-_0x5a3c86,_0x3f21cd=Math[_0x1cff6c(0x178)](_0x59e316*_0x59e316+_0x145a65*_0x145a65)||0x1,_0x443560=_0x59e316/_0x3f21cd*0xa,_0x553565=_0x145a65/_0x3f21cd*0xa;return _0x1cff6c(0x140)+_0x5a3c86+_0x1cff6c(0x17b)+_0x279ede+_0x1cff6c(0x18f)+_0x57a900+_0x1cff6c(0x164)+_0x37ebf1+_0x1cff6c(0x15f)+(_0xc7afcc+_0x443560)+_0x1cff6c(0x144)+(_0x400f56+_0x553565)+'\x22\x20text-anchor=\x22middle\x22\x20dominant-baseline=\x22central\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x31c489+'</text>';}function heightLine(_0x54f8d7,_0x218de2,_0x188a2f,_0x13510a,_0x418269=0x1){const _0x40fc46=a0_0x15a15b,_0x12c186=_0x418269*0xc;return'<line\x20x1=\x22'+_0x54f8d7+_0x40fc46(0x17b)+_0x218de2+_0x40fc46(0x18f)+_0x54f8d7+'\x22\x20y2=\x22'+_0x188a2f+_0x40fc46(0x143)+(_0x54f8d7-0x4)+_0x40fc46(0x17b)+_0x218de2+_0x40fc46(0x18f)+(_0x54f8d7+0x4)+'\x22\x20y2=\x22'+_0x218de2+_0x40fc46(0x189)+(_0x54f8d7-0x4)+_0x40fc46(0x17b)+_0x188a2f+_0x40fc46(0x18f)+(_0x54f8d7+0x4)+_0x40fc46(0x164)+_0x188a2f+'\x22\x20stroke=\x22#64748b\x22\x20stroke-width=\x221\x22/>\x0a\x20\x20<text\x20x=\x22'+(_0x54f8d7+_0x12c186)+'\x22\x20y=\x22'+(_0x218de2+_0x188a2f)/0x2+_0x40fc46(0x125)+_0x13510a+'</text>';}function svgRect(_0x420044,_0x3f1f20){const _0x4bb738=a0_0x15a15b,_0x779c48=0x14,_0x567405=0xf,_0x2a900f=0x50,_0x10c8dd=0x46;return svgWrap(_0x4bb738(0x195)+_0x779c48+_0x4bb738(0x144)+_0x567405+_0x4bb738(0x139)+_0x2a900f+'\x22\x20height=\x22'+_0x10c8dd+_0x4bb738(0x12b)+FILL+'\x22\x20stroke=\x22'+STROKE+_0x4bb738(0x136)+dimLine(_0x779c48,_0x567405+_0x10c8dd+0x8,_0x779c48+_0x2a900f,_0x567405+_0x10c8dd+0x8,_0x420044+'cm')+_0x4bb738(0x127)+heightLine(_0x779c48+_0x2a900f+0x8,_0x567405,_0x567405+_0x10c8dd,_0x3f1f20+'cm')+'\x0a\x20\x20');}function svgSquare(_0xdc5ac6){return svgRect(_0xdc5ac6,_0xdc5ac6);}function svgTriangle(_0x18d8ee,_0x21a164){const _0x31e4eb=a0_0x15a15b,_0x155fa3=0xa,_0x588aa8=0x55,_0x3452fd=0x64,_0x6a0b8f=0x32,_0x2c03bd=_0x155fa3+_0x6a0b8f;return svgWrap(_0x31e4eb(0x185)+_0x155fa3+','+_0x588aa8+'\x20'+(_0x155fa3+_0x3452fd)+','+_0x588aa8+'\x20'+_0x2c03bd+','+(_0x588aa8-0x41)+'\x22\x20fill=\x22'+FILL+'\x22\x20stroke=\x22'+STROKE+_0x31e4eb(0x123)+_0x2c03bd+'\x22\x20y1=\x22'+_0x588aa8+_0x31e4eb(0x18f)+_0x2c03bd+'\x22\x20y2=\x22'+(_0x588aa8-0x41)+_0x31e4eb(0x137)+(_0x2c03bd-0x4)+_0x31e4eb(0x17b)+_0x588aa8+_0x31e4eb(0x18f)+(_0x2c03bd+0x4)+'\x22\x20y2=\x22'+_0x588aa8+_0x31e4eb(0x16c)+dimLine(_0x155fa3,_0x588aa8+0xa,_0x155fa3+_0x3452fd,_0x588aa8+0xa,_0x18d8ee+'cm')+'\x0a\x20\x20\x20\x20<text\x20x=\x22'+(_0x2c03bd+0xa)+_0x31e4eb(0x144)+(_0x588aa8-0x1e)+'\x22\x20text-anchor=\x22start\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x21a164+_0x31e4eb(0x11e));}function svgParallel(_0xe436cf,_0x5c4a62){const _0x344897=a0_0x15a15b,_0x56626b=0x14,_0xb72cde=0xf,_0xcfbee0=0x14,_0x2ad8ca=0x55,_0x4d9f31=0x41;return svgWrap(_0x344897(0x185)+(_0xb72cde+_0x56626b)+','+_0xcfbee0+'\x20'+(_0xb72cde+_0x56626b+_0x2ad8ca)+','+_0xcfbee0+'\x20'+(_0xb72cde+_0x2ad8ca)+','+(_0xcfbee0+_0x4d9f31)+'\x20'+_0xb72cde+','+(_0xcfbee0+_0x4d9f31)+_0x344897(0x12b)+FILL+_0x344897(0x166)+STROKE+_0x344897(0x123)+(_0xb72cde+_0x56626b)+'\x22\x20y1=\x22'+_0xcfbee0+_0x344897(0x18f)+(_0xb72cde+_0x56626b)+'\x22\x20y2=\x22'+(_0xcfbee0+_0x4d9f31)+_0x344897(0x15b)+dimLine(_0xb72cde,_0xcfbee0+_0x4d9f31+0xa,_0xb72cde+_0x2ad8ca,_0xcfbee0+_0x4d9f31+0xa,_0xe436cf+'cm')+_0x344897(0x17a)+(_0xb72cde+_0x56626b-0xe)+'\x22\x20y=\x22'+(_0xcfbee0+_0x4d9f31/0x2)+'\x22\x20text-anchor=\x22middle\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x5c4a62+_0x344897(0x11e));}function svgRhombus(_0x364ea9,_0x6d7413){const _0x58530e=a0_0x15a15b,_0x2891d9=0x3c,_0x4edcfa=0x32,_0x9f1c50=0x32,_0x12bc7c=0x23;return svgWrap(_0x58530e(0x185)+_0x2891d9+','+(_0x4edcfa-_0x12bc7c)+'\x20'+(_0x2891d9+_0x9f1c50)+','+_0x4edcfa+'\x20'+_0x2891d9+','+(_0x4edcfa+_0x12bc7c)+'\x20'+(_0x2891d9-_0x9f1c50)+','+_0x4edcfa+_0x58530e(0x12b)+FILL+'\x22\x20stroke=\x22'+STROKE+_0x58530e(0x123)+(_0x2891d9-_0x9f1c50)+_0x58530e(0x17b)+_0x4edcfa+_0x58530e(0x18f)+(_0x2891d9+_0x9f1c50)+_0x58530e(0x164)+_0x4edcfa+'\x22\x20stroke=\x22#94a3b8\x22\x20stroke-width=\x221\x22\x20stroke-dasharray=\x223,2\x22/>\x0a\x20\x20\x20\x20<line\x20x1=\x22'+_0x2891d9+'\x22\x20y1=\x22'+(_0x4edcfa-_0x12bc7c)+_0x58530e(0x18f)+_0x2891d9+'\x22\x20y2=\x22'+(_0x4edcfa+_0x12bc7c)+_0x58530e(0x172)+_0x2891d9+'\x22\x20y=\x22'+(_0x4edcfa+0x8)+'\x22\x20text-anchor=\x22middle\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x364ea9+_0x58530e(0x120)+(_0x2891d9+_0x9f1c50/0x2+0x6)+_0x58530e(0x144)+(_0x4edcfa-_0x12bc7c/0x2-0x4)+_0x58530e(0x168)+_0x6d7413+_0x58530e(0x11e));}function svgTrapezoid(_0x2aa5bc,_0x4296f3,_0x1a55d2){const _0x4c0c2e=a0_0x15a15b,_0x412479=0xa,_0x1e81d2=0x14,_0x51420c=0x5a,_0x5390d3=0x41,_0x42a8db=0x14;return svgWrap(_0x4c0c2e(0x185)+(_0x412479+_0x42a8db)+','+_0x1e81d2+'\x20'+(_0x412479+_0x42a8db+(_0x51420c-0x2*_0x42a8db)*_0x2aa5bc/_0x4296f3)+','+_0x1e81d2+'\x20'+(_0x412479+_0x51420c)+','+(_0x1e81d2+_0x5390d3)+'\x20'+_0x412479+','+(_0x1e81d2+_0x5390d3)+_0x4c0c2e(0x12b)+FILL+_0x4c0c2e(0x166)+STROKE+'\x22\x20stroke-width=\x222\x22/>\x0a\x20\x20\x20\x20'+dimLine(_0x412479,_0x1e81d2+_0x5390d3+0xa,_0x412479+_0x51420c,_0x1e81d2+_0x5390d3+0xa,_0x4296f3+'cm')+_0x4c0c2e(0x127)+dimLine(_0x412479+_0x42a8db,_0x1e81d2-0xa,_0x412479+_0x42a8db+(_0x51420c-0x2*_0x42a8db)*_0x2aa5bc/_0x4296f3,_0x1e81d2-0xa,_0x2aa5bc+'cm')+_0x4c0c2e(0x127)+heightLine(_0x412479+_0x51420c+0x8,_0x1e81d2,_0x1e81d2+_0x5390d3,_0x1a55d2+'cm')+_0x4c0c2e(0x179));}function svgCircle(_0x50ec99){const _0x4ce1b3=a0_0x15a15b;return svgWrap('\x0a\x20\x20\x20\x20<circle\x20cx=\x2260\x22\x20cy=\x2252\x22\x20r=\x2240\x22\x20fill=\x22'+FILL+_0x4ce1b3(0x166)+STROKE+'\x22\x20stroke-width=\x222\x22/>\x0a\x20\x20\x20\x20<line\x20x1=\x2260\x22\x20y1=\x2252\x22\x20x2=\x22100\x22\x20y2=\x2252\x22\x20stroke=\x22#94a3b8\x22\x20stroke-width=\x221\x22\x20stroke-dasharray=\x223,2\x22/>\x0a\x20\x20\x20\x20<text\x20x=\x2280\x22\x20y=\x2245\x22\x20text-anchor=\x22middle\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x50ec99+'cm</text>\x0a\x20\x20\x20\x20<text\x20x=\x2270\x22\x20y=\x2292\x22\x20text-anchor=\x22middle\x22\x20font-size=\x229\x22\x20fill=\x22#64748b\x22>（半径）</text>\x0a\x20\x20');}function svgCuboid(_0x34907a,_0x5c14a6,_0x4ebff0){const _0x1973ee=a0_0x15a15b,_0x36858a=0x14,_0x592e9f=0x14,_0x404d6d=0x41,_0x66d557=0x37,_0x4065a2=0x14;return svgWrap(_0x1973ee(0x185)+_0x36858a+','+(_0x592e9f+_0x4065a2)+'\x20'+(_0x36858a+_0x404d6d)+','+(_0x592e9f+_0x4065a2)+'\x20'+(_0x36858a+_0x404d6d)+','+(_0x592e9f+_0x4065a2+_0x66d557)+'\x20'+_0x36858a+','+(_0x592e9f+_0x4065a2+_0x66d557)+'\x22\x20fill=\x22'+FILL+'\x22\x20stroke=\x22'+STROKE+_0x1973ee(0x13a)+_0x36858a+','+(_0x592e9f+_0x4065a2)+'\x20'+(_0x36858a+_0x4065a2)+','+_0x592e9f+'\x20'+(_0x36858a+_0x404d6d+_0x4065a2)+','+_0x592e9f+'\x20'+(_0x36858a+_0x404d6d)+','+(_0x592e9f+_0x4065a2)+_0x1973ee(0x133)+STROKE+_0x1973ee(0x13a)+(_0x36858a+_0x404d6d)+','+(_0x592e9f+_0x4065a2)+'\x20'+(_0x36858a+_0x404d6d+_0x4065a2)+','+_0x592e9f+'\x20'+(_0x36858a+_0x404d6d+_0x4065a2)+','+(_0x592e9f+_0x66d557)+'\x20'+(_0x36858a+_0x404d6d)+','+(_0x592e9f+_0x4065a2+_0x66d557)+_0x1973ee(0x135)+STROKE+_0x1973ee(0x129)+(_0x36858a+_0x404d6d/0x2)+_0x1973ee(0x144)+(_0x592e9f+_0x4065a2+_0x66d557+0xe)+_0x1973ee(0x177)+_0x34907a+_0x1973ee(0x120)+(_0x36858a+_0x404d6d+_0x4065a2+0xe)+_0x1973ee(0x144)+(_0x592e9f+_0x66d557/0x2+_0x4065a2/0x2)+'\x22\x20font-size=\x2210\x22\x20fill=\x22#1e40af\x22\x20font-weight=\x22700\x22>'+_0x5c14a6+'cm</text>\x0a\x20\x20\x20\x20<text\x20x=\x22'+(_0x36858a-0xc)+_0x1973ee(0x144)+(_0x592e9f+_0x4065a2+_0x66d557/0x2)+_0x1973ee(0x150)+_0x4ebff0+'cm</text>\x0a\x20\x20');}function svgCylinder(_0x172221,_0x4919c4){const _0x5882cd=a0_0x15a15b,_0x5d51b3=0x3c,_0x45a533=0x14,_0x5aad12=0xc,_0xc428bb=0x28,_0x101a9d=0x41;return svgWrap(_0x5882cd(0x195)+(_0x5d51b3-_0xc428bb)+_0x5882cd(0x144)+(_0x45a533+_0x5aad12)+_0x5882cd(0x139)+_0xc428bb*0x2+_0x5882cd(0x142)+_0x101a9d+_0x5882cd(0x12b)+FILL+_0x5882cd(0x166)+STROKE+'\x22\x20stroke-width=\x222\x22/>\x0a\x20\x20\x20\x20<ellipse\x20cx=\x22'+_0x5d51b3+_0x5882cd(0x17d)+(_0x45a533+_0x5aad12+_0x101a9d)+'\x22\x20rx=\x22'+_0xc428bb+'\x22\x20ry=\x22'+_0x5aad12+_0x5882cd(0x12b)+FILL+_0x5882cd(0x166)+STROKE+_0x5882cd(0x124)+_0x5d51b3+'\x22\x20cy=\x22'+(_0x45a533+_0x5aad12)+_0x5882cd(0x17c)+_0xc428bb+'\x22\x20ry=\x22'+_0x5aad12+_0x5882cd(0x133)+STROKE+'\x22\x20stroke-width=\x222\x22/>\x0a\x20\x20\x20\x20<line\x20x1=\x22'+_0x5d51b3+_0x5882cd(0x17b)+(_0x45a533+_0x5aad12)+_0x5882cd(0x18f)+(_0x5d51b3+_0xc428bb)+'\x22\x20y2=\x22'+(_0x45a533+_0x5aad12)+_0x5882cd(0x172)+(_0x5d51b3+_0xc428bb/0x2)+_0x5882cd(0x144)+(_0x45a533-0x4)+_0x5882cd(0x177)+_0x172221+_0x5882cd(0x120)+_0x5d51b3+_0x5882cd(0x144)+(_0x45a533+0x4)+_0x5882cd(0x134)+(_0x5d51b3+_0xc428bb+0x10)+'\x22\x20y=\x22'+(_0x45a533+_0x5aad12+_0x101a9d/0x2)+_0x5882cd(0x168)+_0x4919c4+_0x5882cd(0x11e));}function makeProb(_0x235117){const _0xf08c47=a0_0x15a15b,_0x4b1efc={'menseki':['rect',_0xf08c47(0x14c),_0xf08c47(0x193),'parallel',_0xf08c47(0x119),'trapezoid'],'enshuu_menseki':['circle'],'taieki':['cuboid'],'entai':['cylinder']},_0xda7f6f=_0x4b1efc[_0x235117]||_0x4b1efc['menseki'],_0x16196f=_0xda7f6f[rand(0x0,_0xda7f6f[_0xf08c47(0x116)]-0x1)],_0x16dcb5=rand(0x2,0xf),_0x777e5b=rand(0x2,0xf),_0x3d6c83=rand(0x2,0xc),_0x171dfb=rand(0x2,0xa);if(_0x16196f===_0xf08c47(0x182)){const _0x6cd41f=_0x16dcb5*_0x777e5b;return{'svg':svgRect(_0x16dcb5,_0x777e5b),'q':'長方形の面積','formula':_0xf08c47(0x174),'ans':_0x6cd41f+'cm²'};}if(_0x16196f===_0xf08c47(0x14c))return{'svg':svgSquare(_0x16dcb5),'q':_0xf08c47(0x102),'formula':_0xf08c47(0x160),'ans':_0x16dcb5*_0x16dcb5+'cm²'};if(_0x16196f==='triangle'){const _0x42592f=_0x16dcb5*_0x777e5b/0x2;return{'svg':svgTriangle(_0x16dcb5,_0x777e5b),'q':_0xf08c47(0x163),'formula':_0xf08c47(0x11b),'ans':_0x42592f+_0xf08c47(0x117)};}if(_0x16196f===_0xf08c47(0x169)){const _0x1f35c3=_0x16dcb5*_0x777e5b;return{'svg':svgParallel(_0x16dcb5,_0x777e5b),'q':_0xf08c47(0x14e),'formula':'底辺\x20×\x20高さ','ans':_0x1f35c3+_0xf08c47(0x117)};}if(_0x16196f===_0xf08c47(0x119)){const _0x35cf43=_0x16dcb5*_0x777e5b/0x2;return{'svg':svgRhombus(_0x16dcb5,_0x777e5b),'q':_0xf08c47(0x10b),'formula':_0xf08c47(0x126),'ans':_0x35cf43+'cm²'};}if(_0x16196f===_0xf08c47(0x132)){const _0xcd1e6f=(_0x16dcb5+_0x777e5b)*_0x3d6c83/0x2;return{'svg':svgTrapezoid(_0x16dcb5,_0x777e5b,_0x3d6c83),'q':_0xf08c47(0x18a),'formula':'（上底\x20+\x20下底）×\x20高さ\x20÷\x202','ans':_0xcd1e6f+_0xf08c47(0x117)};}if(_0x16196f===_0xf08c47(0x18d)){const _0x1cd18b=(_0x16dcb5*_0x16dcb5*0x13a/0x64)[_0xf08c47(0x17e)](0x2);return{'svg':svgCircle(_0x16dcb5),'q':_0xf08c47(0x110),'formula':_0xf08c47(0x18e),'ans':_0x1cd18b+_0xf08c47(0x117)};}if(_0x16196f===_0xf08c47(0x167)){const _0x185643=_0x16dcb5*_0x777e5b*_0x3d6c83;return{'svg':svgCuboid(_0x16dcb5,_0x777e5b,_0x3d6c83),'q':'直方体の体積','formula':_0xf08c47(0x146),'ans':_0x185643+_0xf08c47(0x15a)};}if(_0x16196f==='cylinder'){const _0x46a2e4=(_0x16dcb5*_0x16dcb5*0x13a/0x64*_0x777e5b)[_0xf08c47(0x17e)](0x1);return{'svg':svgCylinder(_0x16dcb5,_0x777e5b),'q':'円柱の体積（π≒3.14）','formula':_0xf08c47(0x145),'ans':_0x46a2e4+'cm³'};}return makeProb(_0xf08c47(0x131));}function probHTML(_0x170d26,_0x2ccfea){const _0x4edf69=a0_0x15a15b;return _0x4edf69(0x15d)+_0x170d26+_0x4edf69(0x162)+_0x2ccfea['q']+_0x4edf69(0x12f)+_0x2ccfea[_0x4edf69(0x184)]+'</div>\x0a\x20\x20\x20\x20<div\x20class=\x22zukei-shape\x22>'+_0x2ccfea[_0x4edf69(0x103)]+'</div>\x0a\x20\x20\x20\x20<div\x20class=\x22zukei-ans-row\x22>\x0a\x20\x20\x20\x20\x20\x20<span\x20class=\x22zukei-ans-label\x22>答え</span>\x0a\x20\x20\x20\x20\x20\x20<span\x20class=\x22zukei-blank-long\x22></span>\x0a\x20\x20\x20\x20</div>\x0a\x20\x20</div>';}function appendAnswerPage(_0x513a7a,_0x8ccde3,_0x306b56,_0x1c0486){const _0x4535bf=a0_0x15a15b,_0x1ab128=document[_0x4535bf(0x152)](_0x4535bf(0x16d));_0x1ab128[_0x4535bf(0x11a)]=_0x4535bf(0x18c);const _0x2ea631=document[_0x4535bf(0x152)]('div');_0x2ea631['className']='page-scale-box';const _0x589c03=document[_0x4535bf(0x152)](_0x4535bf(0x16d));_0x589c03['className']=_0x4535bf(0x14f);const _0x50a657=document['createElement']('div');_0x50a657['className']=_0x4535bf(0x12e),_0x50a657['textContent']=_0x1c0486+'\u3000答え',_0x589c03[_0x4535bf(0x156)](_0x50a657);for(let _0x368481=0x1;_0x368481<=_0x306b56;_0x368481++){const _0x25aae5=_0x8ccde3[_0x4535bf(0x10d)](_0x1ce2b2=>_0x1ce2b2[_0x4535bf(0x141)]===_0x368481);if(!_0x25aae5[_0x4535bf(0x116)])continue;const _0xbd1e25=document[_0x4535bf(0x152)](_0x4535bf(0x16d));_0xbd1e25[_0x4535bf(0x11a)]='answer-section';if(_0x306b56>0x1){const _0x135ffe=document[_0x4535bf(0x152)]('div');_0x135ffe[_0x4535bf(0x11a)]=_0x4535bf(0x149),_0x135ffe[_0x4535bf(0x112)]=_0x368481+'枚目',_0xbd1e25[_0x4535bf(0x156)](_0x135ffe);}const _0x5d933e=document[_0x4535bf(0x152)](_0x4535bf(0x16d));_0x5d933e[_0x4535bf(0x11a)]='answer-grid',_0x25aae5['forEach'](({num:_0x33e5ec,label:_0x612fb5})=>{const _0x56adfd=_0x4535bf,_0x468e63=document[_0x56adfd(0x152)](_0x56adfd(0x16d));_0x468e63[_0x56adfd(0x11a)]='answer-item',_0x468e63[_0x56adfd(0x128)]=_0x56adfd(0x118)+_0x33e5ec+_0x56adfd(0x13f)+_0x612fb5+_0x56adfd(0x16f),_0x5d933e[_0x56adfd(0x156)](_0x468e63);}),_0xbd1e25[_0x4535bf(0x156)](_0x5d933e),_0x589c03['appendChild'](_0xbd1e25);}_0x2ea631[_0x4535bf(0x156)](_0x589c03),_0x1ab128[_0x4535bf(0x156)](_0x2ea631),_0x513a7a[_0x4535bf(0x156)](_0x1ab128);}function generate(){const _0x4f636e=a0_0x15a15b,_0x30e366=document['getElementById'](_0x4f636e(0x10c))?.[_0x4f636e(0x14a)]||'menseki',_0x14bf47=parseInt(document['getElementById'](_0x4f636e(0x109))[_0x4f636e(0x14a)]),_0x586ac4=document['getElementById'](_0x4f636e(0x157));_0x586ac4['innerHTML']='';const _0xe99a57=[],_0x157e89={'menseki':_0x4f636e(0x191),'enshuu_menseki':_0x4f636e(0xff),'taieki':_0x4f636e(0x181),'entai':_0x4f636e(0x16a)},_0x49b73f=_0x157e89[_0x30e366]||'図形',_0xfe6abe=0x4;for(let _0x5690f0=0x0;_0x5690f0<_0x14bf47;_0x5690f0++){const _0x373fb3=document[_0x4f636e(0x152)](_0x4f636e(0x16d));_0x373fb3[_0x4f636e(0x11a)]=_0x4f636e(0x173);const _0x29f413=document['createElement']('div');_0x29f413[_0x4f636e(0x11a)]='zukei-page-title',_0x29f413[_0x4f636e(0x112)]=_0x49b73f,_0x373fb3['appendChild'](_0x29f413);const _0x5d17f0=document[_0x4f636e(0x152)]('div');_0x5d17f0[_0x4f636e(0x11a)]=_0x4f636e(0x161);for(let _0x16dbb9=0x1;_0x16dbb9<=_0xfe6abe;_0x16dbb9++){const _0x38e825=makeProb(_0x30e366);_0x5d17f0[_0x4f636e(0x128)]+=probHTML(_0x16dbb9,_0x38e825),_0xe99a57['push']({'pageNo':_0x5690f0+0x1,'num':_0x16dbb9,'label':_0x38e825[_0x4f636e(0x175)]});}_0x373fb3[_0x4f636e(0x156)](_0x5d17f0),_0x586ac4['appendChild'](wrapPageForPreview(_0x373fb3));}appendAnswerPage(_0x586ac4,_0xe99a57,_0x14bf47,_0x49b73f),applyMobilePageScaling();}window['addEventListener'](a0_0x15a15b(0x115),()=>{const _0x2e9c74=a0_0x15a15b,_0x2d87de=new URLSearchParams(window[_0x2e9c74(0x153)][_0x2e9c74(0x11c)]),_0x529642=_0x2d87de[_0x2e9c74(0x147)](_0x2e9c74(0x10c));if(_0x529642){const _0x25c0f9=document[_0x2e9c74(0x101)](_0x2e9c74(0x10c));if(_0x25c0f9)_0x25c0f9[_0x2e9c74(0x14a)]=_0x529642;}document['getElementById'](_0x2e9c74(0x10c))?.[_0x2e9c74(0x100)]('change',generate),document[_0x2e9c74(0x101)]('count')?.[_0x2e9c74(0x100)](_0x2e9c74(0x16b),generate),generate();let _0x450214;window['addEventListener'](_0x2e9c74(0x13d),()=>{clearTimeout(_0x450214),_0x450214=setTimeout(applyMobilePageScaling,0x50);}),window[_0x2e9c74(0x100)]('beforeprint',applyMobilePageScaling),window[_0x2e9c74(0x100)]('afterprint',applyMobilePageScaling);});
+// =====================================================
+// うちトレ 図形ジェネレーター v3（完全新規）
+// =====================================================
+
+const FILL   = '#dbeafe';
+const STROKE = '#1e40af';
+
+function rand(a, b) {
+  return Math.floor(Math.random() * (b - a + 1)) + a;
+}
+
+// ────────────────────────────────────────────────────
+// SVGユーティリティ
+// ────────────────────────────────────────────────────
+function mksvg(w, h, inner) {
+  return `<svg width="${w}" height="${h}" viewBox="-10 -10 ${w+20} ${h+20}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+}
+
+// 寸法ラベル付き補助線
+function dimLabel(x1, y1, x2, y2, label) {
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const dx = -(y2-y1), dy = x2-x1;
+  const len = Math.sqrt(dx*dx+dy*dy) || 1;
+  const ox = dx/len*14, oy = dy/len*14;
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="${mx+ox}" y="${my+oy}" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#1e40af" font-weight="700">${label}</text>`;
+}
+
+// 垂線＋高さラベル
+function hLabel(x, y1, y2, label, side=1) {
+  const tx = x + side*16;
+  return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="#64748b" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="${x-4}" y1="${y1}" x2="${x+4}" y2="${y1}" stroke="#64748b" stroke-width="1.5"/>
+<line x1="${x-4}" y1="${y2}" x2="${x+4}" y2="${y2}" stroke="#64748b" stroke-width="1.5"/>
+<text x="${tx}" y="${(y1+y2)/2}" dominant-baseline="central" text-anchor="${side>0?'start':'end'}" font-size="12" fill="#1e40af" font-weight="700">${label}</text>`;
+}
+
+// ────────────────────────────────────────────────────
+// 図形SVG生成
+// ────────────────────────────────────────────────────
+
+// 長方形（縦横比を反映）
+function drawRect(wcm, hcm) {
+  const MAX=110, x=16, y=14;
+  const ratio = wcm / hcm;
+  let W, H;
+  if (ratio >= 1) { W = MAX; H = Math.max(Math.round(MAX / ratio), 35); }
+  else            { H = MAX; W = Math.max(Math.round(MAX * ratio), 35); }
+  const svgW = W + 55, svgH = H + 48;
+  return mksvg(svgW, svgH,
+    `<rect x="${x}" y="${y}" width="${W}" height="${H}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    dimLabel(x, y+H+13, x+W, y+H+13, wcm+'cm') +
+    hLabel(x+W+13, y, y+H, hcm+'cm')
+  );
+}
+
+// 正方形
+function drawSquare(scm) {
+  return drawRect(scm, scm);
+}
+
+// 三角形（4バリエーション）
+function drawTriangle(basecm, hcm, variant) {
+  const BW=115, H=85, bx=22, by=115;
+  let pts, apexX;
+  if      (variant===0) { apexX=bx;        } // 直角（左）
+  else if (variant===1) { apexX=bx+BW/2;   } // 二等辺
+  else if (variant===2) { apexX=bx-20;     } // 鈍角
+  else                  { apexX=bx+BW*0.7; } // 鋭角右寄り
+  const apexY = by - H;
+  pts = `${bx},${by} ${bx+BW},${by} ${apexX},${apexY}`;
+  // 底辺への垂足
+  const footX = Math.max(bx-25, Math.min(bx+BW, apexX));
+  const side = apexX > bx+BW/2 ? -1 : 1;
+  return mksvg(185, 148,
+    `<polygon points="${pts}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    dimLabel(bx, by+13, bx+BW, by+13, basecm+'cm') +
+    `<line x1="${footX}" y1="${by}" x2="${apexX}" y2="${apexY}" stroke="#64748b" stroke-width="1" stroke-dasharray="3,2"/>` +
+    `<line x1="${footX-4}" y1="${by}" x2="${footX+4}" y2="${by}" stroke="#64748b" stroke-width="1.5"/>` +
+    `<line x1="${footX-4}" y1="${apexY}" x2="${footX+4}" y2="${apexY}" stroke="#64748b" stroke-width="1.5"/>` +
+    `<text x="${apexX+side*16}" y="${(by+apexY)/2}" dominant-baseline="central" text-anchor="${side>0?'start':'end'}" font-size="12" fill="#1e40af" font-weight="700">${hcm}cm</text>`
+  );
+}
+
+// 平行四辺形
+function drawParallel(basecm, hcm) {
+  const sh=26, bx=16, by=14, W=112, H=82;
+  return mksvg(178, 134,
+    `<polygon points="${bx+sh},${by} ${bx+sh+W},${by} ${bx+W},${by+H} ${bx},${by+H}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    dimLabel(bx, by+H+13, bx+W, by+H+13, basecm+'cm') +
+    hLabel(bx+W+14, by, by+H, hcm+'cm')
+  );
+}
+
+// ひし形
+function drawRhombus(d1cm, d2cm) {
+  const cx=82, cy=62, rx=56, ry=42;
+  return mksvg(175, 132,
+    `<polygon points="${cx},${cy-ry} ${cx+rx},${cy} ${cx},${cy+ry} ${cx-rx},${cy}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    `<line x1="${cx-rx}" y1="${cy}" x2="${cx+rx}" y2="${cy}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>` +
+    `<line x1="${cx}" y1="${cy-ry}" x2="${cx}" y2="${cy+ry}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>` +
+    `<text x="${cx}" y="${cy+ry+14}" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">${d1cm}cm</text>` +
+    `<text x="${cx+rx+13}" y="${cy}" dominant-baseline="central" font-size="12" fill="#1e40af" font-weight="700">${d2cm}cm</text>`
+  );
+}
+
+// 台形（上底・下底・高さ）
+function drawTrapezoid(topcm, botcm, hcm) {
+  const bx=14, by=14, H=82, botW=118;
+  const topW = botW * (topcm/botcm);
+  const off  = (botW-topW)/2;
+  return mksvg(182, 136,
+    `<polygon points="${bx+off},${by} ${bx+off+topW},${by} ${bx+botW},${by+H} ${bx},${by+H}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    dimLabel(bx, by+H+13, bx+botW, by+H+13, botcm+'cm') +
+    dimLabel(bx+off, by-13, bx+off+topW, by-13, topcm+'cm') +
+    hLabel(bx+botW+15, by, by+H, hcm+'cm')
+  );
+}
+
+// 円
+function drawCircle(rcm) {
+  const cx=85, cy=68, R=56;
+  return mksvg(175, 148,
+    `<circle cx="${cx}" cy="${cy}" r="${R}" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    `<line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,2"/>` +
+    `<text x="${cx+R/2}" y="${cy-9}" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">${rcm}cm</text>` +
+    `<text x="${cx}" y="${cy+R+14}" text-anchor="middle" font-size="11" fill="#64748b">（半径）</text>`
+  );
+}
+
+// おうぎ形（割り切れる角度のみ）
+function drawSector(rcm, angle) {
+  const cx=88, cy=90, R=68;
+  const rad = angle * Math.PI / 180;
+  const x2  = cx + R*Math.cos(rad);
+  const y2  = cy - R*Math.sin(rad);  // SVGはy軸反転なし → +sin で下
+  // 上方向（-π/2）から時計回りに描く
+  const startRad = -Math.PI/2;
+  const endRad   = startRad + angle*Math.PI/180;
+  const ex = cx + R*Math.cos(endRad);
+  const ey = cy + R*Math.sin(endRad);
+  const sx = cx + R*Math.cos(startRad);
+  const sy = cy + R*Math.sin(startRad);
+  const lg = angle > 180 ? 1 : 0;
+  const midRad = startRad + angle*Math.PI/180/2;
+  const tx = cx + R*0.45*Math.cos(midRad);
+  const ty = cy + R*0.45*Math.sin(midRad);
+  return mksvg(188, 168,
+    `<path d="M${cx},${cy} L${sx},${sy} A${R},${R} 0 ${lg} 1 ${ex},${ey} Z" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>` +
+    `<text x="${(cx+sx)/2+8}" y="${(cy+sy)/2}" text-anchor="start" dominant-baseline="central" font-size="12" fill="#1e40af" font-weight="700">${rcm}cm</text>` +
+    `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#1e40af" font-weight="900">${angle}°</text>`
+  );
+}
+
+// 直方体
+function drawCuboid(wcm, dcm, hcm) {
+  const x=22, y=22, W=92, D=30, H=80;
+  return mksvg(178, 162,
+    `<polygon points="${x},${y+D} ${x+W},${y+D} ${x+W},${y+D+H} ${x},${y+D+H}" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>` +
+    `<polygon points="${x},${y+D} ${x+D},${y} ${x+W+D},${y} ${x+W},${y+D}" fill="#eff6ff" stroke="${STROKE}" stroke-width="2"/>` +
+    `<polygon points="${x+W},${y+D} ${x+W+D},${y} ${x+W+D},${y+H} ${x+W},${y+D+H}" fill="#dbeafe" stroke="${STROKE}" stroke-width="2"/>` +
+    dimLabel(x, y+D+H+14, x+W, y+D+H+14, wcm+'cm') +
+    `<text x="${x+W+D+11}" y="${y+H/2+D/2}" dominant-baseline="central" font-size="12" fill="#1e40af" font-weight="700">${dcm}cm</text>` +
+    `<text x="${x-12}" y="${y+D+H/2}" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#1e40af" font-weight="700">${hcm}cm</text>`
+  );
+}
+
+// 円柱
+function drawCylinder(rcm, hcm) {
+  const cx=86, y=18, rx=56, ry=14, H=95;
+  return mksvg(178, 160,
+    `<rect x="${cx-rx}" y="${y+ry}" width="${rx*2}" height="${H}" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>` +
+    `<ellipse cx="${cx}" cy="${y+ry+H}" rx="${rx}" ry="${ry}" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>` +
+    `<ellipse cx="${cx}" cy="${y+ry}" rx="${rx}" ry="${ry}" fill="#eff6ff" stroke="${STROKE}" stroke-width="2"/>` +
+    `<line x1="${cx}" y1="${y+ry}" x2="${cx+rx}" y2="${y+ry}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,2"/>` +
+    `<text x="${cx+rx/2}" y="${y+ry-10}" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">${rcm}cm</text>` +
+    hLabel(cx+rx+14, y+ry, y+ry+H, hcm+'cm')
+  );
+}
+
+// ────────────────────────────────────────────────────
+// 問題生成
+// ────────────────────────────────────────────────────
+function makeProb(pageType) {
+  const pools = {
+    menseki:        ['rect','square','triangle','triangle','parallel','rhombus','trapezoid'],
+    enshuu_menseki: ['circle','circle','sector','sector'],
+    taieki:         ['cuboid'],
+    entai:          ['cylinder'],
+  };
+  const pool = pools[pageType] || pools.menseki;
+  const type = pool[rand(0, pool.length-1)];
+  const a = rand(3,13), b = rand(3,13);
+
+  if (type==='rect') {
+    return { svg:drawRect(a,b), q:'長方形の面積を求めなさい。', formula:'たて × よこ', ans:a*b+'cm²' };
+  }
+  if (type==='square') {
+    return { svg:drawSquare(a), q:'正方形の面積を求めなさい。', formula:'一辺 × 一辺', ans:a*a+'cm²' };
+  }
+  if (type==='triangle') {
+    const v=rand(0,3);
+    return { svg:drawTriangle(a,b,v), q:'三角形の面積を求めなさい。', formula:'底辺 × 高さ ÷ 2', ans:(a*b/2)+'cm²' };
+  }
+  if (type==='parallel') {
+    return { svg:drawParallel(a,b), q:'平行四辺形の面積を求めなさい。', formula:'底辺 × 高さ', ans:a*b+'cm²' };
+  }
+  if (type==='rhombus') {
+    return { svg:drawRhombus(a,b), q:'ひし形の面積を求めなさい。', formula:'対角線 × 対角線 ÷ 2', ans:(a*b/2)+'cm²' };
+  }
+  if (type==='trapezoid') {
+    const top=rand(3,9), bot=rand(top+2,13), h=rand(3,9);
+    return { svg:drawTrapezoid(top,bot,h), q:'台形の面積を求めなさい。', formula:'（上底 + 下底）× 高さ ÷ 2', ans:((top+bot)*h/2)+'cm²' };
+  }
+  if (type==='circle') {
+    const r=rand(2,9);
+    return { svg:drawCircle(r), q:'円の面積（π≒3.14）を求めなさい。', formula:'半径 × 半径 × 3.14', ans:(r*r*3.14)+'cm²' };
+  }
+  if (type==='sector') {
+    const r=rand(3,9);
+    // angle÷360 が割り切れる角度のみ（循環小数を防ぐ）
+    const angles=[36,45,72,90,108,144,180,216,252,288,324];
+    const angle=angles[rand(0,angles.length-1)];
+    return { svg:drawSector(r,angle), q:'おうぎ形の面積（π≒3.14）を求めなさい。', formula:'半径 × 半径 × 3.14 × 中心角 ÷ 360', ans:(r*r*3.14*(angle/360))+'cm²' };
+  }
+  if (type==='cuboid') {
+    const w=rand(2,11), d=rand(2,9), h=rand(2,11);
+    return { svg:drawCuboid(w,d,h), q:'直方体の体積を求めなさい。', formula:'たて × よこ × 高さ', ans:(w*d*h)+'cm³' };
+  }
+  if (type==='cylinder') {
+    const r=rand(2,8), h=rand(3,12);
+    return { svg:drawCylinder(r,h), q:'円柱の体積（π≒3.14）を求めなさい。', formula:'半径 × 半径 × 3.14 × 高さ', ans:(r*r*3.14*h)+'cm³' };
+  }
+  return makeProb('menseki');
+}
+
+// ────────────────────────────────────────────────────
+// HTML生成・表示
+// ────────────────────────────────────────────────────
+function probHTML(num, prob) {
+  return `<div class="zukei-item">
+  <div class="zukei-header"><span class="zukei-num">（${num}）</span><span class="zukei-q">${prob.q}</span></div>
+  <div class="zukei-formula-hint">公式：${prob.formula}</div>
+  <div class="zukei-shape">${prob.svg}</div>
+  <div class="zukei-ans-row"><span class="zukei-ans-label">答え</span><span class="zukei-blank-long"></span></div>
+</div>`;
+}
+
+function wrapPage(page) {
+  const w = document.createElement('div'); w.className = 'page-preview-wrap';
+  const b = document.createElement('div'); b.className = 'page-scale-box';
+  b.appendChild(page); w.appendChild(b); return w;
+}
+
+function buildAnswerPage(answers, count, title) {
+  const w = document.createElement('div'); w.className = 'page-preview-wrap';
+  const b = document.createElement('div'); b.className = 'page-scale-box';
+  const p = document.createElement('div'); p.className = 'zukei-page answer-page';
+  const t = document.createElement('div'); t.className = 'zukei-page-title';
+  t.textContent = title + '\u3000答え'; p.appendChild(t);
+  for (let pg=1; pg<=count; pg++) {
+    const items = answers.filter(a => a.pageNo===pg);
+    if (!items.length) continue;
+    const sec  = document.createElement('div'); sec.className  = 'answer-section';
+    if (count>1) {
+      const lbl = document.createElement('div'); lbl.className = 'answer-page-label';
+      lbl.textContent = pg+'枚目'; sec.appendChild(lbl);
+    }
+    const grid = document.createElement('div'); grid.className = 'answer-grid';
+    items.forEach(({num,label}) => {
+      const i = document.createElement('div'); i.className = 'answer-item';
+      i.innerHTML = `<span class="answer-num">（${num}）</span><span class="answer-val">${label}</span>`;
+      grid.appendChild(i);
+    });
+    sec.appendChild(grid); p.appendChild(sec);
+  }
+  b.appendChild(p); w.appendChild(b); return w;
+}
+
+function applyMobilePageScaling() {
+  document.querySelectorAll('.page-preview-wrap').forEach(wrap => {
+    const box  = wrap.querySelector('.page-scale-box');
+    const page = wrap.querySelector('.zukei-page');
+    if (!box||!page) return;
+    const W=page.scrollWidth, H=page.scrollHeight;
+    if (!W||!H) return;
+    if (window.innerWidth>640 || window.matchMedia('print').matches) {
+      box.style.width=W+'px'; box.style.height=H+'px'; return;
+    }
+    const avail = Math.max(wrap.clientWidth-8, 0);
+    if (!avail) return;
+    const sc = Math.min(1, avail/W);
+    wrap.classList.add('scaled');
+    box.style.width=W*sc+'px'; box.style.height=H*sc+'px';
+    page.style.transform='scale('+sc+')';
+  });
+}
+
+async function downloadPDF() {
+  const pages = document.querySelectorAll('.zukei-page');
+  if (!pages.length) { alert('先に生成してください'); return; }
+  if (!window.html2canvas||!window.jspdf) { alert('ライブラリ読み込み失敗。'); return; }
+  const {jsPDF} = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  for (let i=0; i<pages.length; i++) {
+    const c = await html2canvas(pages[i],{scale:2,useCORS:true});
+    if (i>0) pdf.addPage();
+    pdf.addImage(c.toDataURL('image/png'),'PNG',0,0,210,297);
+  }
+  pdf.save('zukei.pdf');
+}
+
+function generate() {
+  const pageType  = document.getElementById('mode')?.value || 'menseki';
+  const count     = parseInt(document.getElementById('count').value);
+  const container = document.getElementById('pages');
+  container.innerHTML = '';
+  const titles = {
+    menseki:'図形の面積', enshuu_menseki:'円の面積',
+    taieki:'体積（直方体・立方体）', entai:'円柱の体積'
+  };
+  const title   = titles[pageType] || '図形';
+  const answers = [];
+  for (let p=0; p<count; p++) {
+    const page = document.createElement('div'); page.className='zukei-page';
+    const t    = document.createElement('div'); t.className='zukei-page-title'; t.textContent=title; page.appendChild(t);
+    const grid = document.createElement('div'); grid.className='zukei-grid';
+    for (let n=1; n<=4; n++) {
+      const prob = makeProb(pageType);
+      grid.innerHTML += probHTML(n, prob);
+      answers.push({pageNo:p+1, num:n, label:prob.ans});
+    }
+    page.appendChild(grid);
+    container.appendChild(wrapPage(page));
+  }
+  container.appendChild(buildAnswerPage(answers, count, title));
+  applyMobilePageScaling();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const mode   = params.get('mode');
+  if (mode) { const el=document.getElementById('mode'); if(el) el.value=mode; }
+  document.getElementById('mode')?.addEventListener('change', generate);
+  document.getElementById('count')?.addEventListener('change', generate);
+  generate();
+  let t;
+  window.addEventListener('resize', ()=>{ clearTimeout(t); t=setTimeout(applyMobilePageScaling,80); });
+  window.addEventListener('beforeprint', applyMobilePageScaling);
+  window.addEventListener('afterprint',  applyMobilePageScaling);
+});

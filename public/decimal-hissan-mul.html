@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小数のかけ算・わり算（ひっ算）| うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .dec-problem{
+      position: relative; width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: flex-end; justify-content: flex-start;
+      padding-top: 10mm; padding-bottom: 2px;
+    }
+    .decimal-hissan-grid{
+      grid-template-rows: repeat(6, 1fr);
+      gap: 3mm 12mm;
+      height: calc(297mm - 10mm - 18mm);
+    }
+    .dec-problem-num{ position:absolute; top:-2px; left:0; font-size:13px; color:#475569; }
+    .dec-row{ display:flex; align-items:flex-end; justify-content:flex-end; line-height:1; margin-bottom:1px; }
+    .dec-op{ font-size:24px; font-weight:700; width:22px; text-align:center; margin-right:2px; }
+    .dec-digit{ font-size:24px; font-weight:700; width:22px; text-align:center; letter-spacing:0; }
+    .dec-digit.empty{ opacity:0; }
+    .dec-dot{ font-size:24px; font-weight:900; width:10px; text-align:center; padding-bottom:1px; }
+    .dec-dot.empty{ opacity:0; }
+    .dec-line{ border-bottom:2px solid #000; width:100%; margin-top:3px; }
+    .page.answer-page{ height:auto; min-height:80mm; }
+  </style>
+</head>
+<body data-page-type="decimal-hissan-mul">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ">
+      <div>
+        <div class="logo-text">うちトレ</div>
+        <div class="logo-sub">Uchitore</div>
+      </div>
+    </div>
+
+    <div class="header-row no-print">
+      <div>
+        <div style="display:none;"></div>
+        <h1>小数のかけ算・わり算（ひっ算）</h1>
+        <div class="small-note">小数×整数・小数÷整数の筆算練習です。</div>
+      </div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="op">演算</label>
+        <select id="op">
+          <option value="mul" selected>かけ算（×）</option>
+          <option value="div">割り算（÷）</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="level">レベル</label>
+        <select id="level">
+          <option value="1" selected>小数第1位</option>
+          <option value="2">小数第2位</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  const MAX = 3000;
+  function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function toFixed(n, p){ return parseFloat(n.toFixed(p)); }
+
+  function makeProblem(op, level){
+    for(let i=0; i<MAX; i++){
+      const places = parseInt(level);
+      if(op === 'mul'){
+        // 小数(第1位or第2位) × 整数(1桁)
+        const factor = Math.pow(10, places);
+        const aInt = rand(11, 99); // 1.1〜9.9 or 1.11〜9.99
+        const a = toFixed(aInt / factor, places);
+        const b = rand(2, 9);
+        const ans = toFixed(a * b, places);
+        if(ans > 0 && ans < 100) return { a, b, ans, op:'×' };
+      } else {
+        // 小数÷整数(1桁) = きれいに割り切れる
+        const factor = Math.pow(10, places);
+        const b = rand(2, 9);
+        const ansInt = rand(11, 99);
+        const ans = toFixed(ansInt / factor, places);
+        const a = toFixed(b * ans, places + 1 > 2 ? 2 : places);
+        if(a > 0 && ans > 0) return { a, b, ans, op:'÷' };
+      }
+    }
+    return op === 'mul'
+      ? { a: 3.2, b: 4, ans: 12.8, op: '×' }
+      : { a: 6.4, b: 4, ans: 1.6, op: '÷' };
+  }
+
+  function parseDigits(num){
+    const str = num.toString();
+    const [intStr, fracStr=''] = str.split('.');
+    const intPadded = intStr.padStart(3, '\x00');
+    const fracPadded = (fracStr + '\x00\x00').slice(0,2);
+    return {
+      int3: intPadded[0] === '\x00' ? null : intPadded[0],
+      int2: intPadded[1] === '\x00' ? null : intPadded[1],
+      int1: intPadded[2],
+      hasDot: fracStr.length > 0,
+      frac1: fracPadded[0] === '\x00' ? null : fracPadded[0],
+      frac2: fracPadded[1] === '\x00' ? null : fracPadded[1],
+    };
+  }
+
+  function digitRowHTML(digits, opSymbol){
+    const d = (val) =>
+      `<span class="dec-digit${val===null?' empty':''}">${val===null?'0':val}</span>`;
+    const dot = digits.hasDot
+      ? `<span class="dec-dot">.</span>`
+      : `<span class="dec-dot empty">.</span>`;
+    const op = opSymbol
+      ? `<span class="dec-op">${opSymbol}</span>`
+      : `<span class="dec-op" style="opacity:0">×</span>`;
+    return `${op}${d(digits.int3)}${d(digits.int2)}${d(digits.int1)}${dot}${d(digits.frac1)}${d(digits.frac2)}`;
+  }
+
+  // わり算は除数（整数）を右側に表示する
+  function divRowHTML(a, b){
+    const da = parseDigits(a);
+    return `
+      <div class="dec-problem">
+        <div style="width:100%;font-size:13px;font-weight:700;color:#475569;margin-bottom:4px;text-align:right;">
+          ${a} ÷ ${b} =
+        </div>
+        <div style="height:60px;"></div>
+      </div>`;
+  }
+
+  function problemHTML(num, prob){
+    if(prob.op === '÷'){
+      // 割り算は横式で表示（筆算スペース付き）
+      return `
+        <div class="dec-problem">
+          <div class="dec-problem-num">(${num})</div>
+          <div style="font-size:22px;font-weight:700;text-align:right;padding-right:4px;margin-top:4px;">
+            ${prob.a} ÷ ${prob.b} =
+          </div>
+        </div>`;
+    }
+    // かけ算は縦式
+    // aの小数桁数を取得 → bをその列に右詰め配置
+    const da = parseDigits(prob.a);
+    const aStr = prob.a.toString();
+    const decPlaces = aStr.includes('.') ? aStr.split('.')[1].length : 0;
+    const bStr = prob.b.toString(); // 常に1桁整数
+
+    // 空セル生成ヘルパー
+    const d = (val) => `<span class="dec-digit${val===null?' empty':''}">${val===null?'0':val}</span>`;
+    const emptyDot = `<span class="dec-dot empty">.</span>`;
+    const opSpan = `<span class="dec-op">×</span>`;
+
+    // bの桁を小数部の右端に揃える
+    // 列順: int3 | int2 | int1 | dot | frac1 | frac2
+    let bRow;
+    if(decPlaces >= 2){
+      // b → frac2の位置
+      bRow = `${opSpan}${d(null)}${d(null)}${d(null)}${emptyDot}${d(null)}${d(bStr)}`;
+    } else {
+      // b → frac1の位置（小数第1位）
+      bRow = `${opSpan}${d(null)}${d(null)}${d(null)}${emptyDot}${d(bStr)}${d(null)}`;
+    }
+
+    return `
+      <div class="dec-problem">
+        <div class="dec-problem-num">(${num})</div>
+        <div class="dec-row">${digitRowHTML(da, null)}</div>
+        <div class="dec-row">${bRow}</div>
+        <div class="dec-line"></div>
+      </div>`;
+  }
+
+  function wrapPage(page){
+    const wrap = document.createElement('div');
+    wrap.className = 'page-preview';
+    const scaleBox = document.createElement('div');
+    scaleBox.className = 'page-scale-box';
+    scaleBox.appendChild(page);
+    wrap.appendChild(scaleBox);
+    return wrap;
+  }
+
+  function generate(){
+    const op    = document.getElementById('op').value;
+    const level = document.getElementById('level').value;
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('pages');
+    container.innerHTML = '';
+    const allProblems = [];
+
+    for(let p=0; p<count; p++){
+      const usedKeys = new Set();
+      const problems = [];
+      for(let i=1; i<=18; i++){
+        let prob;
+        for(let t=0; t<200; t++){
+          prob = makeProblem(op, level);
+          const key = `${prob.a},${prob.b}`;
+          if(!usedKeys.has(key)){ usedKeys.add(key); break; }
+        }
+        problems.push(prob);
+        allProblems.push({ pageNo: p+1, num: i, prob });
+      }
+      const page = document.createElement('div');
+      page.className = 'page';
+      const grid = document.createElement('div');
+      grid.className = 'problem-grid decimal-hissan-grid';
+      problems.forEach((prob, idx) => {
+        grid.innerHTML += problemHTML(idx+1, prob);
+      });
+      page.appendChild(grid);
+      container.appendChild(wrapPage(page));
+    }
+
+    // 答えページ
+    const ansPage = document.createElement('div');
+    ansPage.className = 'page answer-page';
+    const header = document.createElement('div');
+    header.className = 'answer-page-header';
+    const opLabel = op==='mul' ? 'かけ算' : '割り算';
+    header.textContent = `小数のかけ算・わり算（ひっ算）　${opLabel}　答え`;
+    ansPage.appendChild(header);
+    for(let p=1; p<=count; p++){
+      const probs = allProblems.filter(x=>x.pageNo===p);
+      const section = document.createElement('div');
+      section.className = 'answer-section';
+      if(count>1){
+        const lbl = document.createElement('div');
+        lbl.className = 'answer-section-label';
+        lbl.textContent = `${p}枚目`;
+        section.appendChild(lbl);
+      }
+      const grid = document.createElement('div');
+      grid.className = 'answer-grid';
+      probs.forEach(({num, prob}) => {
+        const item = document.createElement('div');
+        item.className = 'answer-item';
+        item.innerHTML = `<span class="answer-num">(${num})</span><span class="answer-val">${prob.ans}</span>`;
+        grid.appendChild(item);
+      });
+      section.appendChild(grid);
+      ansPage.appendChild(section);
+    }
+    const ansWrap = document.createElement('div');
+    ansWrap.className = 'page-preview';
+    const ansScaleBox = document.createElement('div');
+    ansScaleBox.className = 'page-scale-box';
+    ansScaleBox.appendChild(ansPage);
+    ansWrap.appendChild(ansScaleBox);
+    container.appendChild(ansWrap);
+    applyMobilePageScaling();
+  }
+
+  function applyMobilePageScaling(){
+    document.querySelectorAll('.page-preview').forEach(wrapper => {
+      const scaleBox = wrapper.querySelector('.page-scale-box');
+      const page     = wrapper.querySelector('.page');
+      if(!scaleBox || !page) return;
+      if(page.classList.contains('answer-page')) return;
+      wrapper.classList.remove('is-scaled');
+      scaleBox.style.width = ''; scaleBox.style.height = '';
+      page.style.transform = '';
+      const pw = page.offsetWidth, ph = page.offsetHeight;
+      if(!pw || !ph) return;
+      if(window.innerWidth > 640 || window.matchMedia('print').matches){
+        scaleBox.style.width = pw+'px'; scaleBox.style.height = ph+'px'; return;
+      }
+      const avail = Math.max(wrapper.clientWidth-8, 0);
+      if(!avail) return;
+      const scale = Math.min(1, avail/pw);
+      wrapper.classList.add('is-scaled');
+      scaleBox.style.width  = (pw*scale)+'px';
+      scaleBox.style.height = (ph*scale)+'px';
+      page.style.transform  = `scale(${scale})`;
+    });
+  }
+
+  async function downloadPDF(){
+    const pages = document.querySelectorAll('.page');
+    if(!pages.length){ alert('先に「生成」を押してください。'); return; }
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    for(let i=0; i<pages.length; i++){
+      const canvas = await html2canvas(pages[i], { scale:2, useCORS:true });
+      if(i>0) pdf.addPage();
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
+    }
+    pdf.save('decimal_mul_hissan.pdf');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const op = new URLSearchParams(location.search).get('op');
+    if(op) document.getElementById('op').value = op;
+    generate();
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t=setTimeout(applyMobilePageScaling,80); });
+    window.addEventListener('beforeprint', applyMobilePageScaling);
+    window.addEventListener('afterprint',  applyMobilePageScaling);
+  });
+  </script>
+<!-- ログインガード -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body>
+</html>

@@ -35,9 +35,9 @@
       <div class="control-group">
         <label for="digit1">上の数の桁</label>
         <select id="digit1">
-          <option value="1">1</option>
-          <option value="2" selected>2</option>
-          <option value="3">3</option>
+          <option value="1">1桁</option>
+          <option value="2" selected>2桁</option>
+          <option value="3">3桁</option>
         </select>
       </div>
 
@@ -70,6 +70,36 @@
     <div id="pages"></div>
   </div>
   <script src="assets/generator.js"></script>
+  <script>
+  // ── 1桁－1桁バグ修正 ─────────────────────────────────────
+  // generator.js は 1桁×1桁を強制的に 2桁×1桁へ変換してしまうため上書き
+
+  normalizeSubtractionDigits = function(topDigits, bottomDigits) {
+    if (topDigits < bottomDigits) topDigits = bottomDigits;
+    return { topDigits: topDigits, bottomDigits: bottomDigits };
+  };
+
+  makeSubtractionProblem = function(topDigits, bottomDigits) {
+    var norm = normalizeSubtractionDigits(topDigits, bottomDigits);
+    var td = norm.topDigits, bd = norm.bottomDigits;
+    var topMin = td === 1 ? 1 : Math.pow(10, td - 1);
+    var topMax = Math.pow(10, td) - 1;
+    var botMin = bd === 1 ? 1 : Math.pow(10, bd - 1);
+    var botMax = Math.pow(10, bd) - 1;
+
+    for (var i = 0; i < 5000; i++) {
+      var a = Math.floor(Math.random() * (topMax - topMin + 1)) + topMin;
+      var b = Math.floor(Math.random() * (botMax - botMin + 1)) + botMin;
+      if (a > b && (a - b) >= 1 && hasBorrow(a, b)) return [a, b];
+    }
+    for (var j = 0; j < 5000; j++) {
+      var a = Math.floor(Math.random() * (topMax - topMin + 1)) + topMin;
+      var b = Math.floor(Math.random() * (botMax - botMin + 1)) + botMin;
+      if (a > b && (a - b) >= 1) return [a, b];
+    }
+    return [topMin + 1, 1];
+  };
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
   <script src="assets/tablet-v2.js?v=28"></script>
 <!-- ログインガード -->

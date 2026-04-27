@@ -283,6 +283,7 @@ body{padding-top:52px;}
     👋 こんにちは、<span class="user-nav-name" id="navUserName">...</span> さん
   </div>
   <div class="user-nav-right">
+    <a href="/admin/index.html" class="user-nav-btn" id="adminDashBtn" style="display:none;background:#fef3c7;color:#b45309;border-color:#fcd34d;font-weight:700">🛠️ 管理画面</a>
     <a href="/settings.html" class="user-nav-btn">⚙️ 設定</a>
     <a href="/contact.html"  class="user-nav-btn">💬 お問い合わせ</a>
     <button class="user-nav-btn logout" onclick="signOutUser()">ログアウト</button>
@@ -342,6 +343,30 @@ body{padding-top:52px;}
         <div class="card-title">すうじをかこう（21〜100）</div>
         <div class="card-desc">21〜100のなぞり練習。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">幼児　すうじのじゅんばん・かずをかぞえる・えでたしざん</div>
+    <div class="cards">
+      <a href="suuji-jun.html" class="card" data-test-unit="suuji-jun" data-no-test="1">
+        <div class="card-icon" style="background:#fff7ed;">📋</div>
+        <div class="card-title">すうじのじゅんばん（虫食い）</div>
+        <div class="card-desc">並んだ数字の□を埋める。例：2 3 □ 5 □ 7</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="kazu-kazoeru.html" class="card" data-test-unit="kazu-kazoeru" data-no-test="1">
+        <div class="card-icon" style="background:#f0fdf4;">🍎</div>
+        <div class="card-title">かずをかぞえよう（10進法）</div>
+        <div class="card-desc">5個ずつ並んだ絵を数える。10のまとまりの感覚を身につける。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
+      </a>
+      <a href="ezu-tashizan.html" class="card" data-test-unit="ezu-tashizan" data-no-test="1">
+        <div class="card-icon" style="background:#faf5ff;">🎨</div>
+        <div class="card-title">えでたしざん</div>
+        <div class="card-desc">絵を見て足し算。🍎3個＋🍎2個＝何個？</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span></div>
       </a>
     </div>
   </div>
@@ -561,7 +586,7 @@ body{padding-top:52px;}
       <a href="zukei.html" class="card" data-test-unit="zukei">
         <div class="card-icon" style="background:#f0fdf4;">📐</div>
         <div class="card-title">面積（三角形・台形・ひし形など）</div>
-        <div class="card-desc">図形を見て面積を求める。公式ヒント付き。</div>
+        <div class="card-desc">図形を見て面積を求める。</div>
         <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
       <a href="zukei-en.html" class="card" data-test-unit="zukei-en">
@@ -661,74 +686,122 @@ body{padding-top:52px;}
   </div>
 
   <div class="curriculum-group">
-    <div class="curriculum-label">中1　正負の数・文字式・一次方程式</div>
+    <div class="curriculum-label">中1　正負の数・文字式・方程式・図形</div>
     <div class="cards">
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <a href="seifuno.html?op=add" class="card" data-test-unit="seifuno-add">
         <div class="card-icon" style="background:#eff6ff;">±</div>
-        <div class="card-title">正負の数</div>
-        <div class="card-desc">加減乗除。絶対値。</div>
-        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+        <div class="card-title">正負の数（加法）</div>
+        <div class="card-desc">負の数を含む足し算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
-        <div class="card-icon" style="background:#eff6ff;">🔡</div>
-        <div class="card-title">文字式</div>
-        <div class="card-desc">式の計算・展開。</div>
-        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      <a href="seifuno.html?op=sub" class="card" data-test-unit="seifuno-sub">
+        <div class="card-icon" style="background:#eff6ff;">±</div>
+        <div class="card-title">正負の数（減法）</div>
+        <div class="card-desc">負の数を含む引き算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
       </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <a href="seifuno.html?op=mul" class="card" data-test-unit="seifuno-mul">
+        <div class="card-icon" style="background:#eff6ff;">±</div>
+        <div class="card-title">正負の数（乗法）</div>
+        <div class="card-desc">負の数を含む掛け算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="seifuno.html?op=div" class="card" data-test-unit="seifuno-div">
+        <div class="card-icon" style="background:#eff6ff;">±</div>
+        <div class="card-title">正負の数（除法）</div>
+        <div class="card-desc">負の数を含む割り算。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="monjishiki-dainy.html" class="card" data-test-unit="monjishiki-dainy">
+        <div class="card-icon" style="background:#eff6ff;">🔢</div>
+        <div class="card-title">文字式　式の値（代入）</div>
+        <div class="card-desc">x の値を代入して式の値を求める練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="monjishiki-kasn.html" class="card" data-test-unit="monjishiki-kasn">
+        <div class="card-icon" style="background:#f0fdf4;">➕</div>
+        <div class="card-title">文字式　同類項の整理（加減）</div>
+        <div class="card-desc">同類項をまとめて整理する練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <a href="monjishiki-josn.html" class="card" data-test-unit="monjishiki-josn">
+        <div class="card-icon" style="background:#fdf4ff;">✖️</div>
+        <div class="card-title">文字式　乗除</div>
+        <div class="card-desc">文字式の掛け算・割り算の練習。</div>
+        <div class="card-pills"><span class="pill pill-ok">✅ 使用可能</span><span class="pill pill-new">✏️ タブレット</span></div>
+      </a>
+      <div class="card" style="opacity:.6;">
         <div class="card-icon" style="background:#eff6ff;">🟰</div>
         <div class="card-title">一次方程式</div>
-        <div class="card-desc">方程式の解き方。</div>
+        <div class="card-desc">方程式を解く・文章題。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
-    </div>
-  </div>
-
-  <div class="curriculum-group">
-    <div class="curriculum-label">中2　連立方程式・一次関数</div>
-    <div class="cards">
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      </div>
+      <div class="card" style="opacity:.6;">
         <div class="card-icon" style="background:#eff6ff;">📊</div>
-        <div class="card-title">連立方程式</div>
-        <div class="card-desc">代入法・加減法。</div>
+        <div class="card-title">比例と反比例</div>
+        <div class="card-desc">グラフ・座標・変化。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
-        <div class="card-icon" style="background:#eff6ff;">📈</div>
-        <div class="card-title">一次関数</div>
-        <div class="card-desc">グラフ・傾き・切片。</div>
-        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
+      </div>
     </div>
   </div>
 
   <div class="curriculum-group">
-    <div class="curriculum-label">中3　二次方程式・二次関数・平方根</div>
+    <div class="curriculum-label">中2　方程式・関数・確率・図形</div>
     <div class="cards">
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      <div class="card" style="opacity:.6;">
+        <div class="card-icon" style="background:#eff6ff;">🔢</div>
+        <div class="card-title">式の計算</div>
+        <div class="card-desc">単項式・多項式の計算。</div>
+        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      </div>
+      <div class="card" style="opacity:.6;">
+        <div class="card-icon" style="background:#eff6ff;">🔄</div>
+        <div class="card-title">連立方程式</div>
+        <div class="card-desc">加減法・代入法・文章題。</div>
+        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      </div>
+      <div class="card" style="opacity:.6;">
+        <div class="card-icon" style="background:#eff6ff;">📉</div>
+        <div class="card-title">一次関数</div>
+        <div class="card-desc">y=ax+b・傾き・切片・グラフ。</div>
+        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="curriculum-group">
+    <div class="curriculum-label">中3　平方根・方程式・関数・図形</div>
+    <div class="cards">
+      <div class="card" style="opacity:.6;">
         <div class="card-icon" style="background:#eff6ff;">√</div>
         <div class="card-title">平方根</div>
-        <div class="card-desc">根号の計算・有理化。</div>
+        <div class="card-desc">根号の計算・有理化・近似値。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
-        <div class="card-icon" style="background:#eff6ff;">📐</div>
-        <div class="card-title">因数分解</div>
-        <div class="card-desc">多項式の因数分解。</div>
+      </div>
+      <div class="card" style="opacity:.6;">
+        <div class="card-icon" style="background:#eff6ff;">🔣</div>
+        <div class="card-title">多項式・因数分解</div>
+        <div class="card-desc">展開・因数分解・乗法公式。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      </div>
+      <div class="card" style="opacity:.6;">
         <div class="card-icon" style="background:#eff6ff;">🟰</div>
         <div class="card-title">二次方程式</div>
-        <div class="card-desc">解の公式・因数分解。</div>
+        <div class="card-desc">因数分解・解の公式。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
-      <a href="#" class="card" style="opacity:.6;pointer-events:none;">
+      </div>
+      <div class="card" style="opacity:.6;">
         <div class="card-icon" style="background:#eff6ff;">📈</div>
         <div class="card-title">二次関数</div>
-        <div class="card-desc">放物線・頂点・軸。</div>
+        <div class="card-desc">y=ax²・頂点・最大最小。</div>
         <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
-      </a>
+      </div>
+      <div class="card" style="opacity:.6;">
+        <div class="card-icon" style="background:#eff6ff;">📐</div>
+        <div class="card-title">三平方の定理</div>
+        <div class="card-desc">ピタゴラスの定理・辺の長さ。</div>
+        <div class="card-pills"><span class="pill pill-soon">🔜 近日追加</span></div>
+      </div>
     </div>
   </div>
 
@@ -769,6 +842,13 @@ const urlMap = {
   'subtraction-horizontal':    'subtraction-horizontal.html',
   'multiplication-horizontal': 'multiplication-horizontal.html',
   'division-horizontal':       'division-horizontal.html',
+  // 中学数学
+  'ichijikansu':    'ichijikansu.html',
+  'renritsu':       'renritsu.html',
+  'nijihoteishiki': 'nijihoteishiki.html',
+  'nijijikansu':    'nijijikansu.html',
+  'sanpei':         'sanpei.html',
+  'kakuritsu':      'kakuritsu.html',
 };
 const labelOp  = {addition:'足し算',subtraction:'引き算',multiplication:'かけ算',division:'割り算'};
 const labelFmt = {hissan:'ひっ算',horizontal:'横式'};
@@ -873,6 +953,9 @@ window.addEventListener('DOMContentLoaded', () => {
       const snap = await firebase.firestore().collection('users').doc(user.uid).get();
       const name = snap.data()?.name || user.email;
       document.getElementById('navUserName').textContent = name;
+      if (snap.data()?.role === 'admin') {
+        document.getElementById('adminDashBtn').style.display = '';
+      }
     } catch(e) {
       document.getElementById('navUserName').textContent = user.email;
     }
@@ -916,14 +999,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const unitId = card.dataset.testUnit;
     const prog   = progress[unitId] || {};
     const passed  = prog.passed || false;
-    // 管理者は全アンロック
-    const unlocked = isAdmin || prog.unlocked || passed || unitId === FIRST_UNIT;
+    const noTest  = card.dataset.noTest === '1';
+    // 管理者は全アンロック。no-testカードも常時解放。
+    const unlocked = isAdmin || noTest || prog.unlocked || passed || unitId === FIRST_UNIT;
 
     const wrap = document.createElement('div');
     wrap.className = 'test-btn-wrap';
 
     if (isAdmin) {
-      const noTest = card.dataset.noTest === '1';
       if (noTest) {
         wrap.innerHTML = `<span class="test-badge" style="background:#ede9fe;color:#5b21b6">👑 管理者</span>`;
       } else {
@@ -944,7 +1027,6 @@ window.addEventListener('DOMContentLoaded', () => {
       `;
     } else if (unlocked) {
       // 解放済み（未合格）：テストありの場合のみボタン表示
-      const noTest = card.dataset.noTest === '1';
       if (noTest) {
         wrap.innerHTML = `<span class="test-badge" style="background:#dcfce7;color:#166534">🔓 解放済み</span>`;
       } else {

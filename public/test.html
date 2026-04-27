@@ -289,7 +289,10 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans JP',sans-serif;back
         <button class="nk" onclick="ni('0')">0</button>
         <button class="nk enter" onclick="sa()">決定<br>Enter</button>
       </div>
-      <button class="dot-btn" onclick="ni('.')">．（小数点）</button>
+      <div style="display:flex;gap:6px;margin-top:2px;">
+        <button class="dot-btn" onclick="ni('.')">．（小数点）</button>
+        <button class="dot-btn" onclick="niMinus()" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">－（マイナス）</button>
+      </div>
     </div>
   </div>
 </div>
@@ -496,7 +499,6 @@ const TEST_UNITS = {
                                 <line x1="120" y1="95" x2="195" y2="95" stroke="#0ea5e9" stroke-width="2" stroke-dasharray="5,3"/>
                                 <circle cx="120" cy="95" r="4" fill="#0ea5e9"/>
                                 <text x="158" y="88" font-size="15" font-weight="800" font-family="sans-serif" fill="#1c1917">${rad}cm</text>
-                                <text x="120" y="185" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#555">半径 × 半径 × 3.14</text>
                               </svg>`;
                               return{a:'円の面積',op:'＝',b:'?cm²',ans:Math.round(rad*rad*3.14*100)/100,svg};
                             } else {
@@ -524,7 +526,6 @@ const TEST_UNITS = {
                                 <circle cx="${cx}" cy="${cy}" r="4" fill="#0ea5e9"/>
                                 <text x="${(r1lx+4).toFixed(0)}" y="${(r1ly-4).toFixed(0)}" font-size="14" font-weight="800" font-family="sans-serif" fill="#1c1917">${rad}cm</text>
                                 <text x="${arcLx.toFixed(0)}" y="${arcLy.toFixed(0)}" text-anchor="middle" font-size="13" font-weight="700" font-family="sans-serif" fill="#0369a1">${ang}°</text>
-                                <text x="120" y="192" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#555">半径²×3.14×${ang}/360</text>
                               </svg>`;
                               return{a:'おうぎ形の面積',op:'＝',b:'?cm²',ans,svg};
                             }
@@ -586,6 +587,57 @@ const TEST_UNITS = {
                           gen(){ const t=r(5,10),n=r(t,t*2); return{a:`つる+かめ=${t}匹 あし=${n}本`,op:'つるは',b:'?羽',ans:Math.max(0,Math.round((n-t*2)/2))}; } },
   'basho':              { name:'場合の数',                  next:null,
                           gen(){ const n=r(3,6); return{a:`${n}人を1列に並べる`,op:'並び方は',b:'?通り',ans:[1,1,2,6,24,120][n]}; } },
+
+  // ── 中学：正負の数 ──────────────────────────────────
+  'seifuno-add':        { name:'正負の数（加法）',            next:'seifuno-sub',
+                          gen(){
+                            const bothNeg=Math.random()<0.5;
+                            let a,b;
+                            if(bothNeg){a=-r(1,99);b=-r(1,99);}
+                            else{a=r(1,99);b=-r(1,99);if(Math.random()<.5){const t=a;a=b;b=t;}}
+                            return{a,op:'＋',b,ans:a+b};
+                          } },
+  'seifuno-sub':        { name:'正負の数（減法）',            next:'seifuno-mul',
+                          gen(){
+                            const bothNeg=Math.random()<0.5;
+                            let a,b;
+                            if(bothNeg){a=-r(1,99);b=-r(1,99);}
+                            else{a=r(1,99);b=-r(1,99);if(Math.random()<.5){const t=a;a=b;b=t;}}
+                            return{a,op:'－',b,ans:a-b};
+                          } },
+  'seifuno-mul':        { name:'正負の数（乗法）',            next:'seifuno-div',
+                          gen(){
+                            const bothNeg=Math.random()<0.5;
+                            const x=r(1,19),y=r(1,9);
+                            let a,b;
+                            if(bothNeg){a=-x;b=-y;}
+                            else{a=x;b=-y;if(Math.random()<.5){a=-x;b=y;}}
+                            return{a,op:'×',b,ans:a*b};
+                          } },
+  'seifuno-div':        { name:'正負の数（除法）',            next:null,
+                          gen(){
+                            const bothNeg=Math.random()<0.5;
+                            const divisor=r(2,19);
+                            const maxQ=Math.floor(999/divisor);
+                            const quotient=r(1,maxQ);
+                            let a,b;
+                            if(bothNeg){a=-(divisor*quotient);b=-divisor;}
+                            else if(Math.random()<.5){a=-(divisor*quotient);b=divisor;}
+                            else{a=divisor*quotient;b=-divisor;}
+                            return{a,op:'÷',b,ans:a/b};
+                          } },
+
+  'kakuritsu':          { name:'確率',                      next:null,
+                          answerType:'fraction',
+                          gen(){
+                            const target=r(2,10);
+                            let fav=0;
+                            for(let i=1;i<=6;i++)for(let j=1;j<=6;j++)if(i+j===target)fav++;
+                            function gcd(a,b){return b===0?a:gcd(b,a%b);}
+                            const g=gcd(fav,36);
+                            return{a:`2つのさいころ 和=${target}`,op:'確率=',b:'?',
+                                   ans:fav/36*1000/1000,ansNumer:fav/g,ansDenum:36/g};
+                          } },
 };
 
 // ====================================================
@@ -612,8 +664,9 @@ requireAuth().then(async ({user, userData:ud})=>{
 
   // ── ロックチェック ──────────────────────────────
   const FIRST_UNIT = 'addition-10';
+  const FREE_UNITS = ['addition-10','seifuno-add','seifuno-sub','seifuno-mul','seifuno-div'];
   const isAdmin = ud?.role === 'admin';
-  if(!isAdmin && unitId !== FIRST_UNIT){
+  if(!isAdmin && !FREE_UNITS.includes(unitId)){
     try{
       const progDoc = await db.collection('users').doc(currentUser.uid)
                                .collection('progress').doc(unitId).get();
@@ -648,8 +701,28 @@ requireAuth().then(async ({user, userData:ud})=>{
 });
 
 // ====================================================
-// テスト開始
+// 重複なし問題生成ヘルパー
 // ====================================================
+function genUniqueQuestions(unit, tq) {
+  const seen  = new Set();
+  const result = [];
+  const MAX_TRY = 500;
+  let   tries  = 0;
+  while (result.length < tq && tries < MAX_TRY) {
+    tries++;
+    const q   = unit.gen();
+    const key = JSON.stringify({ a: q.a, op: q.op, b: q.b });
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(q);
+    }
+  }
+  // 万が一ユニークが足りない場合はそのまま埋める
+  while (result.length < tq) result.push(unit.gen());
+  return result;
+}
+
+
 document.getElementById('startBtn').addEventListener('click', ()=>{
   if(!unit) return; // まだロード中
   document.getElementById('startScreen').style.display='none';
@@ -658,7 +731,7 @@ document.getElementById('startBtn').addEventListener('click', ()=>{
   document.getElementById('testScreen').style.height='100%';
 
   const tq = unit.totalQ || DEFAULT_Q;
-  questions = Array.from({length:tq}, ()=>unit.gen());
+  questions = genUniqueQuestions(unit, tq);
 
   const isTablet = unit.mode === 'tablet';
   document.getElementById('qOverlay').style.display = isTablet ? 'block' : 'none';
@@ -703,11 +776,17 @@ function showQuestion(idx){
   if(q.svg){ diagEl.innerHTML = q.svg; diagEl.style.display = 'flex'; }
   else { diagEl.innerHTML = ''; diagEl.style.display = 'none'; }
   document.querySelector('.qc-text').className = isStory ? 'qc-text story' : 'qc-text';
-  document.getElementById('qCA').innerHTML=renderFrac(String(q.a));
+  // 正負の数ユニットは負の数を (-n) 形式で表示
+  function fmtSeifuno(v){
+    if(!unitId.startsWith('seifuno')) return renderFrac(String(v));
+    const n=Number(v);
+    return n<0?`<span style="color:var(--muted)">(</span>${n}<span style="color:var(--muted)">)</span>`:String(n);
+  }
+  document.getElementById('qCA').innerHTML=fmtSeifuno(q.a);
   const showOp = q.op !== '→';
   document.getElementById('qCOp').innerHTML = showOp ? renderFrac(String(q.op)) : '';
   document.getElementById('qCOp').style.display = showOp ? 'inline' : 'none';
-  document.getElementById('qCB').innerHTML=renderFrac(String(q.b));
+  document.getElementById('qCB').innerHTML=fmtSeifuno(q.b);
 
   // タブレット：オーバーレイの → も非表示
   document.getElementById('qOp').innerHTML = q.op !== '→' ? renderFrac(String(q.op)) : '';
@@ -849,12 +928,20 @@ function ni(d){
   if(isFracMode()){niFrac(d);return;}
   if(isTimeMode()){niTime(d);return;}
   if(answered)return;
-  if(inputVal.length>=7)return;
+  if(inputVal.replace('-','').length>=6)return;
   if(d==='.'&&inputVal.includes('.'))return;
   if(d==='.'&&inputVal==='')inputVal='0';
   inputVal+=d; updateDisplay();
 }
-function nd(){ if(isFracMode()){ndFrac();return;} if(isTimeMode()){ndTime();return;} if(answered)return; inputVal=inputVal.slice(0,-1); updateDisplay(); }
+function nd(){ if(isFracMode()){ndFrac();return;} if(isTimeMode()){ndTime();return;}
+  if(answered)return; inputVal=inputVal.slice(0,-1); updateDisplay(); }
+function niMinus(){
+  if(isFracMode()||isTimeMode()||answered)return;
+  // 先頭に－をトグル
+  if(inputVal.startsWith('-')){ inputVal=inputVal.slice(1); }
+  else { inputVal='-'+inputVal; }
+  updateDisplay();
+}
 function sa(){ submitAnswer(); }
 
 function updateDisplay(){
@@ -1017,7 +1104,7 @@ async function showResult(){
 
 function retryTest(){
   const tq=unit.totalQ||DEFAULT_Q;
-  questions=Array.from({length:tq},()=>unit.gen());
+  questions=genUniqueQuestions(unit,tq);
   currentQ=0;correctCnt=0;inputVal='';answered=false;
   fracNVal='';fracDVal='';timeHVal='';timeMVal='';
   document.getElementById('resultOverlay').classList.remove('show');
@@ -1182,9 +1269,6 @@ function drawGeometryFigure(unitId, q){
     // 半径ラベル
     labelStyle(16); bigCtx.fillStyle='#e07b39';
     bigCtx.fillText(`半径 ${rad}cm`, cx+r/2, cy-18);
-    // 面積の式ヒント
-    labelStyle(13, false); bigCtx.fillStyle='#94a3b8';
-    bigCtx.fillText('半径×半径×3.14', cx, cy+r+30);
   }
 
   // ========== zukei-taieki: 直方体 ==========
@@ -1232,9 +1316,6 @@ function drawGeometryFigure(unitId, q){
     bigCtx.translate(ox+fw+depth/2+15, oy-fh-depth/2);
     bigCtx.fillText(`${w}cm`, 0, 0);                  // 奥行き
     bigCtx.restore();
-    // 式ヒント
-    labelStyle(12,false); bigCtx.fillStyle='#94a3b8';
-    bigCtx.fillText('たて × よこ × 高さ', cx, oy+46);
   }
 
   // ========== zukei-entai: 円柱 ==========
@@ -1294,9 +1375,6 @@ function drawGeometryFigure(unitId, q){
     labelStyle(15); bigCtx.fillStyle='#e07b39';
     bigCtx.fillText(`半径 ${rad}cm`, cx+rx/2, topY-14);
     bigCtx.fillText(`高さ ${h}cm`, cx+rx+42, cy);
-    // 式ヒント
-    labelStyle(12,false); bigCtx.fillStyle='#94a3b8';
-    bigCtx.fillText('半径×半径×3.14×高さ', cx, botY+ry+28);
   }
 
   bigCtx.restore();

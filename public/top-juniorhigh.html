@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うちトレ 中学数学 ｜ 中1〜中3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:     #0f1623;
+  --surface:#18202f;
+  --card:   #1e2840;
+  --border: #2a3650;
+  --gold:   #a78bfa;
+  --gold-s: #c4b5fd;
+  --blue:   #60a5fa;
+  --text:   #f1f5f9;
+  --muted:  #94a3b8;
+  --radius: 20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+  padding-top:52px;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(167,139,250,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(167,139,250,.04) 1px,transparent 1px);
+  background-size:48px 48px;z-index:0;
+}
+.glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.glow-1{width:600px;height:600px;background:rgba(167,139,250,.08);top:-200px;right:-100px;}
+.glow-2{width:500px;height:500px;background:rgba(96,165,250,.07);bottom:-100px;left:-100px;}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 24px 80px;}
+
+/* ナビバー */
+.user-nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(15,22,35,.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+}
+.user-nav-left{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.user-nav-name{font-weight:800;color:var(--text);font-size:14px;}
+.user-nav-right{display:flex;align-items:center;gap:8px;}
+.user-nav-btn{
+  padding:6px 14px;border-radius:999px;
+  border:1.5px solid var(--border);background:transparent;
+  font:inherit;font-size:12px;font-weight:700;cursor:pointer;
+  text-decoration:none;color:var(--muted);transition:.15s;
+}
+.user-nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.user-nav-btn.logout{color:#ef4444;border-color:rgba(239,68,68,.3);}
+
+/* ヒーロー */
+nav.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0 0;}
+.nav-logo-img{height:36px;filter:invert(1) sepia(1) saturate(2) hue-rotate(220deg) brightness(1.2);}
+.hero{padding:56px 0 48px;display:flex;flex-direction:column;align-items:flex-start;gap:16px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);
+  border-radius:999px;padding:6px 18px;font-size:12px;font-weight:700;color:var(--gold);
+}
+.hero h1{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(32px,5.5vw,60px);font-weight:800;line-height:1.2;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--gold),var(--gold-s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.9;border-left:3px solid var(--gold);padding-left:16px;}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;margin-top:8px;}
+.stat{display:flex;flex-direction:column;gap:2px;}
+.stat-num{font-family:'Shippori Mincho',serif;font-size:32px;font-weight:800;line-height:1;}
+.stat-num span{font-size:16px;color:var(--gold);}
+.stat-label{font-size:12px;color:var(--muted);font-weight:700;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold),#818cf8);
+  color:#fff;font:inherit;font-size:15px;font-weight:800;
+  padding:14px 32px;border-radius:14px;border:none;cursor:pointer;
+  text-decoration:none;transition:.18s ease;box-shadow:0 4px 24px rgba(167,139,250,.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(167,139,250,.4);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--muted);font:inherit;font-size:15px;font-weight:700;
+  padding:14px 24px;border-radius:14px;border:1px solid var(--border);cursor:pointer;
+  text-decoration:none;transition:.15s ease;
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted);}
+
+/* 区切り */
+.divider{display:flex;align-items:center;gap:12px;margin:48px 0 28px;}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-label{
+  font-family:'Shippori Mincho',serif;font-size:13px;font-weight:800;
+  color:var(--gold);letter-spacing:2px;white-space:nowrap;
+}
+
+/* 単元グリッド */
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:48px;}
+.unit-card{
+  background:var(--card);border-radius:16px;padding:18px 20px;
+  border:1px solid var(--border);transition:.2s ease;cursor:default;
+  text-decoration:none;color:inherit;display:block;
+}
+a.unit-card:hover{background:rgba(167,139,250,.07);transform:translateY(-2px);border-color:rgba(167,139,250,.4);}
+.uk-grade{
+  font-size:10px;font-weight:800;letter-spacing:1px;
+  color:var(--gold);margin-bottom:6px;
+}
+.uk-name{font-size:16px;font-weight:800;margin-bottom:4px;}
+.uk-desc{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.uk-badge{
+  display:inline-block;font-size:10px;font-weight:800;
+  padding:3px 10px;border-radius:999px;
+}
+.badge-ready{background:rgba(34,197,94,.15);color:#4ade80;}
+.badge-soon {background:rgba(167,139,250,.12);color:var(--gold);}
+.uk-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.uk-tag{
+  font-size:10px;padding:2px 7px;background:rgba(255,255,255,.05);
+  border-radius:4px;color:var(--muted);
+}
+
+/* フッター */
+.footer{text-align:center;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);}
+@media(max-width:600px){.hero{padding:36px 0 28px;}.hero-stats{gap:20px;}}
+</style>
+</head>
+<body>
+
+<!-- ナビバー -->
+<div class="user-nav">
+  <div class="user-nav-left">
+    👋 こんにちは、<span class="user-nav-name" id="navUserName">...</span> さん
+  </div>
+  <div class="user-nav-right">
+    <a href="/top-juken.html" class="user-nav-btn">← 受験モードへ</a>
+    <button class="user-nav-btn logout" onclick="signOutUser()">ログアウト</button>
+  </div>
+</div>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="wrap">
+  <nav class="nav">
+    <img src="logo.svg" alt="うちトレ" class="nav-logo-img">
+  </nav>
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <div class="hero-badge">📐 中学数学モード</div>
+    <h1>数学で、<br><em>壁を越える。</em></h1>
+    <p class="hero-sub">
+      一次関数から二次方程式まで。<br>
+      中1〜中3の全単元を、タブレット手書きで本格演習。
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">6<span>単元</span></div>
+        <div class="stat-label">実装済み（順次追加）</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100<span>問</span></div>
+        <div class="stat-label">各単元・重複なし出題</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3<span>学年</span></div>
+        <div class="stat-label">中1・中2・中3対応</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#units" class="btn-primary">📚 単元を選ぶ</a>
+      <a href="/top-juken.html" class="btn-ghost">受験算数へ →</a>
+    </div>
+  </div>
+
+  <!-- 単元一覧 -->
+  <div class="divider" id="units">
+    <div class="divider-line"></div>
+    <div class="divider-label">中学数学 単元一覧</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="unit-grid">
+    <!-- 中1 -->
+    <a class="unit-card" href="ichijikansu.html" data-unit="ichijikansu">
+      <div class="uk-grade">中2</div>
+      <div class="uk-name">📈 一次関数</div>
+      <div class="uk-desc">y=ax+b、傾き・切片・変化の割合</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">y求める</span><span class="uk-tag">x求める</span><span class="uk-tag">2点通る直線</span><span class="uk-tag">変化の割合</span></div>
+    </a>
+
+    <a class="unit-card" href="renritsu.html" data-unit="renritsu">
+      <div class="uk-grade">中2</div>
+      <div class="uk-name">🔄 連立方程式</div>
+      <div class="uk-desc">加減法・代入法で x, y を求める</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">加減法</span><span class="uk-tag">代入法</span><span class="uk-tag">文章題</span></div>
+    </a>
+
+    <a class="unit-card" href="nijihoteishiki.html" data-unit="nijihoteishiki">
+      <div class="uk-grade">中3</div>
+      <div class="uk-name">🔢 二次方程式</div>
+      <div class="uk-desc">因数分解・解の公式で解を求める</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">因数分解</span><span class="uk-tag">解の公式</span><span class="uk-tag">完全平方</span></div>
+    </a>
+
+    <a class="unit-card" href="nijijikansu.html" data-unit="nijijikansu">
+      <div class="uk-grade">中3</div>
+      <div class="uk-name">📉 二次関数</div>
+      <div class="uk-desc">y=ax²、頂点・最大最小・グラフ</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">y値</span><span class="uk-tag">頂点</span><span class="uk-tag">最大・最小</span></div>
+    </a>
+
+    <a class="unit-card" href="sanpei.html" data-unit="sanpei">
+      <div class="uk-grade">中3</div>
+      <div class="uk-name">📐 三平方の定理</div>
+      <div class="uk-desc">ピタゴラスの定理で辺の長さを求める</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">斜辺</span><span class="uk-tag">他の辺</span><span class="uk-tag">整数解</span></div>
+    </a>
+
+    <a class="unit-card" href="kakuritsu.html" data-unit="kakuritsu">
+      <div class="uk-grade">中2</div>
+      <div class="uk-name">🎲 確率</div>
+      <div class="uk-desc">さいころ・コイン・カードの確率計算</div>
+      <span class="uk-badge badge-ready">✅ 使用可能</span>
+      <div class="uk-tags"><span class="uk-tag">さいころ</span><span class="uk-tag">コイン</span><span class="uk-tag">組み合わせ</span></div>
+    </a>
+
+    <!-- 今後追加予定 -->
+    <div class="unit-card">
+      <div class="uk-grade">中1</div>
+      <div class="uk-name">🔤 文字と式</div>
+      <div class="uk-desc">文字式・代入・式の計算</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+
+    <div class="unit-card">
+      <div class="uk-grade">中2</div>
+      <div class="uk-name">📐 図形・合同</div>
+      <div class="uk-desc">合同条件・証明の流れ</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+
+    <div class="unit-card">
+      <div class="uk-grade">中3</div>
+      <div class="uk-name">🔵 図形・相似</div>
+      <div class="uk-desc">相似比・面積比・体積比</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+
+    <div class="unit-card">
+      <div class="uk-grade">中3</div>
+      <div class="uk-name">⭕ 円の性質</div>
+      <div class="uk-desc">円周角・接線・弦の定理</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+
+    <div class="unit-card">
+      <div class="uk-grade">中1〜3</div>
+      <div class="uk-name">📦 空間図形</div>
+      <div class="uk-desc">体積・表面積・回転体</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+
+    <div class="unit-card">
+      <div class="uk-grade">中2〜3</div>
+      <div class="uk-name">📊 データ・統計</div>
+      <div class="uk-desc">度数分布・平均・中央値・四分位数</div>
+      <span class="uk-badge badge-soon">準備中</span>
+    </div>
+  </div>
+
+  <div class="footer">うちトレ 中学数学モード</div>
+</div>
+
+<style>
+.unit-card.locked { opacity: .45; pointer-events: none; position: relative; }
+.unit-card.locked::after { content: '🔒'; position: absolute; top: 12px; right: 12px; font-size: 18px; }
+.unit-card.passed .uk-badge { background: rgba(16,185,129,.15); color: #10b981; border-color: rgba(16,185,129,.3); }
+.unit-card.passed .uk-badge::before { content: '✅ 合格済み'; }
+.unit-card.passed .uk-badge-text { display: none; }
+.jh-score-badge { display: inline-block; margin-left: 8px; font-size: 11px; background: rgba(16,185,129,.12); color: #10b981; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>
+requireAuth();
+const JH_UNITS = ['ichijikansu','renritsu','nijihoteishiki','nijijikansu','sanpei','kakuritsu'];
+const JH_FIRST = 'ichijikansu';
+
+window.addEventListener('DOMContentLoaded', () => {
+  const unsub = firebase.auth().onAuthStateChanged(async user => {
+    if (!user) return;
+    try {
+      const snap = await firebase.firestore().collection('users').doc(user.uid).get();
+      document.getElementById('navUserName').textContent = snap.data()?.name || user.email;
+      const isAdmin = snap.data()?.role === 'admin';
+
+      // progress取得
+      const progSnap = await firebase.firestore().collection('users').doc(user.uid).collection('progress').get();
+      const progress = {};
+      progSnap.forEach(d => { progress[d.id] = d.data(); });
+
+      // 各カードにロック/合格状態を反映
+      document.querySelectorAll('[data-unit]').forEach(card => {
+        const uid = card.dataset.unit;
+        const prog = progress[uid] || {};
+        const passed = prog.passed === true;
+        const unlocked = isAdmin || passed || prog.unlocked === true || uid === JH_FIRST;
+        if (passed) {
+          card.classList.add('passed');
+          const badge = card.querySelector('.uk-badge');
+          if (badge) { badge.textContent = '✅ 合格済み'; badge.style.background='rgba(16,185,129,.15)'; badge.style.color='#10b981'; }
+        } else if (!unlocked) {
+          card.classList.add('locked');
+        }
+      });
+    } catch(e) {
+      document.getElementById('navUserName').textContent = user.email;
+    }
+    unsub();
+  });
+});
+</script>
+</body>
+</html>

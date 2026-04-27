@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>式の値（代入） | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .monji-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7mm 8mm;
+      padding: 8mm 12mm;
+      height: calc(297mm - 20mm);
+      align-content: start;
+    }
+    .monji-grid .problem-horizontal {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 3px;
+      padding: 6px 4px 10px;
+      border-bottom: 1px solid #ccc;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Times New Roman', serif;
+      min-height: 50px;
+    }
+    .monji-num  { font-size: 20px; font-weight: 700; }
+    .monji-op   { color: #e07b39; font-weight: 700; margin: 0 2px; }
+    .monji-var  { color: #1d4ed8; font-style: italic; font-weight: 800; }
+    .monji-pnum { font-size: 11px; font-family:'Noto Sans JP',sans-serif; color:#888; font-weight:400; position:absolute; top:-2px; left:0; }
+    .page.answer-page { height: auto; min-height: 80mm; }
+  </style>
+</head>
+<body data-page-type="monjishiki">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ">
+      <div>
+        <div class="logo-text">うちトレ</div>
+        <div class="logo-sub">Uchitore</div>
+      </div>
+    </div>
+    <div class="header-row no-print">
+      <div><h1>文字式　式の値（代入）</h1></div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+    <div class="card controls no-print">
+      <input type="hidden" id="prob-type" value="dainy">
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+    <div id="pages"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  function r(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function rNZ(a,b){ let v; do{ v=r(a,b); }while(v===0); return v; }
+
+  // 係数表示（1なら省略、-1なら－のみ）
+  function coefStr(c, v){
+    if(c===1)  return `<span class="monji-var">${v}</span>`;
+    if(c===-1) return `<span class="monji-op">-</span><span class="monji-var">${v}</span>`;
+    if(c<0)    return `<span class="monji-op">${c}</span><span class="monji-var">${v}</span>`;
+    return `<span class="monji-num">${c}</span><span class="monji-var">${v}</span>`;
+  }
+  // 定数項（先頭でない場合は符号付き）
+  function numSign(n){
+    return n>=0
+      ? `<span class="monji-op">＋</span><span class="monji-num">${n}</span>`
+      : `<span class="monji-op">－</span><span class="monji-num">${Math.abs(n)}</span>`;
+  }
+  // 答え文字列（係数1/-1対応）
+  function coefAns(c, v){
+    if(c===0) return '0';
+    if(c===1) return v;
+    if(c===-1) return '-'+v;
+    return c+v;
+  }
+
+  function makeProblem(type){
+    if(type==='dainy'){
+      // 式の値：x=n を代入
+      const a=rNZ(-9,9);
+      const b=r(-9,9);
+      const x=rNZ(-9,9);
+      const useB = Math.random()<0.6; // b項を入れるか
+      const ans = useB ? a*x+b : a*x;
+      const bStr = useB ? numSign(b) : '';
+      const q = `x = ${x} のとき　${coefStr(a,'x')}${bStr}`;
+      return { q, ansStr: String(ans), q_plain: `x=${x} のとき ${coefAns(a,'x')}${useB?(b>=0?'+'+b:b):''}` };
+    }
+    else if(type==='kasn'){
+      // 同類項の整理：ax + bx（+ 定数）
+      const a=rNZ(-9,9), b=rNZ(-9,9);
+      const sum=a+b;
+      const useConst = Math.random()<0.5;
+      const c = useConst ? r(-9,9) : 0;
+      const qStr = `${coefStr(a,'x')}${numSign(b).replace('＋','').replace('－','')}... `; // ダミー（下で整形）
+
+      // 問題HTML
+      const bStr = b>=0
+        ? `<span class="monji-op">＋</span>${coefStr(b,'x')}`
+        : `<span class="monji-op">－</span>${coefStr(Math.abs(b),'x')}`;
+      const cStr = useConst && c!==0 ? numSign(c) : '';
+      const q = `${coefStr(a,'x')}${bStr}${cStr}`;
+
+      // 答え
+      let ansStr;
+      if(sum===0 && !useConst) ansStr = '0';
+      else if(sum===0)         ansStr = useConst&&c!==0 ? String(c) : '0';
+      else                     ansStr = coefAns(sum,'x') + (useConst&&c!==0 ? (c>=0?'+'+c:c) : '');
+
+      return { q, ansStr };
+    }
+    else { // josn：乗除
+      const type2 = Math.random()<0.5 ? 'mul' : 'div';
+      if(type2==='mul'){
+        // ax × b or b × ax
+        const a=rNZ(-9,9), b=rNZ(-9,9);
+        const reversed = Math.random()<0.5;
+        const q = reversed
+          ? `<span class="monji-num">${b}</span><span class="monji-op">×</span>${coefStr(a,'x')}`
+          : `${coefStr(a,'x')}<span class="monji-op">×</span><span class="monji-num">${b}</span>`;
+        const prod=a*b;
+        return { q, ansStr: coefAns(prod,'x') };
+      } else {
+        // ax ÷ b（割り切れる係数）
+        const b=rNZ(2,9);
+        const mult=rNZ(-9,9);
+        const a=b*mult; // aはbの倍数
+        const q = `${coefStr(a,'x')}<span class="monji-op">÷</span><span class="monji-num">${b}</span>`;
+        return { q, ansStr: coefAns(mult,'x') };
+      }
+    }
+  }
+
+  function problemHTML(num, prob){
+    return `<div class="problem-horizontal">
+      <span class="monji-pnum">(${num})</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      ${prob.q}<span style="margin-left:6px">＝</span>
+    </div>`;
+  }
+
+  function wrapPage(page){
+    const wrap=document.createElement('div'); wrap.className='page-preview';
+    const box=document.createElement('div'); box.className='page-scale-box';
+    box.appendChild(page); wrap.appendChild(box); return wrap;
+  }
+
+  function generate(){
+    const type  = document.getElementById('prob-type').value;
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('pages');
+    container.innerHTML = '';
+    const allProblems = [];
+
+    const typeNames = {dainy:'式の値（代入）', kasn:'同類項の整理', josn:'式の乗除'};
+
+    for(let p=0; p<count; p++){
+      const used=new Set(), probs=[];
+      for(let i=1; i<=20; i++){
+        let prob;
+        for(let t=0; t<300; t++){
+          prob = makeProblem(type);
+          if(!used.has(prob.ansStr+i)){ used.add(prob.ansStr+i); break; }
+        }
+        probs.push(prob);
+        allProblems.push({pageNo:p+1, num:i, prob});
+      }
+      const page=document.createElement('div'); page.className='page';
+      const grid=document.createElement('div'); grid.className='monji-grid';
+      probs.forEach((prob,idx)=>{ grid.innerHTML+=problemHTML(idx+1,prob); });
+      page.appendChild(grid);
+      container.appendChild(wrapPage(page));
+    }
+
+    // 答えページ
+    const ansPage=document.createElement('div'); ansPage.className='page answer-page';
+    const hdr=document.createElement('div'); hdr.className='answer-page-header';
+    hdr.textContent=`文字式（式の値（代入））　答え`;
+    ansPage.appendChild(hdr);
+    for(let p=1; p<=count; p++){
+      const probs=allProblems.filter(x=>x.pageNo===p);
+      const sec=document.createElement('div'); sec.className='answer-section';
+      if(count>1){const l=document.createElement('div');l.className='answer-section-label';l.textContent=`${p}枚目`;sec.appendChild(l);}
+      const grid=document.createElement('div'); grid.className='answer-grid';
+      probs.forEach(({num,prob})=>{
+        const item=document.createElement('div'); item.className='answer-item';
+        item.innerHTML=`<span class="answer-num">(${num})</span><span class="answer-val">${prob.ansStr}</span>`;
+        grid.appendChild(item);
+      });
+      sec.appendChild(grid); ansPage.appendChild(sec);
+    }
+    const aw=document.createElement('div');aw.className='page-preview';
+    const ab=document.createElement('div');ab.className='page-scale-box';
+    ab.appendChild(ansPage);aw.appendChild(ab);container.appendChild(aw);
+    applyMobilePageScaling();
+  }
+
+  function applyMobilePageScaling(){
+    document.querySelectorAll('.page-preview').forEach(wrapper=>{
+      const scaleBox=wrapper.querySelector('.page-scale-box');
+      const page=wrapper.querySelector('.page');
+      if(!scaleBox||!page) return;
+      if(page.classList.contains('answer-page')) return;
+      wrapper.classList.remove('is-scaled');
+      scaleBox.style.width=''; scaleBox.style.height=''; page.style.transform='';
+      const pw=page.offsetWidth, ph=page.offsetHeight;
+      if(!pw||!ph) return;
+      if(window.innerWidth>640||window.matchMedia('print').matches){
+        scaleBox.style.width=pw+'px'; scaleBox.style.height=ph+'px'; return;
+      }
+      const avail=Math.max(wrapper.clientWidth-8,0); if(!avail) return;
+      const scale=Math.min(1,avail/pw);
+      wrapper.classList.add('is-scaled');
+      scaleBox.style.width=(pw*scale)+'px'; scaleBox.style.height=(ph*scale)+'px';
+      page.style.transform=`scale(${scale})`;
+    });
+  }
+
+  async function downloadPDF(){
+    const pages=document.querySelectorAll('.page');
+    if(!pages.length){alert('先に「生成」を押してください。');return;}
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    for(let i=0;i<pages.length;i++){
+      const canvas=await html2canvas(pages[i],{scale:2,useCORS:true});
+      if(i>0) pdf.addPage();
+      pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,210,297);
+    }
+    pdf.save('monjishiki.pdf');
+  }
+
+  window.addEventListener('DOMContentLoaded',()=>{
+    generate();
+    let t;
+    window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(applyMobilePageScaling,80);});
+    window.addEventListener('beforeprint',applyMobilePageScaling);
+    window.addEventListener('afterprint',applyMobilePageScaling);
+  });
+  </script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body>
+</html>

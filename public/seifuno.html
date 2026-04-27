@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正負の数 | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* ── 印刷グリッド ── */
+    .seifuno-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6mm 8mm;
+      padding: 8mm 12mm;
+      height: calc(297mm - 20mm);
+      align-content: start;
+    }
+    /* problem-horizontal との共存スタイル */
+    .seifuno-grid .problem-horizontal {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      padding: 6px 4px 10px;
+      border-bottom: 1px solid #ccc;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Times New Roman', serif;
+      min-height: 52px;
+    }
+    .seifuno-prob-num {
+      position: absolute;
+      top: -2px; left: 0;
+      font-size: 11px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #888; font-weight: 400;
+    }
+    .seifuno-paren { color: #555; }
+    .seifuno-op { color: #e07b39; font-weight: 700; margin: 0 2px; }
+    .page.answer-page { height: auto; min-height: 80mm; }
+  </style>
+</head>
+<body data-page-type="seifuno">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ">
+      <div>
+        <div class="logo-text">うちトレ</div>
+        <div class="logo-sub">Uchitore</div>
+      </div>
+    </div>
+    <div class="header-row no-print">
+      <div><h1 id="page-title">正負の数</h1></div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="count">枚数</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+
+    <div id="pages"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  const MAX = 500;
+  function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  // 各演算の範囲設定
+  // 加減: ±99  乗: ±19 × ±9  除: ±999 ÷ ±19
+  function makeProblem(op){
+    for(let i=0; i<MAX; i++){
+      let a, b, ans, opSym;
+      const bothNeg = Math.random() < 0.5;
+
+      if(op==='add'){
+        opSym = '＋';
+        if(bothNeg){ a=-rand(1,99); b=-rand(1,99); }
+        else{ a=rand(1,99); b=-rand(1,99); if(Math.random()<.5){const t=a;a=b;b=t;} }
+        ans = a + b;
+      } else if(op==='sub'){
+        opSym = '－';
+        if(bothNeg){ a=-rand(1,99); b=-rand(1,99); }
+        else{ a=rand(1,99); b=-rand(1,99); if(Math.random()<.5){const t=a;a=b;b=t;} }
+        ans = a - b;
+      } else if(op==='mul'){
+        opSym = '×';
+        const x=rand(1,19), y=rand(1,9);
+        if(bothNeg){ a=-x; b=-y; }
+        else{ a=x; b=-y; if(Math.random()<.5){a=-x;b=y;} }
+        ans = a * b;
+      } else {
+        opSym = '÷';
+        const divisor=rand(2,19);
+        // 割り切れる被除数を divisor の倍数で作る（±999以内）
+        const maxQ = Math.floor(999/divisor);
+        const quotient=rand(1, maxQ);
+        if(bothNeg){ a=-(divisor*quotient); b=-divisor; }
+        else{ if(Math.random()<.5){a=-(divisor*quotient);b=divisor;}else{a=divisor*quotient;b=-divisor;} }
+        ans = a / b;
+        if(!Number.isInteger(ans)) continue;
+      }
+      return {a, b, ans, op:opSym};
+    }
+    return {a:-3,b:-5,ans:-8,op:'＋'};
+  }
+
+  // tablet-v2.jsが認識できる .problem-horizontal クラスを付与
+  function problemHTML(num, prob){
+    const nH = n => n<0
+      ? `<span class="seifuno-paren">(</span>${n}<span class="seifuno-paren">)</span>`
+      : `${n}`;
+    return `<div class="problem-horizontal">
+      <span class="seifuno-prob-num">(${num})</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      ${nH(prob.a)}<span class="seifuno-op">${prob.op}</span>${nH(prob.b)}<span style="margin-left:4px">＝</span>
+    </div>`;
+  }
+
+  function wrapPage(page){
+    const wrap=document.createElement('div'); wrap.className='page-preview';
+    const box=document.createElement('div'); box.className='page-scale-box';
+    box.appendChild(page); wrap.appendChild(box); return wrap;
+  }
+
+  function generate(){
+    const op    = window._seifunoOp || new URLSearchParams(location.search).get('op') || 'add';
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('pages');
+    container.innerHTML = '';
+    const allProblems = [];
+
+    for(let p=0;p<count;p++){
+      const used=new Set(), probs=[];
+      for(let i=1;i<=20;i++){
+        let prob;
+        for(let t=0;t<300;t++){
+          prob=makeProblem(op);
+          const key=`${prob.a},${prob.op},${prob.b}`;
+          if(!used.has(key)){used.add(key);break;}
+        }
+        probs.push(prob);
+        allProblems.push({pageNo:p+1,num:i,prob});
+      }
+      const page=document.createElement('div'); page.className='page';
+      const grid=document.createElement('div'); grid.className='seifuno-grid';
+      probs.forEach((prob,idx)=>{ grid.innerHTML+=problemHTML(idx+1,prob); });
+      page.appendChild(grid);
+      container.appendChild(wrapPage(page));
+    }
+
+    // 答えページ
+    const ansPage=document.createElement('div'); ansPage.className='page answer-page';
+    const hdr=document.createElement('div'); hdr.className='answer-page-header';
+    hdr.textContent=document.getElementById('page-title').textContent+'　答え';
+    ansPage.appendChild(hdr);
+    for(let p=1;p<=count;p++){
+      const probs=allProblems.filter(x=>x.pageNo===p);
+      const sec=document.createElement('div'); sec.className='answer-section';
+      if(count>1){ const l=document.createElement('div');l.className='answer-section-label';l.textContent=`${p}枚目`;sec.appendChild(l); }
+      const grid=document.createElement('div'); grid.className='answer-grid';
+      probs.forEach(({num,prob})=>{
+        const item=document.createElement('div'); item.className='answer-item';
+        item.innerHTML=`<span class="answer-num">(${num})</span><span class="answer-val">${prob.ans}</span>`;
+        grid.appendChild(item);
+      });
+      sec.appendChild(grid); ansPage.appendChild(sec);
+    }
+    const aw=document.createElement('div');aw.className='page-preview';
+    const ab=document.createElement('div');ab.className='page-scale-box';
+    ab.appendChild(ansPage);aw.appendChild(ab);container.appendChild(aw);
+    applyMobilePageScaling();
+  }
+
+  function applyMobilePageScaling(){
+    document.querySelectorAll('.page-preview').forEach(wrapper=>{
+      const scaleBox=wrapper.querySelector('.page-scale-box');
+      const page=wrapper.querySelector('.page');
+      if(!scaleBox||!page) return;
+      if(page.classList.contains('answer-page')) return;
+      wrapper.classList.remove('is-scaled');
+      scaleBox.style.width=''; scaleBox.style.height=''; page.style.transform='';
+      const pw=page.offsetWidth,ph=page.offsetHeight;
+      if(!pw||!ph) return;
+      if(window.innerWidth>640||window.matchMedia('print').matches){
+        scaleBox.style.width=pw+'px'; scaleBox.style.height=ph+'px'; return;
+      }
+      const avail=Math.max(wrapper.clientWidth-8,0); if(!avail) return;
+      const scale=Math.min(1,avail/pw);
+      wrapper.classList.add('is-scaled');
+      scaleBox.style.width=(pw*scale)+'px'; scaleBox.style.height=(ph*scale)+'px';
+      page.style.transform=`scale(${scale})`;
+    });
+  }
+
+  async function downloadPDF(){
+    const pages=document.querySelectorAll('.page');
+    if(!pages.length){alert('先に「生成」を押してください。');return;}
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    for(let i=0;i<pages.length;i++){
+      const canvas=await html2canvas(pages[i],{scale:2,useCORS:true});
+      if(i>0) pdf.addPage();
+      pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,210,297);
+    }
+    pdf.save('seifuno.pdf');
+  }
+
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const op = new URLSearchParams(location.search).get('op') || 'add';
+    const titles = {add:'正負の数（加法）',sub:'正負の数（減法）',mul:'正負の数（乗法）',div:'正負の数（除法）'};
+    document.getElementById('page-title').textContent = titles[op] || '正負の数';
+    document.title = (titles[op]||'正負の数') + ' | うちトレ';
+    window._seifunoOp = op;
+    generate();
+    let t;
+    window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(applyMobilePageScaling,80);});
+    window.addEventListener('beforeprint', applyMobilePageScaling);
+    window.addEventListener('afterprint',  applyMobilePageScaling);
+  });
+  </script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>連立方程式 | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .jh-card{background:#fff;border:2px solid #e7e5e4;border-radius:16px;padding:28px 24px;margin:0 auto 16px;max-width:700px;}
+    .jh-question{font-size:17px;font-weight:700;color:#1c1917;line-height:1.8;margin-bottom:14px;}
+    .jh-eq{background:#fef9c3;border:2px solid #fbbf24;border-radius:10px;padding:14px 20px;font-size:22px;font-weight:800;font-family:'Georgia',serif;display:block;margin-bottom:18px;line-height:1.7;white-space:pre-line;}
+    .jh-ans-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+    .jh-lbl{font-size:15px;font-weight:700;color:#44403c;}
+    .jh-input{border:2px solid #d6d3d1;border-radius:8px;padding:8px 12px;font-size:18px;font-weight:700;width:90px;text-align:center;font-family:inherit;}
+    .jh-input:focus{outline:none;border-color:#FF6B35;}
+    .jh-input.wide{width:130px;}
+    .jh-check{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+    .jh-next{background:linear-gradient(135deg,#FF6B35,#f97316);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+    .jh-result{font-size:15px;font-weight:700;padding:8px 14px;border-radius:8px;margin-top:10px;display:none;}
+    .jh-result.ok{background:#dcfce7;color:#16a34a;display:block;}
+    .jh-result.ng{background:#fee2e2;color:#dc2626;display:block;}
+    .score-bar{display:flex;gap:16px;align-items:center;font-size:13px;font-weight:700;color:#78716c;}
+    .score-bar b{color:#FF6B35;font-size:16px;}
+    .frac-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:0;vertical-align:middle;margin:0 4px;}
+    .frac-wrap input{width:60px;border:2px solid #d6d3d1;border-radius:6px;padding:4px 8px;font-size:16px;font-weight:700;text-align:center;font-family:inherit;}
+    .frac-wrap input:focus{outline:none;border-color:#FF6B35;}
+    .frac-line{height:2px;background:#1c1917;width:60px;margin:2px 0;}
+  </style>
+</head>
+<body data-page-type="renritsu">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ"><div><div class="logo-text">うちトレ</div><div class="logo-sub">Uchitore</div></div>
+    </div>
+    <div class="header-row no-print">
+      <div><h1>連立方程式</h1></div>
+      <div class="header-actions"><a href="top-home.html" class="secondary-button">トップへ戻る</a></div>
+    </div>
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="prob-type">種類</label>
+        <select id="prob-type" onchange="generate()">
+          <option value="random">ランダム</option>
+          <option value="kagen">加減法</option>
+          <option value="dainy">代入法</option>
+        </select>
+      </div>
+      <div class="score-bar"><div>問題数: <b id="q-count">0</b></div><div>正解: <b id="q-correct">0</b></div></div>
+      <div class="page-actions"><button class="primary" onclick="generate()">▶ 新しい問題</button></div>
+    </div>
+    <div id="prob-area" style="padding:0 4px;"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  let qCount=0,qCorrect=0;
+  let currentX=null,currentY=null;
+  function r(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+  function sgn(n,noPlus){return n<0?`- ${Math.abs(n)}`:noPlus?`${n}`:`+ ${n}`;}
+  function coefStr(c,v){
+    if(c===0)return'';
+    if(c===1)return v;
+    if(c===-1)return`-${v}`;
+    return`${c}${v}`;
+  }
+
+  function generate(){
+    const t=document.getElementById('prob-type').value;
+    const type=t==='random'?['kagen','dainy'][r(0,1)]:t;
+    qCount++;document.getElementById('q-count').textContent=qCount;
+    let x,y;
+    do{x=r(-4,4);}while(x===0&&Math.random()>.3);
+    do{y=r(-4,4);}while(y===0&&Math.random()>.3);
+    currentX=x;currentY=y;
+    let a1=r(1,4),b1,c1,a2,b2,c2,hint='';
+    if(type==='kagen'){
+      // 一方の係数を共通にして消去できるようにする
+      const coef=r(1,3);
+      b1=r(1,3); c1=a1*x+b1*y;
+      a2=coef*a1; b2=r(1,3); c2=a2*x+b2*y;
+      hint='加減法：どちらかの文字を消去しよう';
+    } else {
+      // 代入法: 1式からy=...の形にできるよう
+      b1=1; c1=a1*x+y; // b1=1でy=c1-a1*xの形
+      a2=r(1,4); b2=r(1,4); c2=a2*x+b2*y;
+      hint='代入法：1つの式をy=～の形に変えよう';
+    }
+    function eqStr(a,b,c){
+      const as=a===1?'x':a===-1?'-x':`${a}x`;
+      const bs=b>0?` + ${b===1?'':b}y`:b<0?` - ${Math.abs(b)===1?'':Math.abs(b)}y`:'';
+      return `${as}${bs} = ${c}`;
+    }
+    const area=document.getElementById('prob-area');
+    area.innerHTML=`<div class="jh-card">
+      <div class="jh-question">次の連立方程式を解きなさい。</div>
+      <div class="jh-eq">{ ${eqStr(a1,b1,c1)}\n  ${eqStr(a2,b2,c2)}</div>
+      <div class="jh-ans-row"><span class="jh-lbl">x =</span><input class="jh-input" id="inp-x" type="number"><span class="jh-lbl">y =</span><input class="jh-input" id="inp-y" type="number"><button class="jh-check" onclick="checkAnswer()">✓ 答え合わせ</button></div>
+      <div class="jh-result" id="jh-result"></div>
+      <div class="jh-ans-row" style="margin-top:12px;"><button class="jh-next" onclick="generate()">▶ 次の問題</button></div>
+    </div>`;
+    document.getElementById('inp-x').focus();
+  }
+
+  function checkAnswer(){
+    const xv=parseInt(document.getElementById('inp-x').value);
+    const yv=parseInt(document.getElementById('inp-y').value);
+    const res=document.getElementById('jh-result');
+    if(xv===currentX&&yv===currentY){
+      qCorrect++;document.getElementById('q-correct').textContent=qCorrect;
+      res.className='jh-result ok';res.textContent=`✅ 正解！ x = ${currentX}, y = ${currentY}`;
+      if(qCorrect>=10)recordPass();
+    } else {
+      res.className='jh-result ng';res.textContent=`❌ 不正解。正解は x = ${currentX}, y = ${currentY}`;
+    }
+  }
+
+  async function recordPass(){
+    try{
+      const user=firebase.auth().currentUser;if(!user)return;
+      const db=firebase.firestore();
+      const ref=db.collection('users').doc(user.uid).collection('progress').doc('renritsu');
+      const prev=(await ref.get()).data()||{};
+      await ref.set({unitId:'renritsu',passed:true,attempts:(prev.attempts||0)+1,
+        bestScore:Math.max(prev.bestScore||0,qCorrect),
+        passedAt:prev.passedAt||firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      await db.collection('users').doc(user.uid).collection('progress').doc('nijihoteishiki')
+        .set({unitId:'nijihoteishiki',unlocked:true,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+    }catch(e){console.error(e);}
+  }
+
+  window.addEventListener('DOMContentLoaded',()=>{generate();});
+  </script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body></html>

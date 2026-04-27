@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>えでたしざん | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .etashi-page {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 8mm 14mm 8mm;
+      box-sizing: border-box;
+    }
+    .etashi-page-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e293b;
+      text-align: center;
+      padding-bottom: 6px;
+      border-bottom: 3px solid #a78bfa;
+      margin-bottom: 12px;
+    }
+    .etashi-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8mm 10mm;
+      align-content: start;
+    }
+    .etashi-problem {
+      padding: 8px 8px 14px;
+      border-bottom: 1.5px solid #e2e8f0;
+      position: relative;
+    }
+    .etashi-pnum {
+      font-size: 11px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #94a3b8;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    /* 絵エリア：左グループ ＋ 右グループ */
+    .etashi-scene {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .etashi-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1px;
+      max-width: 90px;
+    }
+    .etashi-obj { font-size: 22px; line-height: 1.2; }
+    .etashi-plus {
+      font-size: 22px;
+      font-weight: 900;
+      color: #a78bfa;
+      padding: 0 2px;
+    }
+    .etashi-label {
+      font-size: 11px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #64748b;
+      margin-top: 2px;
+      text-align: center;
+    }
+    .etashi-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .etashi-question {
+      font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+    .etashi-formula {
+      font-size: 18px;
+      font-weight: 900;
+      font-family: 'Times New Roman', serif;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .etashi-f-num { color: #1e293b; }
+    .etashi-f-op  { color: #a78bfa; }
+    .etashi-blank {
+      display: inline-block;
+      width: 34px;
+      height: 28px;
+      border-bottom: 2.5px solid #64748b;
+      vertical-align: bottom;
+    }
+    .page.answer-page { height: auto; min-height: 80mm; }
+  </style>
+</head>
+<body data-page-type="ezu-tashizan">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ">
+      <div>
+        <div class="logo-text">うちトレ</div>
+        <div class="logo-sub">Uchitore</div>
+      </div>
+    </div>
+    <div class="header-row no-print">
+      <div><h1>えでたしざん</h1></div>
+      <div class="header-actions">
+        <a href="top-home.html" class="secondary-button">トップへ戻る</a>
+      </div>
+    </div>
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="max-ans">こたえのさいだい</label>
+        <select id="max-ans">
+          <option value="5" selected>〜5</option>
+          <option value="10">〜10</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="count">まいすう</label>
+        <select id="count">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="page-actions">
+        <button class="primary" onclick="generate()">生成</button>
+        <button class="secondary" onclick="window.print()">印刷</button>
+        <button class="secondary" onclick="downloadPDF()">PDF保存</button>
+      </div>
+    </div>
+    <div id="pages"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  const ICONS = ['🍎','🍊','🍋','🍇','🍓','🌸','⭐','🐱','🐶','🌷','🎀','🍩','🍪','🎈','🐸',
+                 '🦋','🌈','🍄','🐠','🍦'];
+
+  function r(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+  function makeProblem(maxAns, iconIdx) {
+    const sum = r(2, maxAns);
+    const a   = r(1, sum - 1);
+    const b   = sum - a;
+    const icon = ICONS[iconIdx % ICONS.length];
+    return { a, b, sum, icon };
+  }
+
+  function groupHTML(n, icon) {
+    return `<div class="etashi-group">${Array(n).fill(`<span class="etashi-obj">${icon}</span>`).join('')}</div>`;
+  }
+
+  function problemHTML(idx, prob) {
+    const iconName = prob.icon;
+    return `<div class="etashi-problem">
+      <div class="etashi-pnum">(${idx})</div>
+      <div class="etashi-scene">
+        <div class="etashi-col">
+          ${groupHTML(prob.a, prob.icon)}
+          <div class="etashi-label">${prob.a}こ</div>
+        </div>
+        <span class="etashi-plus">＋</span>
+        <div class="etashi-col">
+          ${groupHTML(prob.b, prob.icon)}
+          <div class="etashi-label">${prob.b}こ</div>
+        </div>
+      </div>
+      <div class="etashi-question">${prob.icon} は　ぜんぶで　なんこ？</div>
+      <div class="etashi-formula">
+        <span class="etashi-f-num">${prob.a}</span>
+        <span class="etashi-f-op">＋</span>
+        <span class="etashi-f-num">${prob.b}</span>
+        <span class="etashi-f-op">＝</span>
+        <span class="etashi-blank"></span>
+      </div>
+    </div>`;
+  }
+
+  function generate() {
+    const maxAns  = parseInt(document.getElementById('max-ans').value);
+    const count   = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('pages');
+    container.innerHTML = '';
+    const allProblems = [];
+
+    for (let p = 0; p < count; p++) {
+      const probs = [];
+      for (let i = 1; i <= 6; i++) {
+        const prob = makeProblem(maxAns, p * 6 + i - 1);
+        probs.push(prob);
+        allProblems.push({ pageNo: p+1, num: i, prob });
+      }
+      const page  = document.createElement('div'); page.className  = 'page';
+      const inner = document.createElement('div'); inner.className = 'etashi-page';
+
+      const title = document.createElement('div'); title.className = 'etashi-page-title';
+      title.innerHTML = `🎨 えでたしざん　<span style="font-size:14px;color:#94a3b8;font-weight:500">（こたえ〜${maxAns}）</span>`;
+      inner.appendChild(title);
+
+      const grid = document.createElement('div'); grid.className = 'etashi-grid';
+      probs.forEach((prob, idx) => { grid.innerHTML += problemHTML(idx+1, prob); });
+      inner.appendChild(grid);
+
+      page.appendChild(inner);
+      container.appendChild(wrapPage(page));
+    }
+
+    // 答えページ
+    const ansPage = document.createElement('div'); ansPage.className = 'page answer-page';
+    const hdr = document.createElement('div'); hdr.className = 'answer-page-header';
+    hdr.textContent = `えでたしざん　こたえ`;
+    ansPage.appendChild(hdr);
+
+    for (let p = 1; p <= count; p++) {
+      const probs = allProblems.filter(x => x.pageNo === p);
+      const sec   = document.createElement('div'); sec.className = 'answer-section';
+      if (count > 1) {
+        const l = document.createElement('div'); l.className = 'answer-section-label';
+        l.textContent = `${p}まいめ`; sec.appendChild(l);
+      }
+      const grid = document.createElement('div'); grid.className = 'answer-grid';
+      probs.forEach(({ num, prob }) => {
+        const item = document.createElement('div'); item.className = 'answer-item';
+        item.innerHTML = `<span class="answer-num">(${num})</span><span class="answer-val">${prob.sum}</span>`;
+        grid.appendChild(item);
+      });
+      sec.appendChild(grid); ansPage.appendChild(sec);
+    }
+    const aw = document.createElement('div'); aw.className = 'page-preview';
+    const ab = document.createElement('div'); ab.className = 'page-scale-box';
+    ab.appendChild(ansPage); aw.appendChild(ab); container.appendChild(aw);
+    applyMobilePageScaling();
+  }
+
+  function wrapPage(page) {
+    const wrap = document.createElement('div'); wrap.className = 'page-preview';
+    const box  = document.createElement('div'); box.className  = 'page-scale-box';
+    box.appendChild(page); wrap.appendChild(box); return wrap;
+  }
+
+  function applyMobilePageScaling() {
+    document.querySelectorAll('.page-preview').forEach(wrapper => {
+      const scaleBox = wrapper.querySelector('.page-scale-box');
+      const page     = wrapper.querySelector('.page');
+      if (!scaleBox || !page) return;
+      if (page.classList.contains('answer-page')) return;
+      wrapper.classList.remove('is-scaled');
+      scaleBox.style.width = ''; scaleBox.style.height = ''; page.style.transform = '';
+      const pw = page.offsetWidth, ph = page.offsetHeight;
+      if (!pw || !ph) return;
+      if (window.innerWidth > 640 || window.matchMedia('print').matches) {
+        scaleBox.style.width = pw + 'px'; scaleBox.style.height = ph + 'px'; return;
+      }
+      const avail = Math.max(wrapper.clientWidth - 8, 0); if (!avail) return;
+      const scale = Math.min(1, avail / pw);
+      wrapper.classList.add('is-scaled');
+      scaleBox.style.width  = (pw * scale) + 'px';
+      scaleBox.style.height = (ph * scale) + 'px';
+      page.style.transform  = `scale(${scale})`;
+    });
+  }
+
+  async function downloadPDF() {
+    const pages = document.querySelectorAll('.page');
+    if (!pages.length) { alert('先に「生成」を押してください。'); return; }
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    for (let i = 0; i < pages.length; i++) {
+      const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true });
+      if (i > 0) pdf.addPage();
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
+    }
+    pdf.save('ezu-tashizan.pdf');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    generate();
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(applyMobilePageScaling, 80); });
+    window.addEventListener('beforeprint', applyMobilePageScaling);
+    window.addEventListener('afterprint',  applyMobilePageScaling);
+  });
+  </script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body>
+</html>

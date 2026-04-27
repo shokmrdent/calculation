@@ -107,6 +107,7 @@ body { background: #f0f2f5; }
             <tr>
               <th>名前</th>
               <th>メールアドレス</th>
+              <th>ロール</th>
               <th>ステータス</th>
               <th>同時接続上限</th>
               <th>登録日</th>
@@ -114,7 +115,7 @@ body { background: #f0f2f5; }
             </tr>
           </thead>
           <tbody id="userTableBody">
-            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">読み込み中...</td></tr>
+            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:40px">読み込み中...</td></tr>
           </tbody>
         </table>
       </div>
@@ -287,8 +288,10 @@ body { background: #f0f2f5; }
 <script>
 let allUsers = [];
 let editingUid = null;
+let currentAdminUid = null;
 
-requireAdmin().then(({ userData }) => {
+requireAdmin().then(({ user, userData }) => {
+  currentAdminUid = user.uid;
   document.getElementById('adminName').textContent = userData.name || '管理者';
   loadUsers();
   checkUnreadMessages();
@@ -297,8 +300,17 @@ requireAdmin().then(({ userData }) => {
 // ── ユーザー一覧読み込み ─────────────────────────
 function loadUsers() {
   db.collection('users').orderBy('createdAt', 'desc')
-    .onSnapshot(snap => {
+    .onSnapshot(async snap => {
       allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      // 管理者自身が一覧に含まれていない場合（createdAtなし等）は個別取得して先頭に追加
+      if (currentAdminUid && !allUsers.find(u => u.id === currentAdminUid)) {
+        const adminSnap = await db.collection('users').doc(currentAdminUid).get();
+        if (adminSnap.exists) {
+          allUsers.unshift({ id: adminSnap.id, ...adminSnap.data() });
+        }
+      }
+
       filterTable();
     });
 }
@@ -322,20 +334,22 @@ function filterTable() {
 
   const tbody = document.getElementById('userTableBody');
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">該当するユーザーがいません</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:40px">該当するユーザーがいません</td></tr>';
     return;
   }
 
   tbody.innerHTML = filtered.map(u => {
     const s = statusBadge(u.subscriptionStatus);
+    const r = roleBadge(u.role);
     const d = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('ja-JP') : '—';
+    const isSelf = u.id === currentAdminUid;
     return `
-      <tr>
+      <tr${isSelf ? ' style="background:#fffbf0"' : ''}>
         <td style="cursor:pointer" onclick="openDetailModal('${u.id}')">
-          <div style="font-weight:700;color:var(--blue);text-decoration:underline">${u.name || '—'}</div>
-          <div style="font-size:11px;color:var(--muted)">${u.role === 'admin' ? '👑 管理者' : ''}</div>
+          <div style="font-weight:700;color:var(--blue);text-decoration:underline">${u.name || '—'}${isSelf ? ' <span style="font-size:11px;color:#f59e0b;font-weight:400">(あなた)</span>' : ''}</div>
         </td>
         <td style="font-size:13px">${u.email || '—'}</td>
+        <td>${r}</td>
         <td>${s}</td>
         <td style="text-align:center">
           <span style="font-weight:900;font-size:18px;color:var(--blue)">${u.maxConcurrentSessions || 1}</span>
@@ -357,6 +371,13 @@ function statusBadge(status) {
     pending:  '<span class="badge badge-trial">処理中</span>',
   };
   return map[status] || `<span class="badge">${status||'—'}</span>`;
+}
+
+function roleBadge(role) {
+  if (role === 'admin') {
+    return '<span style="display:inline-flex;align-items:center;gap:4px;background:#fef3c7;color:#b45309;border:1px solid #fcd34d;border-radius:6px;padding:3px 9px;font-size:12px;font-weight:700">👑 管理者</span>';
+  }
+  return '<span style="display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:6px;padding:3px 9px;font-size:12px;font-weight:700">👤 一般ユーザー</span>';
 }
 
 // ── アカウント作成 ──────────────────────────────

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>確率 | うちトレ</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .jh-card{background:#fff;border:2px solid #e7e5e4;border-radius:16px;padding:28px 24px;margin:0 auto 16px;max-width:700px;}
+    .jh-question{font-size:17px;font-weight:700;color:#1c1917;line-height:1.8;margin-bottom:14px;}
+    .jh-eq{background:#fef9c3;border:2px solid #fbbf24;border-radius:10px;padding:14px 20px;font-size:22px;font-weight:800;font-family:'Georgia',serif;display:block;margin-bottom:18px;line-height:1.7;white-space:pre-line;}
+    .jh-ans-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+    .jh-lbl{font-size:15px;font-weight:700;color:#44403c;}
+    .jh-input{border:2px solid #d6d3d1;border-radius:8px;padding:8px 12px;font-size:18px;font-weight:700;width:90px;text-align:center;font-family:inherit;}
+    .jh-input:focus{outline:none;border-color:#FF6B35;}
+    .jh-input.wide{width:130px;}
+    .jh-check{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+    .jh-next{background:linear-gradient(135deg,#FF6B35,#f97316);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+    .jh-result{font-size:15px;font-weight:700;padding:8px 14px;border-radius:8px;margin-top:10px;display:none;}
+    .jh-result.ok{background:#dcfce7;color:#16a34a;display:block;}
+    .jh-result.ng{background:#fee2e2;color:#dc2626;display:block;}
+    .score-bar{display:flex;gap:16px;align-items:center;font-size:13px;font-weight:700;color:#78716c;}
+    .score-bar b{color:#FF6B35;font-size:16px;}
+    .frac-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:0;vertical-align:middle;margin:0 4px;}
+    .frac-wrap input{width:60px;border:2px solid #d6d3d1;border-radius:6px;padding:4px 8px;font-size:16px;font-weight:700;text-align:center;font-family:inherit;}
+    .frac-wrap input:focus{outline:none;border-color:#FF6B35;}
+    .frac-line{height:2px;background:#1c1917;width:60px;margin:2px 0;}
+  </style>
+</head>
+<body data-page-type="kakuritsu">
+  <div class="container">
+    <div class="page-logo-area no-print">
+      <img src="logo.svg" alt="うちトレ"><div><div class="logo-text">うちトレ</div><div class="logo-sub">Uchitore</div></div>
+    </div>
+    <div class="header-row no-print">
+      <div><h1>確率</h1></div>
+      <div class="header-actions"><a href="top-home.html" class="secondary-button">トップへ戻る</a></div>
+    </div>
+    <div class="card controls no-print">
+      <div class="control-group">
+        <label for="prob-type">種類</label>
+        <select id="prob-type" onchange="generate()">
+          <option value="random">ランダム</option>
+          <option value="dice">さいころ</option>
+          <option value="coin">コイン</option>
+          <option value="card">カード</option>
+        </select>
+      </div>
+      <div class="score-bar"><div>問題数: <b id="q-count">0</b></div><div>正解: <b id="q-correct">0</b></div></div>
+      <div class="page-actions"><button class="primary" onclick="generate()">▶ 新しい問題</button></div>
+    </div>
+    <div id="prob-area" style="padding:0 4px;"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <script src="assets/tablet-v2.js?v=28"></script>
+  <script>
+  let qCount=0,qCorrect=0;
+  let currentNumer=null,currentDenom=null;
+  function r(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+  function sgn(n,noPlus){return n<0?`- ${Math.abs(n)}`:noPlus?`${n}`:`+ ${n}`;}
+  function coefStr(c,v){
+    if(c===0)return'';
+    if(c===1)return v;
+    if(c===-1)return`-${v}`;
+    return`${c}${v}`;
+  }
+
+  function gcd(a,b){return b===0?a:gcd(b,a%b);}
+  function generate(){
+    const t=document.getElementById('prob-type').value;
+    const type=t==='random'?['dice','coin','card'][r(0,2)]:t;
+    qCount++;document.getElementById('q-count').textContent=qCount;
+    let question='',numer=1,denom=1;
+    if(type==='dice'){
+      const target=r(2,10);
+      let fav=0;
+      for(let i=1;i<=6;i++)for(let j=1;j<=6;j++)if(i+j===target)fav++;
+      numer=fav;denom=36;
+      question=`2つのさいころを同時に投げるとき、出た目の和が ${target} になる確率を求めなさい。`;
+    } else if(type==='coin'){
+      const n=r(2,4);const heads=r(1,n);
+      denom=Math.pow(2,n);numer=1;
+      // nコイン投げてheads枚表の確率
+      // C(n,heads)/2^n
+      function comb(n,k){let res=1;for(let i=0;i<k;i++)res=res*(n-i)/(i+1);return Math.round(res);}
+      numer=comb(n,heads);
+      question=`${n}枚のコインを同時に投げるとき、ちょうど ${heads} 枚が表になる確率を求めなさい。`;
+    } else {
+      const total=r(5,9);const pick=r(1,3);
+      // 1〜totalからpick枚選ぶとき偶数のみ
+      const evens=Math.floor(total/2);
+      function comb(n,k){if(k>n)return 0;let res=1;for(let i=0;i<k;i++)res=res*(n-i)/(i+1);return Math.round(res);}
+      numer=comb(evens,pick);denom=comb(total,pick);
+      question=`1から ${total} までの整数が書かれたカードから ${pick} 枚選ぶとき、すべて偶数になる確率を求めなさい。`;
+    }
+    const g=gcd(numer,denom);
+    currentNumer=numer/g;currentDenom=denom/g;
+    const area=document.getElementById('prob-area');
+    area.innerHTML=`<div class="jh-card"><div class="jh-question">${question}</div><div class="jh-ans-row"><span class="jh-lbl">確率：</span><div class="frac-wrap"><input id="inp-n" type="number" min="0" placeholder="分子"><div class="frac-line"></div><input id="inp-d" type="number" min="1" placeholder="分母"></div><button class="jh-check" onclick="checkAnswer()">✓ 答え合わせ</button></div><div class="jh-result" id="jh-result"></div><div class="jh-ans-row" style="margin-top:12px;"><button class="jh-next" onclick="generate()">▶ 次の問題</button></div></div>`;
+    document.getElementById('inp-n').focus();
+  }
+
+  function checkAnswer(){
+    const nv=parseInt(document.getElementById('inp-n').value);
+    const dv=parseInt(document.getElementById('inp-d').value);
+    const res=document.getElementById('jh-result');
+    function gcd(a,b){return b===0?a:gcd(b,a%b);}
+    const g=gcd(Math.abs(nv),Math.abs(dv));
+    const rn=nv/g,rd=dv/g;
+    if(rn===currentNumer&&rd===currentDenom){
+      qCorrect++;document.getElementById('q-correct').textContent=qCorrect;
+      res.className='jh-result ok';res.textContent=`✅ 正解！ ${currentNumer}/${currentDenom}`;
+      if(qCorrect>=10)recordPass();
+    } else {
+      res.className='jh-result ng';res.textContent=`❌ 不正解。正解は ${currentNumer}/${currentDenom}`;
+    }
+  }
+
+  async function recordPass(){
+    try{
+      const user=firebase.auth().currentUser;if(!user)return;
+      const db=firebase.firestore();
+      const ref=db.collection('users').doc(user.uid).collection('progress').doc('kakuritsu');
+      const prev=(await ref.get()).data()||{};
+      await ref.set({unitId:'kakuritsu',passed:true,attempts:(prev.attempts||0)+1,
+        bestScore:Math.max(prev.bestScore||0,qCorrect),
+        passedAt:prev.passedAt||firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      
+    }catch(e){console.error(e);}
+  }
+
+  window.addEventListener('DOMContentLoaded',()=>{generate();});
+  </script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/assets/firebase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>requireAuth();</script>
+</body></html>

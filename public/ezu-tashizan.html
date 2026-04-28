@@ -30,47 +30,51 @@
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8mm 10mm;
+      gap: 10mm 12mm;
       align-content: start;
     }
-    .etashi-problem {
-      padding: 8px 8px 14px;
+    .yoji-prob-item {
+      padding: 10px 8px 16px;
       border-bottom: 1.5px solid #e2e8f0;
       position: relative;
+      text-align: center;
     }
     .etashi-pnum {
-      font-size: 11px;
+      font-size: 12px;
       font-family: 'Noto Sans JP', sans-serif;
       color: #94a3b8;
       font-weight: 400;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      text-align: left;
     }
     /* 絵エリア：左グループ ＋ 右グループ */
     .etashi-scene {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .etashi-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 1px;
-      max-width: 90px;
+      gap: 2px;
+      max-width: 120px;
+      justify-content: center;
     }
-    .etashi-obj { font-size: 22px; line-height: 1.2; }
+    .etashi-obj { font-size: 30px; line-height: 1.2; }
     .etashi-plus {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 900;
       color: #a78bfa;
-      padding: 0 2px;
+      padding: 0 4px;
     }
     .etashi-label {
-      font-size: 11px;
+      font-size: 13px;
       font-family: 'Noto Sans JP', sans-serif;
       color: #64748b;
-      margin-top: 2px;
+      margin-top: 4px;
       text-align: center;
     }
     .etashi-col {
@@ -79,27 +83,29 @@
       align-items: center;
     }
     .etashi-question {
-      font-size: 13px;
+      font-size: 16px;
       font-family: 'Noto Sans JP', sans-serif;
       font-weight: 700;
       color: #334155;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      text-align: center;
     }
     .etashi-formula {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 900;
       font-family: 'Times New Roman', serif;
       color: #1e293b;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      justify-content: center;
     }
     .etashi-f-num { color: #1e293b; }
     .etashi-f-op  { color: #a78bfa; }
     .etashi-blank {
       display: inline-block;
-      width: 34px;
-      height: 28px;
+      width: 42px;
+      height: 32px;
       border-bottom: 2.5px solid #64748b;
       vertical-align: bottom;
     }
@@ -169,7 +175,7 @@
 
   function problemHTML(idx, prob) {
     const iconName = prob.icon;
-    return `<div class="etashi-problem">
+    return `<div class="yoji-prob-item">
       <div class="etashi-pnum">(${idx})</div>
       <div class="etashi-scene">
         <div class="etashi-col">

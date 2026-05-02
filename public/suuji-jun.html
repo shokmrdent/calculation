@@ -76,6 +76,14 @@
       font-weight: 400;
       margin: 0 1px;
     }
+
+    /* ── iOS タッチメニュー完全防止 ── */
+    canvas, .page-preview, .page-scale-box, .page {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: none;
+    }
     .page.answer-page { height: auto; min-height: 80mm; }
   </style>
 </head>
@@ -276,6 +284,14 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="/assets/firebase-config.js"></script>
 <script src="/assets/auth.js"></script>
+<script>
+// iOS長押しメニュー・テキスト選択を完全に防ぐ
+document.addEventListener('contextmenu',  e => e.preventDefault(), { passive: false });
+document.addEventListener('selectstart',  e => e.preventDefault(), { passive: false });
+document.addEventListener('touchstart',   e => {
+  if (e.target.tagName === 'CANVAS') e.preventDefault();
+}, { passive: false });
+</script>
 <script>requireAuth();</script>
 </body>
 </html>
